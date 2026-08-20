@@ -142,7 +142,7 @@ git commit -m "feat: establish PathSpace contracts"
 - Produces: `Resolve-SafeLocalPath -LiteralPath <string>` returning normalized `System.IO.DirectoryInfo`.
 - Rejects: missing paths, files when a directory is required, UNC paths, unsupported providers.
 
-- [ ] **Step 1: Write failing Pester cases**
+- [x] **Step 1: Write failing Pester cases**
 
 ```powershell
 Describe 'Resolve-SafeLocalPath' {
@@ -155,17 +155,17 @@ Describe 'Resolve-SafeLocalPath' {
 }
 ```
 
-- [ ] **Step 2: Run the focused test and confirm failure**
+- [x] **Step 2: Run the focused test and confirm failure**
 
 ```powershell
 Invoke-Pester tests/engine/Resolve-SafeLocalPath.Tests.ps1 -Output Detailed
 ```
 
-- [ ] **Step 3: Implement validation using `GetUnresolvedProviderPathFromPSPath` and `DirectoryInfo`**
+- [x] **Step 3: Implement validation using `GetUnresolvedProviderPathFromPSPath` and `DirectoryInfo`**
 
 The function must use literal paths, reject `PathType -IsNetworkPath`, call `GetFullPath`, and return a directory object without enumerating it.
 
-- [ ] **Step 4: Run tests and commit**
+- [x] **Step 4: Run tests and commit**
 
 ```powershell
 Invoke-Pester tests/engine/Resolve-SafeLocalPath.Tests.ps1
