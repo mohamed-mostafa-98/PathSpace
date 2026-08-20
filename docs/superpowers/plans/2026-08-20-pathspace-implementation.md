@@ -271,7 +271,7 @@ git commit -m "feat: generate evidence-based recommendations"
 - Produces: `EngineClient.ScanAsync(string target, IProgress<ScanProgress>, CancellationToken)` returning `ScanSnapshot`.
 - `MainViewModel` exposes target, scan command, cancel command, progress, state, and snapshot.
 
-- [ ] **Step 1: Scaffold WPF and test projects**
+- [x] **Step 1: Scaffold WPF and test projects**
 
 ```powershell
 dotnet new wpf -n PathSpace.App -o src/PathSpace.App -f net8.0-windows
@@ -281,19 +281,19 @@ dotnet add src/PathSpace.App reference src/PathSpace.Contracts
 dotnet add tests/PathSpace.App.Tests reference src/PathSpace.App src/PathSpace.Contracts
 ```
 
-- [ ] **Step 2: Write a failing JSONL parsing test**
+- [x] **Step 2: Write a failing JSONL parsing test**
 
 Feed progress and snapshot lines through a fake process stream and assert progress is reported before the final snapshot.
 
-- [ ] **Step 3: Implement `EngineClient` using `ProcessStartInfo`**
+- [x] **Step 3: Implement `EngineClient` using `ProcessStartInfo`**
 
 Use redirected standard output/error, asynchronous line reads, the CLI script path from application base directory, and a cancellation file. Do not invoke through shell text concatenation.
 
-- [ ] **Step 4: Implement simple dashboard and state tests**
+- [x] **Step 4: Implement simple dashboard and state tests**
 
 The window contains target selection, Analyze, Cancel, progress, free-space health, and results placeholders. Verify commands disable correctly while scanning.
 
-- [ ] **Step 5: Build, test, and commit**
+- [x] **Step 5: Build, test, and commit**
 
 ```powershell
 dotnet test
@@ -314,19 +314,19 @@ git commit -m "feat: add responsive WPF scan shell"
 - Consumes: `ScanSnapshot`, `Recommendation[]`.
 - Produces: category tree, large-file rows, warning list, recommendation cards, and simple/advanced visibility state.
 
-- [ ] **Step 1: Write failing sorting/filtering tests**
+- [x] **Step 1: Write failing sorting/filtering tests**
 
 Assert categories and large files sort descending by bytes and simple mode hides raw diagnostics.
 
-- [ ] **Step 2: Implement focused result view models**
+- [x] **Step 2: Implement focused result view models**
 
 Keep formatting out of contracts. Provide byte-format helpers in one file and expose accessible labels.
 
-- [ ] **Step 3: Build category, recommendation, and advanced tabs**
+- [x] **Step 3: Build category, recommendation, and advanced tabs**
 
 Use standard WPF controls, virtualization for large tables, keyboard-accessible commands, and no third-party UI framework.
 
-- [ ] **Step 4: Run tests and commit**
+- [x] **Step 4: Run tests and commit**
 
 ```powershell
 dotnet test tests/PathSpace.App.Tests

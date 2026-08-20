@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FA20CB57
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathSpace.Contracts.Tests", "tests\PathSpace.Contracts.Tests\PathSpace.Contracts.Tests.csproj", "{5104FC01-DF42-44E1-AAAB-EB426E41E010}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathSpace.App", "src\PathSpace.App\PathSpace.App.csproj", "{6A1240E5-BB81-4DE7-964B-004C203594C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathSpace.App.Tests", "tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj", "{4F534022-8793-48EB-BA38-F064DCEBAE09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,9 +32,19 @@ Global
 		{5104FC01-DF42-44E1-AAAB-EB426E41E010}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5104FC01-DF42-44E1-AAAB-EB426E41E010}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5104FC01-DF42-44E1-AAAB-EB426E41E010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A1240E5-BB81-4DE7-964B-004C203594C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A1240E5-BB81-4DE7-964B-004C203594C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A1240E5-BB81-4DE7-964B-004C203594C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A1240E5-BB81-4DE7-964B-004C203594C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F534022-8793-48EB-BA38-F064DCEBAE09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F534022-8793-48EB-BA38-F064DCEBAE09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F534022-8793-48EB-BA38-F064DCEBAE09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F534022-8793-48EB-BA38-F064DCEBAE09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CE4BE865-BE35-4488-8A7C-6F85F5D6B89D} = {45721AA4-685E-40A1-982B-F773C3D23A0D}
 		{5104FC01-DF42-44E1-AAAB-EB426E41E010} = {FA20CB57-125C-4EFB-A0CC-BECFD7741001}
+		{6A1240E5-BB81-4DE7-964B-004C203594C6} = {45721AA4-685E-40A1-982B-F773C3D23A0D}
+		{4F534022-8793-48EB-BA38-F064DCEBAE09} = {FA20CB57-125C-4EFB-A0CC-BECFD7741001}
 	EndGlobalSection
 EndGlobal
