@@ -229,7 +229,7 @@ git commit -m "feat: scan local storage with progress"
 - Consumes: completed schema-v1 `ScanSnapshot` plus optional diagnostics.
 - Produces: ordered `Recommendation[]` with stable IDs, evidence, estimated range, risk, reversibility, and privilege.
 
-- [ ] **Step 1: Write table-driven failing tests**
+- [x] **Step 1: Write table-driven failing tests**
 
 ```powershell
 It 'recommends npm cache cleanup with measured evidence' {
@@ -239,15 +239,15 @@ It 'recommends npm cache cleanup with measured evidence' {
 }
 ```
 
-- [ ] **Step 2: Implement pure rules and deterministic priority ordering**
+- [x] **Step 2: Implement pure rules and deterministic priority ordering**
 
 Rules must not inspect or modify the filesystem. They operate only on supplied evidence and diagnostics.
 
-- [ ] **Step 3: Add incomplete-scan rejection test**
+- [x] **Step 3: Add incomplete-scan rejection test**
 
 Assert cleanup recommendations are omitted and an `analysis.incomplete` notice is returned.
 
-- [ ] **Step 4: Run tests and commit**
+- [x] **Step 4: Run tests and commit**
 
 ```powershell
 Invoke-Pester tests/engine/Get-PathSpaceRecommendation.Tests.ps1
