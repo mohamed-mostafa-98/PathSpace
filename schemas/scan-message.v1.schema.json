@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pathspace.local/schemas/scan-message.v1.schema.json",
+  "title": "PathSpace scan message v1",
+  "type": "object",
+  "required": ["schemaVersion", "kind"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "kind": {
+      "enum": ["scan.progress", "scan.warning", "scan.snapshot"]
+    }
+  }
+}

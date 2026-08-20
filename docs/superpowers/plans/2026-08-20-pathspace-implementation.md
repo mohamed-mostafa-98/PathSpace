@@ -86,7 +86,7 @@ PartitionClearner/
 - Produces: `ScanMessage`, `ScanProgress`, `ScanSnapshot`, `StorageAggregate`, `Recommendation`, `ActionPreview`, `ActionManifest`, `ActionResult`.
 - Contract discriminator: `kind`; schema version: `schemaVersion = 1`.
 
-- [ ] **Step 1: Create the solution and projects**
+- [x] **Step 1: Create the solution and projects**
 
 ```powershell
 dotnet new sln -n PathSpace
@@ -96,7 +96,7 @@ dotnet sln add src/PathSpace.Contracts/PathSpace.Contracts.csproj tests/PathSpac
 dotnet add tests/PathSpace.Contracts.Tests reference src/PathSpace.Contracts/PathSpace.Contracts.csproj
 ```
 
-- [ ] **Step 2: Write a failing serialization test**
+- [x] **Step 2: Write a failing serialization test**
 
 ```csharp
 [Fact]
@@ -110,7 +110,7 @@ public void Snapshot_round_trips_with_schema_version()
 }
 ```
 
-- [ ] **Step 3: Run the test and confirm it fails**
+- [x] **Step 3: Run the test and confirm it fails**
 
 ```powershell
 dotnet test tests/PathSpace.Contracts.Tests/PathSpace.Contracts.Tests.csproj
@@ -118,11 +118,11 @@ dotnet test tests/PathSpace.Contracts.Tests/PathSpace.Contracts.Tests.csproj
 
 Expected: compilation failure because `ScanSnapshot` is undefined.
 
-- [ ] **Step 4: Implement immutable record contracts and schemas**
+- [x] **Step 4: Implement immutable record contracts and schemas**
 
 Define the listed records with explicit JSON property names and long byte counters. Schemas require `schemaVersion`, `kind`, and target/action identifiers; disallow additional properties in signed manifests.
 
-- [ ] **Step 5: Run tests and commit**
+- [x] **Step 5: Run tests and commit**
 
 ```powershell
 dotnet test

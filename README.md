@@ -1,10 +1,10 @@
 # PathSpace
 
-PathSpace is a planned offline Windows 10/11 storage analyzer and guided cleanup application. It combines a .NET 8 WPF interface with a reusable PowerShell/CLI engine.
+PathSpace is an offline Windows 10/11 storage analyzer and guided cleanup application. It combines a .NET 8 WPF interface with a reusable PowerShell/CLI engine.
 
 ## Current status
 
-Planning complete. Implementation is tracked in Linear under the **PathSpace** project.
+Implementation is in progress and tracked in Linear under the **PathSpace** project. Versioned scan, recommendation, and action contracts are available in `src/PathSpace.Contracts`.
 
 - [Design specification](docs/superpowers/specs/2026-08-20-pathspace-design.md)
 - [Implementation plan](docs/superpowers/plans/2026-08-20-pathspace-implementation.md)
@@ -30,4 +30,20 @@ Planning complete. Implementation is tracked in Linear under the **PathSpace** p
 - Normal non-admin launch; elevation only for confirmed protected actions
 - Preview, confirmation, recovery safeguards, and post-action verification
 - No registry cleaner, custom defragmenter, network scanning, or v1 plugin framework
+
+## Build and test
+
+Install the .NET 8 SDK, then run:
+
+```powershell
+dotnet restore PathSpace.sln
+dotnet build PathSpace.sln -c Release --no-restore
+dotnet test PathSpace.sln -c Release --no-build
+```
+
+The PowerShell engine test command will become available with the analysis-engine milestone:
+
+```powershell
+Invoke-Pester tests/engine -Output Detailed
+```
 
