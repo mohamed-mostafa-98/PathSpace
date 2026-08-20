@@ -7,7 +7,7 @@
     Copyright = '(c) PathSpace contributors'
     Description = 'Offline local-storage analysis and guarded cleanup engine.'
     PowerShellVersion = '5.1'
-    FunctionsToExport = @()
+    FunctionsToExport = @('*')
     CmdletsToExport = @()
     VariablesToExport = @()
     AliasesToExport = @()

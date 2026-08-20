@@ -186,7 +186,7 @@ git commit -m "feat: validate local scan targets"
 - Produces: `Invoke-PathSpaceScan -LiteralPath <string> [-LargeFileBytes <long>] [-CancellationFile <string>]`.
 - Emits: progress/warning/snapshot JSONL messages conforming to schema v1.
 
-- [ ] **Step 1: Write fixture tests for totals, Unicode, and reparse-point exclusion**
+- [x] **Step 1: Write fixture tests for totals, Unicode, and reparse-point exclusion**
 
 ```powershell
 It 'counts files and does not follow a junction' {
@@ -197,21 +197,21 @@ It 'counts files and does not follow a junction' {
 }
 ```
 
-- [ ] **Step 2: Run and confirm failure**
+- [x] **Step 2: Run and confirm failure**
 
 ```powershell
 Invoke-Pester tests/engine/Invoke-PathSpaceScan.Tests.ps1 -Output Detailed
 ```
 
-- [ ] **Step 3: Implement iterative directory traversal**
+- [x] **Step 3: Implement iterative directory traversal**
 
 Use a `Stack[DirectoryInfo]`, 64-bit counters, safe checkpoints, per-directory exception capture, and `FileAttributes.ReparsePoint` exclusion. Emit progress no more than four times per second.
 
-- [ ] **Step 4: Add cancellation-file test and implementation**
+- [x] **Step 4: Add cancellation-file test and implementation**
 
 Create the cancellation file during a fixture scan and assert the final snapshot has `complete = false` and `cancelled = true`.
 
-- [ ] **Step 5: Run engine tests and commit**
+- [x] **Step 5: Run engine tests and commit**
 
 ```powershell
 Invoke-Pester tests/engine -Output Detailed
