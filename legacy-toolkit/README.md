@@ -2,6 +2,10 @@
 
 This toolkit documents the diagnostics and cleanup workflow used to recover space on a Windows C: partition. Run diagnostic scripts first, preserve backups, and never manually delete pagefiles, WSL/Docker virtual disks, or unknown application databases.
 
+## Provenance and product boundary
+
+These seven scripts were developed and manually validated during the storage-recovery session that inspired PathSpace. They are preserved for auditability and examples only. PathSpace production code does not dot-source or execute them. Sanitized command-output fixtures derived from the same session live under `tests/fixtures/legacy` for deterministic parser tests.
+
 ## Safety levels
 
 - **Read-only:** `01-disk-status.ps1`, `02-find-hidden-space.ps1`, `03-analyze-users.ps1`, `04-analyze-programdata.ps1`, and `05-diagnose-pagefile.ps1`.
