@@ -410,19 +410,19 @@ git commit -m "feat: isolate and validate elevated actions"
 - Produces diagnostics for Docker Desktop/native WSL Docker ownership, WSL distributions, Notion partitions, Claude runtime/junction, pagefile, hibernation, and volume media type.
 - Guided actions never directly delete Docker volumes, WSL distributions, or unknown application data.
 
-- [ ] **Step 1: Write command-output parser tests using saved fixtures**
+- [x] **Step 1: Write command-output parser tests using saved fixtures**
 
 Fixtures cover `wsl --list --verbose`, `docker system df -v`, pagefile CIM output, and unavailable-command cases.
 
-- [ ] **Step 2: Implement diagnostics with command argument arrays and timeouts**
+- [x] **Step 2: Implement diagnostics with command argument arrays and timeouts**
 
 Return `available = false` plus a reason when Docker, WSL, CIM, or elevation is unavailable.
 
-- [ ] **Step 3: Add guided cards and copyable commands**
+- [x] **Step 3: Add guided cards and copyable commands**
 
 Cards explain ownership, risk, backup requirements, and next steps. Commands are generated from validated values, never free-form user text.
 
-- [ ] **Step 4: Run tests and commit**
+- [x] **Step 4: Run tests and commit**
 
 ```powershell
 Invoke-Pester tests/engine/AppDiagnostics.Tests.ps1

@@ -67,6 +67,19 @@
                     </ItemsControl>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="Guidance">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="18">
+                        <TextBlock Text="Guided recovery" FontSize="20" FontWeight="SemiBold"/>
+                        <TextBlock Margin="0,12,0,0" Text="Docker &amp; WSL — identify whether data belongs to Docker Desktop or Ubuntu. Images may be rebuilt; volumes may contain databases and are never auto-selected." TextWrapping="Wrap"/>
+                        <TextBlock Margin="0,12,0,0" Text="Notion — confirm every page is synchronized, then prefer Notion’s Reset local data control." TextWrapping="Wrap"/>
+                        <TextBlock Margin="0,12,0,0" Text="Claude — relocate by copy, verify, retain rollback, and only then create a junction." TextWrapping="Wrap"/>
+                        <TextBlock Margin="0,12,0,0" Text="Pagefile — diagnose memory pressure and crash-dump requirements; never delete pagefile.sys manually." TextWrapping="Wrap"/>
+                        <TextBlock Margin="0,12,0,0" Text="Hibernation — disabling it is reversible but removes Hibernate and may affect Fast Startup." TextWrapping="Wrap"/>
+                        <TextBlock Margin="0,12,0,0" Text="Volume optimization — PathSpace uses Windows Optimize-Volume and lets media type select retrim or defragment behavior." TextWrapping="Wrap"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>
