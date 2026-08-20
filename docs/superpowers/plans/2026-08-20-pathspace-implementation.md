@@ -474,7 +474,7 @@ git commit -m "feat: verify and export recovery reports"
 **Interfaces:**
 - Produces: `artifacts/PathSpace-win-x64/` containing GUI, worker, engine, schemas, and licenses.
 
-- [ ] **Step 1: Add a release build script**
+- [x] **Step 1: Add a release build script**
 
 ```powershell
 dotnet publish src/PathSpace.App/PathSpace.App.csproj -c Release -r win-x64 --self-contained false -o artifacts/PathSpace-win-x64
@@ -482,7 +482,7 @@ dotnet publish src/PathSpace.Worker/PathSpace.Worker.csproj -c Release -r win-x6
 Copy-Item engine,schemas -Destination artifacts/PathSpace-win-x64 -Recurse
 ```
 
-- [ ] **Step 2: Run automated verification**
+- [x] **Step 2: Run automated verification**
 
 ```powershell
 dotnet test PathSpace.sln -c Release
@@ -494,7 +494,7 @@ powershell -ExecutionPolicy Bypass -File scripts/build-portable.ps1
 
 Record OS build, local/removable/folder scans, cancellation, non-admin launch, UAC cancellation, safe action, keyboard navigation, 200% scaling, screen-reader labels, and offline network observation.
 
-- [ ] **Step 4: Verify the portable artifact and commit**
+- [x] **Step 4: Verify the portable artifact and commit**
 
 Launch from a clean directory, complete one read-only folder scan, export JSON, and confirm no network connection is created.
 

@@ -1,20 +1,21 @@
 # Project status
 
-## Completed
+## Implemented and verified
 
-- Product discovery and understanding lock
-- Architecture selection
-- Safety and privacy boundaries
-- Design specification
-- Detailed implementation plan
-- Linear project configuration
-- Seven Linear milestones
-- Twenty scoped Linear issues with dependencies
-- Legacy toolkit preservation plan
+- Offline PowerShell scanner with safe local-path validation, progress, cancellation, and JSONL output
+- Evidence-based recommendations and guarded cleanup catalog
+- Responsive .NET 8 WPF shell with simple and advanced result views
+- Manifest-validating elevated worker and post-action verification contracts
+- Docker, WSL, Notion, Claude, pagefile, hibernation, and Optimize-Volume guidance
+- JSON/CSV/redacted exports and bounded local audit logs
+- 17 passing PowerShell tests and 15 passing .NET tests
+- Portable x64 build with zero-warning Release compilation
+- Packaged non-admin startup, read-only scan, and zero observed TCP connections on Windows build 26200.9168
 
-## Next issue
+## Manual release sign-off still required
 
-Start with [MOH-5 — Establish repository, solution, and build conventions](https://linear.app/mohamed-mostafa/issue/MOH-5/establish-repository-solution-and-build-conventions).
-
-Implementation should follow `docs/superpowers/plans/2026-08-20-pathspace-implementation.md` and use test-driven task execution.
+- Windows 10 x64 compatibility host
+- Removable-media scan
+- Interactive UAC cancellation and disposable safe-action fixture
+- Keyboard, Narrator, 200% scaling, high-contrast, and contrast checks
 

@@ -4,7 +4,7 @@ PathSpace is an offline Windows 10/11 storage analyzer and guided cleanup applic
 
 ## Current status
 
-Implementation is in progress and tracked in Linear under the **PathSpace** project. Versioned scan, recommendation, and action contracts are available in `src/PathSpace.Contracts`.
+The first portable implementation is in verification. It includes versioned contracts, an offline PowerShell analysis engine, deterministic recommendations, a responsive WPF shell, guarded actions, an elevated worker, guided diagnostics, and exports.
 
 - [Design specification](docs/superpowers/specs/2026-08-20-pathspace-design.md)
 - [Implementation plan](docs/superpowers/plans/2026-08-20-pathspace-implementation.md)
@@ -46,4 +46,12 @@ The PowerShell engine test command will become available with the analysis-engin
 ```powershell
 Invoke-Pester tests/engine -Output Detailed
 ```
+
+Build the portable x64 folder with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\build-portable.ps1
+```
+
+The output is `artifacts\PathSpace-win-x64`. PathSpace makes no network requests and does not include telemetry. Cleanup actions are never preselected and require preview plus explicit confirmation.
 
