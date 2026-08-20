@@ -443,19 +443,19 @@ git commit -m "feat: guide advanced storage recovery"
 - `ReportExporter.ExportJson`, `ExportCsv`, and `ExportRedactedJson`.
 - `ActionCoordinator.ExecuteAsync(ActionPreview, CancellationToken)` always requests a post-action verification snapshot.
 
-- [ ] **Step 1: Write failing redaction and verification tests**
+- [x] **Step 1: Write failing redaction and verification tests**
 
 Assert redacted export replaces the profile prefix with `%USERPROFILE%` and that successful execution without a verification snapshot is reported as `unverified`, not successful.
 
-- [ ] **Step 2: Implement JSON/CSV export and local log rotation**
+- [x] **Step 2: Implement JSON/CSV export and local log rotation**
 
 Use `System.Text.Json`, RFC-4180 CSV escaping, and five local log files capped at 5 MB each.
 
-- [ ] **Step 3: Implement before/after verification coordination**
+- [x] **Step 3: Implement before/after verification coordination**
 
 Compare measured free bytes and target bytes, display both, and never claim the preview estimate as actual recovery.
 
-- [ ] **Step 4: Run tests and commit**
+- [x] **Step 4: Run tests and commit**
 
 ```powershell
 dotnet test tests/PathSpace.App.Tests
