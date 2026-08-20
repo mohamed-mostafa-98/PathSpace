@@ -346,19 +346,19 @@ git commit -m "feat: present scan results and recommendations"
 - Produces: preview and result objects sharing stable target identities.
 - Catalog actions: `temp.user`, `temp.windows`, `recycle.currentUser`, `cache.npm`, `windows.componentCleanup`, `power.hibernate`, `volume.optimize`.
 
-- [ ] **Step 1: Write failing allow-list and preview tests**
+- [x] **Step 1: Write failing allow-list and preview tests**
 
 Assert an unknown action throws and that preview targets exactly equal execution targets in dry-run mode.
 
-- [ ] **Step 2: Implement catalog lookup and normalized target resolution**
+- [x] **Step 2: Implement catalog lookup and normalized target resolution**
 
 No action accepts an arbitrary command. Each action resolves from explicit parameters through its catalog handler.
 
-- [ ] **Step 3: Implement safe handlers with dry-run support**
+- [x] **Step 3: Implement safe handlers with dry-run support**
 
 Locked files are skipped and reported. Root paths, unresolved variables, wildcards, network paths, and reparse targets are rejected.
 
-- [ ] **Step 4: Run tests and commit**
+- [x] **Step 4: Run tests and commit**
 
 ```powershell
 Invoke-Pester tests/engine/PathSpaceActions.Tests.ps1
@@ -378,19 +378,19 @@ git commit -m "feat: add previewable safe action catalog"
 - Produces: `ManifestValidator.Validate(ActionManifest manifest, ReadOnlySpan<byte> manifestBytes)`.
 - Worker arguments: `--manifest <absolute-json-path> --result <absolute-json-path>`.
 
-- [ ] **Step 1: Write failing tests for digest, expiry, nonce, action ID, and target scope**
+- [x] **Step 1: Write failing tests for digest, expiry, nonce, action ID, and target scope**
 
 Create valid and tampered fixtures. Assert the validator rejects changed bytes, manifests older than five minutes, unknown IDs, UNC paths, and drive roots for deletion actions.
 
-- [ ] **Step 2: Implement validator and worker dispatch**
+- [x] **Step 2: Implement validator and worker dispatch**
 
 Compute SHA-256 over canonical manifest content, compare fixed-time, validate against the embedded catalog, invoke the PowerShell action by argument array, and write one `ActionResult`.
 
-- [ ] **Step 3: Add GUI elevation launcher**
+- [x] **Step 3: Add GUI elevation launcher**
 
 Use `ProcessStartInfo.Verb = "runas"` only after confirmation. Treat UAC cancellation as a normal cancelled result.
 
-- [ ] **Step 4: Test and commit**
+- [x] **Step 4: Test and commit**
 
 ```powershell
 dotnet test tests/PathSpace.Worker.Tests
