@@ -6,6 +6,17 @@ namespace PathSpace.App.Tests;
 public sealed class ResultViewModelTests
 {
     [Fact]
+    public void Result_paths_filter_case_insensitively_without_changing_source_order()
+    {
+        var snapshot = new ScanSnapshot(1,"scan.snapshot",@"C:\Data",true,false,30,2,0,
+            [new StorageAggregate(@"C:\Data\Alpha",20,1,0),new StorageAggregate(@"C:\Data\Beta",10,1,0)],
+            [new LargeFileEntry(@"C:\Data\Alpha\one.bin",20,DateTimeOffset.UnixEpoch),new LargeFileEntry(@"C:\Data\Beta\two.bin",10,DateTimeOffset.UnixEpoch)],[]);
+        var results=ResultViewModel.FromSnapshot(snapshot);
+        Assert.Equal(@"C:\Data\Beta",Assert.Single(results.FilterCategories("bEtA")).Path);
+        Assert.Equal(@"C:\Data\Alpha\one.bin",Assert.Single(results.FilterLargeFiles("ALPHA")).Path);
+        Assert.Equal(2,results.Categories.Count);
+    }
+    [Fact]
     public void Results_sort_categories_and_large_files_descending_by_bytes()
     {
         var snapshot = new ScanSnapshot(1, "scan.snapshot", @"C:\Data", true, false, 30, 2, 2,

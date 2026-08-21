@@ -12,6 +12,11 @@ public sealed class ResultViewModel
     public required IReadOnlyList<ScanWarning> Warnings { get; init; }
     public bool IsComplete { get; init; }
 
+    public IReadOnlyList<StorageRow> FilterCategories(string? filter) =>
+        string.IsNullOrWhiteSpace(filter) ? Categories : Categories.Where(value => value.Path.Contains(filter.Trim(),StringComparison.OrdinalIgnoreCase)).ToArray();
+    public IReadOnlyList<LargeFileRow> FilterLargeFiles(string? filter) =>
+        string.IsNullOrWhiteSpace(filter) ? LargeFiles : LargeFiles.Where(value => value.Path.Contains(filter.Trim(),StringComparison.OrdinalIgnoreCase)).ToArray();
+
     public static ResultViewModel FromSnapshot(ScanSnapshot snapshot) => new()
     {
         Categories = snapshot.Aggregates

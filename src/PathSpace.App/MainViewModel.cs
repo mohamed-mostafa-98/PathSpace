@@ -24,6 +24,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private bool _isExecutingAction;
     private string _actionStatus = "Select an actionable recommendation to preview it.";
     private readonly ActionCoordinator _actionCoordinator;
+    private string _resultFilter = string.Empty;
 
     public MainViewModel() : this(new EngineClient()) { }
     public MainViewModel(IEngineClient engineClient, ActionCoordinator? actionCoordinator = null)
@@ -63,7 +64,28 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public string Status { get => _status; private set => SetField(ref _status, value); }
     public ScanProgress? Progress { get => _progress; private set => SetField(ref _progress, value); }
     public ScanSnapshot? Snapshot { get => _snapshot; private set => SetField(ref _snapshot, value); }
-    public ResultViewModel? Results { get => _results; private set => SetField(ref _results, value); }
+    public ResultViewModel? Results
+    {
+        get => _results;
+        private set
+        {
+            if(!SetField(ref _results,value)) return;
+            PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(FilteredCategories)));
+            PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(FilteredLargeFiles)));
+        }
+    }
+    public string ResultFilter
+    {
+        get => _resultFilter;
+        set
+        {
+            if(!SetField(ref _resultFilter,value)) return;
+            PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(FilteredCategories)));
+            PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(FilteredLargeFiles)));
+        }
+    }
+    public IReadOnlyList<StorageRow> FilteredCategories => Results?.FilterCategories(ResultFilter) ?? [];
+    public IReadOnlyList<LargeFileRow> FilteredLargeFiles => Results?.FilterLargeFiles(ResultFilter) ?? [];
     public bool IsAdvancedMode
     {
         get => _isAdvancedMode;

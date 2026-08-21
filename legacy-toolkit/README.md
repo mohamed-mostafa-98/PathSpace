@@ -96,7 +96,14 @@ Do not delete these parent folders. Measure their child directories, then clean 
 
 ## Claude relocation
 
-Prefer Windows **Settings > Apps > Claude > Move** when available. If packaged-app move fails, `07-move-claude-runtime-to-e.ps1` uses an NTFS junction. It checks E: capacity and filesystem, copies data with permissions, verifies the copy, retains a rollback directory on C:, and then creates the junction.
+Prefer Windows **Settings > Apps > Claude > Move** when available. If packaged-app move fails, `07-move-claude-runtime-to-e.ps1` uses an NTFS junction. It accepts explicit source, destination, and backup paths; rejects UNC, drive-root, and overlapping paths; checks capacity and NTFS; copies with permissions; verifies byte/file counts; and retains a rollback directory.
+
+Preview first, then stage only after reviewing the exact paths:
+
+```powershell
+.\07-move-claude-runtime-to-e.ps1 -WhatIf
+.\07-move-claude-runtime-to-e.ps1 -Confirm
+```
 
 Test Claude before deleting the rollback directory. The expected junction is:
 
@@ -105,7 +112,13 @@ C:\Users\DELL\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Cla
   -> E:\claude_data\vm_bundles
 ```
 
-After successful testing, verify the junction target before deleting `vm_bundles.c-backup`.
+If Claude does not work, restore the retained backup safely:
+
+```powershell
+.\07-move-claude-runtime-to-e.ps1 -Rollback -Confirm
+```
+
+After successful testing, verify the junction target before deleting `vm_bundles.c-backup`. Automated tests exercise preview, overlap rejection, real junction staging, and rollback using disposable paths.
 
 ## Healthy free-space target
 

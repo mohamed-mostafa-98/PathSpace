@@ -45,24 +45,30 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="Categories">
-                <DataGrid ItemsSource="{Binding Results.Categories}" AutoGenerateColumns="False" IsReadOnly="True"
-                          EnableRowVirtualization="True" EnableColumnVirtualization="True" AutomationProperties.Name="Storage categories">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="*"/>
-                        <DataGridTextColumn Header="Size" Binding="{Binding DisplaySize}" Width="110"/>
-                        <DataGridTextColumn Header="Files" Binding="{Binding FileCount, StringFormat=N0}" Width="90"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <DockPanel>
+                    <TextBox DockPanel.Dock="Top" Text="{Binding ResultFilter, UpdateSourceTrigger=PropertyChanged}" Margin="8" Padding="8,5" AutomationProperties.Name="Filter result paths"/>
+                    <DataGrid ItemsSource="{Binding FilteredCategories}" AutoGenerateColumns="False" IsReadOnly="True"
+                              EnableRowVirtualization="True" EnableColumnVirtualization="True" AutomationProperties.Name="Storage categories">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="*"/>
+                            <DataGridTextColumn Header="Size" Binding="{Binding DisplaySize}" Width="110"/>
+                            <DataGridTextColumn Header="Files" Binding="{Binding FileCount, StringFormat=N0}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
             </TabItem>
             <TabItem Header="Large files">
-                <DataGrid ItemsSource="{Binding Results.LargeFiles}" AutoGenerateColumns="False" IsReadOnly="True"
-                          EnableRowVirtualization="True" EnableColumnVirtualization="True" AutomationProperties.Name="Large files">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="*"/>
-                        <DataGridTextColumn Header="Size" Binding="{Binding DisplaySize}" Width="110"/>
-                        <DataGridTextColumn Header="Modified" Binding="{Binding LastWriteTimeUtc}" Width="180"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <DockPanel>
+                    <TextBox DockPanel.Dock="Top" Text="{Binding ResultFilter, UpdateSourceTrigger=PropertyChanged}" Margin="8" Padding="8,5" AutomationProperties.Name="Filter large-file paths"/>
+                    <DataGrid ItemsSource="{Binding FilteredLargeFiles}" AutoGenerateColumns="False" IsReadOnly="True"
+                              EnableRowVirtualization="True" EnableColumnVirtualization="True" AutomationProperties.Name="Large files">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="*"/>
+                            <DataGridTextColumn Header="Size" Binding="{Binding DisplaySize}" Width="110"/>
+                            <DataGridTextColumn Header="Modified" Binding="{Binding LastWriteTimeUtc}" Width="180"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
             </TabItem>
             <TabItem Header="Recommendations">
                 <Grid Margin="14">
