@@ -1,0 +1,82 @@
+name: Windows CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-and-package:
+    name: Quality and portable package
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore .NET projects
+        shell: pwsh
+        run: dotnet restore .\PathSpace.sln
+
+      - name: Test .NET contracts, worker, and application
+        shell: pwsh
+        run: dotnet test .\PathSpace.sln -c Release --no-restore --logger 'trx;LogFilePrefix=PathSpace' --results-directory .\artifacts\test-results
+
+      - name: Test PowerShell engine
+        shell: powershell
+        run: |
+          if (-not (Get-Module -ListAvailable Pester | Where-Object Version -EQ '4.10.1')) {
+            Install-Module Pester -RequiredVersion 4.10.1 -Scope CurrentUser -Force -SkipPublisherCheck
+          }
+          Import-Module Pester -RequiredVersion 4.10.1 -Force
+          $result = Invoke-Pester -Script '.\tests\engine' -OutputFormat NUnitXml -OutputFile '.\artifacts\test-results\PathSpace-engine.xml' -PassThru
+          if ($result.FailedCount -ne 0) { exit 1 }
+
+      - name: Validate Markdown links
+        shell: pwsh
+        run: .\scripts\test-markdown-links.ps1
+
+      - name: Build portable package
+        shell: powershell
+        run: .\scripts\build-portable.ps1
+
+      - name: Verify portable checksums
+        shell: pwsh
+        run: .\scripts\test-package-checksums.ps1
+
+      - name: Smoke-test packaged worker
+        shell: pwsh
+        run: .\scripts\verify-portable-action.ps1
+
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pathspace-test-results-${{ github.run_number }}
+          path: artifacts/test-results
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload portable package
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PathSpace-win-x64-${{ github.run_number }}
+          path: artifacts/PathSpace-win-x64
+          if-no-files-found: error
+          retention-days: 30

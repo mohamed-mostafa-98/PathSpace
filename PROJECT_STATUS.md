@@ -29,6 +29,10 @@
 
 These outstanding checks are tracked in Linear and in `docs/testing` rather than being represented as completed.
 
+## CI status
+
+The Windows CI workflow and reusable Markdown/package validators are implemented locally. The repository currently has no configured remote, so the first hosted GitHub Actions run is still required before MOH-29 can be marked complete.
+
 ## Engineering-completeness backlog
 
 - MOH-29 — Windows CI and package pipeline

@@ -47,6 +47,7 @@ Basic workflow:
 - [License](LICENSE) and [third-party notices](THIRD-PARTY-NOTICES.md)
 - [Windows compatibility record](docs/testing/windows-compatibility.md)
 - [Accessibility checklist](docs/testing/accessibility-checklist.md)
+- [Windows CI workflow](.github/workflows/windows-ci.yml)
 
 ## Repository structure
 
@@ -80,6 +81,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-packaged-gui.
 ```
 
 Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, 21 PowerShell engine tests, and 2 opt-in packaged GUI workflows.
+
+The Windows CI workflow runs the non-interactive quality suites, Markdown/schema checks, portable build, checksum verification, and packaged-worker smoke test. It retains test evidence and the checksummed portable package for 30 days. Packaged GUI automation remains an interactive desktop gate because hosted CI sessions do not provide a reliable unlocked desktop.
 
 ## Product identity and version
 

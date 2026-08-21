@@ -72,3 +72,16 @@ This creates and removes only its own disposable temporary fixture.
 - Confirm no unexpected TCP connections.
 - Scan a local folder and a fixed drive.
 - Complete Windows 10, removable-media, UAC-cancellation, Narrator, keyboard, scaling, and high-contrast checks before a public release.
+
+## Windows CI
+
+`.github\workflows\windows-ci.yml` runs on pushes and pull requests targeting `master` or `main`, plus manual dispatch. It uses a least-privilege read-only repository token and a 30-minute timeout. The job restores .NET, treats build warnings as errors through repository properties, runs the .NET and Pester suites, validates local Markdown links and JSON contracts, builds the portable package, verifies every SHA-256 entry, and smoke-tests the packaged worker.
+
+CI retains test results and the portable package for 30 days. It does not sign binaries, access production credentials, upload runtime scan data, or exercise the interactive packaged GUI. Signing is a separate MOH-30 gate, and interactive GUI/accessibility runs require an unlocked Windows desktop.
+
+Local equivalents for the standalone CI checks are:
+
+```powershell
+.\scripts\test-markdown-links.ps1
+.\scripts\test-package-checksums.ps1
+```

@@ -37,6 +37,19 @@ Invoke-Pester -Script '.\tests\engine'
 
 Package-affecting changes must rebuild `artifacts\PathSpace-win-x64`, verify `SHA256SUMS.txt`, and run `scripts\verify-portable-action.ps1` where relevant.
 
+Before opening or merging a pull request, run the same local checks used by Windows CI:
+
+```powershell
+dotnet test .\PathSpace.sln -c Release
+Invoke-Pester -Script '.\tests\engine'
+.\scripts\test-markdown-links.ps1
+.\scripts\build-portable.ps1
+.\scripts\test-package-checksums.ps1
+pwsh -NoProfile -File .\scripts\verify-portable-action.ps1
+```
+
+The hosted workflow must be green for its exact commit. Interactive packaged-GUI and external Windows/accessibility evidence remain separate required release gates and must not be represented as hosted-CI coverage.
+
 ## Safety review
 
 - Do not broaden action targets or elevation scope without explicit threat analysis and tests.
