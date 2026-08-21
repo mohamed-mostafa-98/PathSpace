@@ -5,7 +5,7 @@
 - Host build observed: Windows NT 10.0.26200.0 (Windows 11 branch), build 26200.9168.
 - Architecture: x64.
 - .NET SDK used: 8.0.424, locally installed for development.
-- Automated .NET tests: 2 contract, 13 WPF/client/integration, and 6 worker security tests passed.
+- Automated .NET tests: 2 contract, 14 WPF/client/integration/accessibility-markup, and 6 worker security tests passed.
 - Automated PowerShell tests: 21 local-path, scan, cancellation, recommendation, action, Docker/WSL, and Claude relocation/rollback tests passed.
 
 ## Manual matrix
