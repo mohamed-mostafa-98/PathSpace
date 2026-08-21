@@ -10,6 +10,7 @@ public interface IEngineClient
 {
     Task<ScanSnapshot> ScanAsync(string target, IProgress<ScanProgress> progress, CancellationToken cancellationToken);
     Task<IReadOnlyList<Recommendation>> RecommendAsync(ScanSnapshot snapshot, CancellationToken cancellationToken) => Task.FromResult<IReadOnlyList<Recommendation>>([]);
+    Task<IReadOnlyList<Recommendation>> RecommendAsync(ScanSnapshot snapshot, IReadOnlyList<AppDiagnostic> diagnostics, CancellationToken cancellationToken) => RecommendAsync(snapshot, cancellationToken);
     Task<IReadOnlyList<AppDiagnostic>> DiagnoseAsync(CancellationToken cancellationToken) => Task.FromResult<IReadOnlyList<AppDiagnostic>>([]);
     Task<ActionPreview> PreviewAsync(string actionId, string? driveLetter, CancellationToken cancellationToken) => throw new NotSupportedException();
 }
@@ -56,11 +57,16 @@ public sealed class EngineClient : IEngineClient
     }
 
     public async Task<IReadOnlyList<Recommendation>> RecommendAsync(ScanSnapshot snapshot, CancellationToken cancellationToken)
+        => await RecommendAsync(snapshot, [], cancellationToken);
+
+    public async Task<IReadOnlyList<Recommendation>> RecommendAsync(ScanSnapshot snapshot, IReadOnlyList<AppDiagnostic> diagnostics, CancellationToken cancellationToken)
     {
         var input = Path.Combine(Path.GetTempPath(), $"pathspace-{Guid.NewGuid():N}.snapshot.json");
+        var diagnosticsInput = Path.Combine(Path.GetTempPath(), $"pathspace-{Guid.NewGuid():N}.diagnostics.json");
         await File.WriteAllTextAsync(input, JsonSerializer.Serialize(snapshot, JsonOptions), cancellationToken);
-        try { return await RunJsonLinesAsync<Recommendation>(["recommend", "-InputPath", input], "recommendation", cancellationToken); }
-        finally { File.Delete(input); }
+        await File.WriteAllTextAsync(diagnosticsInput, JsonSerializer.Serialize(diagnostics, JsonOptions), cancellationToken);
+        try { return await RunJsonLinesAsync<Recommendation>(["recommend", "-InputPath", input, "-DiagnosticsPath", diagnosticsInput], "recommendation", cancellationToken); }
+        finally { File.Delete(input); File.Delete(diagnosticsInput); }
     }
 
     public Task<IReadOnlyList<AppDiagnostic>> DiagnoseAsync(CancellationToken cancellationToken) =>

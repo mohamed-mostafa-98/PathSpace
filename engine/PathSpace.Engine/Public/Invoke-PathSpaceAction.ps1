@@ -7,6 +7,10 @@ function Invoke-PathSpaceAction {
         return [pscustomobject]@{ schemaVersion=1; kind='action.result'; actionId=$ActionId; status='dryRun'; recoveredBytes=[long]0; targetsProcessed=[long]0; targetsSkipped=[long]0; targets=$preview.targets; messages=@('No files were changed during dry-run.') }
     }
 
+    $measurementPath = if ($ActionId -in @('temp.user','temp.windows','cache.npm','volume.optimize') -and $preview.targets.Count -gt 0) { [string]$preview.targets[0].path } else { "$env:SystemDrive\" }
+    $measurementRoot = [IO.Path]::GetPathRoot([IO.Path]::GetFullPath($measurementPath))
+    [long]$freeBefore = if ($measurementRoot) { ([IO.DriveInfo]::new($measurementRoot)).AvailableFreeSpace } else { 0 }
+
     [long]$processed = 0
     [long]$skipped = 0
     $messages = New-Object 'System.Collections.Generic.List[string]'
@@ -29,6 +33,9 @@ function Invoke-PathSpaceAction {
     }
     catch { $messages.Add($_.Exception.Message); $skipped++ }
     $after = Get-PathSpaceActionPreview -ActionId $ActionId -Parameters $Parameters
-    [long]$recovered = [Math]::Max(0, $preview.estimatedBytes - $after.estimatedBytes)
+    [long]$freeAfter = if ($measurementRoot) { ([IO.DriveInfo]::new($measurementRoot)).AvailableFreeSpace } else { $freeBefore }
+    [long]$removedFromTargets = [Math]::Max(0, $preview.estimatedBytes - $after.estimatedBytes)
+    [long]$recovered = [Math]::Max(0, $freeAfter - $freeBefore)
+    $messages.Add("Post-action target measurement changed by $removedFromTargets bytes; available disk space changed by $recovered bytes.")
     [pscustomobject]@{ schemaVersion=1; kind='action.result'; actionId=$ActionId; status=$(if($skipped -gt 0){'partial'}else{'completed'}); recoveredBytes=$recovered; targetsProcessed=$processed; targetsSkipped=$skipped; targets=$preview.targets; messages=@($messages.ToArray()) }
 }

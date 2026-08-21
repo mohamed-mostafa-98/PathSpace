@@ -35,11 +35,14 @@ public sealed class EngineClientTests
         {
             var client = new EngineClient(cli);
             var snapshot = await client.ScanAsync(root, new InlineProgress<ScanProgress>(_ => { }), CancellationToken.None);
-            var recommendations = await client.RecommendAsync(snapshot, CancellationToken.None);
+            var hibernationData = System.Text.Json.JsonDocument.Parse("{\"bytes\":1024,\"path\":\"C:\\\\hiberfil.sys\"}").RootElement.Clone();
+            IReadOnlyList<AppDiagnostic> diagnostics = [new AppDiagnostic(1, "app.diagnostic", "hibernation", true, hibernationData, "fixture")];
+            var recommendations = await client.RecommendAsync(snapshot, diagnostics, CancellationToken.None);
             var preview = await client.PreviewAsync("volume.optimize", "C", CancellationToken.None);
 
             Assert.True(snapshot.Complete);
             Assert.Contains(recommendations, value => value.Id == "cache.npm");
+            Assert.Contains(recommendations, value => value.Id == "power.hibernate");
             Assert.Equal("volume.optimize", preview.ActionId);
             Assert.Equal(@"C:\", Assert.Single(preview.Targets).Path);
         }

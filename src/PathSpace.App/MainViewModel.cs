@@ -104,9 +104,13 @@ public sealed class MainViewModel : INotifyPropertyChanged
             var progress = new Progress<ScanProgress>(value => { Progress = value; Status = $"Analyzing {value.CurrentPath}"; });
             Snapshot = await _engineClient.ScanAsync(TargetPath, progress, _scanCancellation.Token);
             Results = ResultViewModel.FromSnapshot(Snapshot);
-            Recommendations = await _engineClient.RecommendAsync(Snapshot, _scanCancellation.Token);
-            Diagnostics = await _engineClient.DiagnoseAsync(_scanCancellation.Token);
-            Status = Snapshot.Complete ? $"Analysis complete: {Snapshot.FileCount:N0} files measured." : "Analysis cancelled. Partial results are read-only.";
+            var optionalWarnings = new List<string>();
+            try { Diagnostics = await _engineClient.DiagnoseAsync(_scanCancellation.Token); }
+            catch (Exception exception) { Diagnostics = []; optionalWarnings.Add($"guided diagnostics unavailable: {exception.Message}"); }
+            try { Recommendations = await _engineClient.RecommendAsync(Snapshot, Diagnostics, _scanCancellation.Token); }
+            catch (Exception exception) { Recommendations = []; optionalWarnings.Add($"recommendations unavailable: {exception.Message}"); }
+            var finalStatus = Snapshot.Complete ? $"Analysis complete: {Snapshot.FileCount:N0} files measured." : "Analysis cancelled. Partial results are read-only.";
+            Status = optionalWarnings.Count == 0 ? finalStatus : $"{finalStatus} {string.Join("; ", optionalWarnings)}";
         }
         catch (Exception exception) { Status = $"Analysis failed: {exception.Message}"; }
         finally

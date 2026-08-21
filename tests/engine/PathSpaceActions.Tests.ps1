@@ -40,7 +40,9 @@ Describe 'PathSpace action catalog' {
             $result=Invoke-PathSpaceAction -ActionId 'temp.user' -Confirmed
 
             [IO.File]::Exists((Join-Path $TestDrive 'remove.bin')) | Should Be $false
-            $result.recoveredBytes | Should Be $preview.estimatedBytes
+            $result.recoveredBytes | Should Not BeLessThan 0
+            ($result.messages -join ' ') | Should Match "target measurement changed by $($preview.estimatedBytes) bytes"
+            ($result.messages -join ' ') | Should Match 'available disk space changed'
             $result.status | Should Be 'completed'
         } finally {$env:TEMP=$previousTemp}
     }

@@ -8,6 +8,8 @@ param(
 
     [string] $InputPath,
 
+    [string] $DiagnosticsPath,
+
     [string] $ActionId,
 
     [string] $DriveLetter,
@@ -30,7 +32,27 @@ try {
         'recommend' {
             if(-not $InputPath -or -not [IO.File]::Exists($InputPath)){throw 'A valid -InputPath snapshot JSON file is required.'}
             $snapshot=Get-Content -LiteralPath $InputPath -Raw | ConvertFrom-Json
-            Get-PathSpaceRecommendation -Snapshot $snapshot | ForEach-Object { $_ | ConvertTo-Json -Depth 10 -Compress }
+            $diagnostics=$null
+            if($DiagnosticsPath -and [IO.File]::Exists($DiagnosticsPath)){
+                $items=@()
+                foreach($line in @(Get-Content -LiteralPath $DiagnosticsPath | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })){
+                    $parsed=$line|ConvertFrom-Json
+                    $items += @($parsed)
+                }
+                $page=@($items|Where-Object id -eq 'pagefile'|Select-Object -First 1)
+                $hiber=@($items|Where-Object id -eq 'hibernation'|Select-Object -First 1)
+                $volume=@($items|Where-Object id -eq 'volume'|Select-Object -First 1)
+                [long]$pageBytes=($page.data.pagefiles|Measure-Object -Property allocatedBytes -Sum).Sum
+                [long]$hiberBytes=if($hiber.Count){$hiber[0].data.bytes}else{0}
+                $systemDriveLetter=([string]$env:SystemDrive).TrimEnd(':')
+                $systemVolume=@($volume.data.volumes|Where-Object DriveLetter -eq $systemDriveLetter|Select-Object -First 1)
+                $diagnostics=[pscustomobject]@{
+                    pagefileBytes=$pageBytes;hiberfileBytes=$hiberBytes
+                    totalBytes=$(if($systemVolume.Count){[long]$systemVolume[0].Size}else{0})
+                    freeBytes=$(if($systemVolume.Count){[long]$systemVolume[0].SizeRemaining}else{0})
+                }
+            }
+            Get-PathSpaceRecommendation -Snapshot $snapshot -Diagnostics $diagnostics | ForEach-Object { $_ | ConvertTo-Json -Depth 10 -Compress }
         }
         'diagnose' {
             Get-PathSpaceAppDiagnostic | ForEach-Object { $_ | ConvertTo-Json -Depth 10 -Compress }
