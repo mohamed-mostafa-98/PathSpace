@@ -32,7 +32,7 @@ Output:
 artifacts\PathSpace-win-x64
 ```
 
-The folder includes the GUI, worker, engine, CLI, schemas, documentation, guided toolkit, and `SHA256SUMS.txt`.
+The folder includes the GUI, worker, engine, CLI, schemas, documentation hub, README, project status, contribution policy, changelog, guided toolkit, and `SHA256SUMS.txt`.
 
 ## Package smoke test
 

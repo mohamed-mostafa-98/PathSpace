@@ -39,6 +39,9 @@ Basic workflow:
 - [Security and cleanup safety](docs/technical/security-and-safety.md)
 - [Build, test, and release guide](docs/technical/build-test-release.md)
 - [User use cases](docs/use-cases/README.md)
+- [Completion roadmap](docs/project-roadmap.md)
+- [Contributing and Definition of Done](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
 - [Windows compatibility record](docs/testing/windows-compatibility.md)
 - [Accessibility checklist](docs/testing/accessibility-checklist.md)
 
@@ -83,5 +86,9 @@ Verified automated coverage on the merged build: 2 contract tests, 6 worker-secu
 - [Linear project](https://linear.app/mohamed-mostafa/project/pathspace-04c36f87d38a)
 - [Design specification](docs/superpowers/specs/2026-08-20-pathspace-design.md)
 - [Implementation plan](docs/superpowers/plans/2026-08-20-pathspace-implementation.md)
+
+## Documentation rule
+
+Every source, configuration, schema, test, packaging, or release change must update `CHANGELOG.md` and all affected documentation in the same commit, then record verification evidence in Linear. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [documentation policy](docs/technical/documentation-policy.md).
 
 The private Windows 11 build is verified. Windows 10, removable-media, Narrator, and manual 200% scaling checks remain explicit public-release gates.

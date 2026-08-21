@@ -8,6 +8,7 @@ PathSpace is a Windows storage-analysis and guided-cleanup product built around 
 - [CLI reference](cli-reference.md)
 - [Security and cleanup safety](security-and-safety.md)
 - [Build, test, and release](build-test-release.md)
+- [Documentation maintenance policy](documentation-policy.md)
 
 ## Technology stack
 

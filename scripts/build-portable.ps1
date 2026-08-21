@@ -17,7 +17,9 @@ if($LASTEXITCODE -ne 0){throw 'Worker publish failed.'}
 foreach($name in @('engine','schemas','cli','legacy-toolkit')){Copy-Item -LiteralPath (Join-Path $projectRoot $name) -Destination $artifact -Recurse -Force}
 Copy-Item -LiteralPath (Join-Path $projectRoot 'engine') -Destination $worker -Recurse -Force
 Copy-Item -LiteralPath (Join-Path $projectRoot 'cli') -Destination $worker -Recurse -Force
-Copy-Item -LiteralPath (Join-Path $projectRoot 'README.md') -Destination $artifact
+foreach($name in @('README.md','PROJECT_STATUS.md','CONTRIBUTING.md','CHANGELOG.md')){
+    Copy-Item -LiteralPath (Join-Path $projectRoot $name) -Destination $artifact
+}
 Copy-Item -LiteralPath (Join-Path $projectRoot 'docs') -Destination $artifact -Recurse -Force
 Get-ChildItem -LiteralPath $artifact -Recurse -File | Get-FileHash -Algorithm SHA256 | ForEach-Object {"$($_.Hash)  $($_.Path.Substring($artifact.Length+1))"} | Set-Content (Join-Path $artifact 'SHA256SUMS.txt') -Encoding UTF8
 Write-Output $artifact

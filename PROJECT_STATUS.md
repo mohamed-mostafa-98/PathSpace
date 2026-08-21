@@ -25,3 +25,15 @@
 - Manual 200% scaling, high-contrast, and contrast review
 
 These outstanding checks are tracked in Linear and in `docs/testing` rather than being represented as completed.
+
+## Engineering-completeness backlog
+
+- MOH-25 — connect bounded local audit logging
+- MOH-26 — complete JSON Schema coverage
+- MOH-27 — packaged GUI end-to-end workflow testing
+- MOH-28 — license, notices, icon, and version metadata
+- MOH-29 — Windows CI and package pipeline
+- MOH-30 — Authenticode signing and release integrity
+- MOH-31 — installer and runtime-prerequisite strategy
+
+The complete dependency order is documented in [docs/project-roadmap.md](docs/project-roadmap.md). MOH-32 establishes the mandatory rule that every future change updates the changelog, affected documentation, and Linear evidence in the same change.
