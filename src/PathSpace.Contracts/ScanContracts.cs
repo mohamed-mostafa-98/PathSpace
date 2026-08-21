@@ -28,7 +28,8 @@ public sealed record ScanSnapshot(
     [property: JsonPropertyName("directoryCount")] long DirectoryCount,
     [property: JsonPropertyName("aggregates")] IReadOnlyList<StorageAggregate> Aggregates,
     [property: JsonPropertyName("largeFiles")] IReadOnlyList<LargeFileEntry> LargeFiles,
-    [property: JsonPropertyName("warnings")] IReadOnlyList<ScanWarning> Warnings);
+    [property: JsonPropertyName("warnings")] IReadOnlyList<ScanWarning> Warnings,
+    [property: JsonPropertyName("scanId")] string ScanId = "");
 
 public sealed record StorageAggregate(
     [property: JsonPropertyName("path")] string Path,

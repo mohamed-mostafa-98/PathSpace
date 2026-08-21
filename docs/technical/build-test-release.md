@@ -18,12 +18,18 @@ dotnet test .\tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj
 Invoke-Pester -Script '.\tests\engine'
 ```
 
-The verified merged build passes 2 contract, 6 worker-security, 14 application/accessibility, and 21 engine tests.
+The current build passes 11 contract/schema, 6 worker-security, 17 application/accessibility, and 21 engine tests. Contract tests use JsonSchema.Net to validate representative serialized v1 messages against every schema and confirm invalid discriminators/unknown properties are rejected.
 
 ## Build portable package
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-portable.ps1
+```
+
+If the SDK is installed privately and is not on `PATH`, supply its host explicitly:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-portable.ps1 -DotNetPath 'C:\path\to\dotnet.exe'
 ```
 
 Output:
@@ -32,7 +38,7 @@ Output:
 artifacts\PathSpace-win-x64
 ```
 
-The folder includes the GUI, worker, engine, CLI, schemas, documentation hub, README, project status, contribution policy, changelog, guided toolkit, and `SHA256SUMS.txt`.
+The folder includes the GUI, worker, engine, CLI, schemas, documentation hub, README, project status, contribution policy, changelog, MIT license, third-party notices, product icon, guided toolkit, and `SHA256SUMS.txt`.
 
 ## Package smoke test
 
@@ -48,6 +54,8 @@ This creates and removes only its own disposable temporary fixture.
 - Run every test suite from the intended release commit.
 - Rebuild the portable folder after the last documentation or source change.
 - Verify every entry in `SHA256SUMS.txt`.
+- Confirm executable product version `0.1.0`, informational version `0.1.0-private`, and the PathSpace application icon.
+- Confirm `LICENSE` and `THIRD-PARTY-NOTICES.md` are present.
 - Launch the packaged GUI as a normal user.
 - Confirm no unexpected TCP connections.
 - Scan a local folder and a fixed drive.

@@ -76,6 +76,20 @@ public sealed class MainViewModelTests
         Assert.Contains("No cleanup action was performed", viewModel.Status);
     }
 
+    [Fact]
+    public async Task Completed_scan_is_written_to_the_audit_boundary_without_a_raw_path()
+    {
+        var audit = new RecordingAuditLog();
+        var snapshot = new ScanSnapshot(1, "scan.snapshot", @"C:\Private\Data", true, false, 20, 2, 1, [], [], []);
+        var viewModel = new MainViewModel(new StubEngineClient(Task.FromResult(snapshot)), auditLog: audit) { TargetPath = snapshot.TargetPath };
+
+        await viewModel.AnalyzeAsync();
+
+        Assert.Contains(audit.Events, value => value.EventName == "scan" && value.Outcome == "started");
+        Assert.Contains(audit.Events, value => value.EventName == "scan" && value.Outcome == "completed");
+        Assert.DoesNotContain(@"C:\Private\Data", string.Join(Environment.NewLine, audit.Events.Select(value => value.Details)));
+    }
+
     private sealed class StubEngineClient(Task<ScanSnapshot> result) : IEngineClient
     {
         public Task<ScanSnapshot> ScanAsync(string target, IProgress<ScanProgress> progress, CancellationToken cancellationToken) => result;
@@ -115,5 +129,10 @@ public sealed class MainViewModelTests
     private sealed class MissingActionVerifier : IActionVerifier
     {
         public Task<ScanSnapshot?> VerifyAsync(ActionPreview preview, CancellationToken token) => Task.FromResult<ScanSnapshot?>(null);
+    }
+    private sealed class RecordingAuditLog : IAuditLog
+    {
+        public List<(string EventName, string Outcome, string Details)> Events { get; } = [];
+        public void Record(string eventName, string outcome, object? details = null) => Events.Add((eventName, outcome, details?.ToString() ?? string.Empty));
     }
 }

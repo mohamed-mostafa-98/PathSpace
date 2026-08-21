@@ -32,16 +32,45 @@ public static class ReportExporter
     private static string Csv(string value) => $"\"{value.Replace("\"", "\"\"")}\"";
 }
 
-public sealed class LocalAuditLog(string directory)
+public interface IAuditLog
+{
+    void Record(string eventName, string outcome, object? details = null);
+}
+
+public sealed class LocalAuditLog(string directory) : IAuditLog
 {
     private const long MaximumBytes = 5 * 1024 * 1024;
     private const int MaximumFiles = 5;
+    private readonly object _sync = new();
+
+    public void Record(string eventName, string outcome, object? details = null)
+    {
+        try
+        {
+            var entry = JsonSerializer.Serialize(new
+            {
+                schemaVersion = 1,
+                kind = "audit.event",
+                timestamp = DateTimeOffset.UtcNow,
+                eventName,
+                outcome,
+                details
+            });
+            Append(entry);
+        }
+        catch (IOException) { }
+        catch (UnauthorizedAccessException) { }
+    }
+
     public void Append(string jsonLine)
     {
-        Directory.CreateDirectory(directory);
-        var current = Path.Combine(directory, "pathspace-0.jsonl");
-        if (File.Exists(current) && new FileInfo(current).Length + Encoding.UTF8.GetByteCount(jsonLine) > MaximumBytes) Rotate();
-        File.AppendAllText(current, jsonLine + Environment.NewLine, Encoding.UTF8);
+        lock (_sync)
+        {
+            Directory.CreateDirectory(directory);
+            var current = Path.Combine(directory, "pathspace-0.jsonl");
+            if (File.Exists(current) && new FileInfo(current).Length + Encoding.UTF8.GetByteCount(jsonLine) > MaximumBytes) Rotate();
+            File.AppendAllText(current, jsonLine + Environment.NewLine, Encoding.UTF8);
+        }
     }
     private void Rotate()
     {

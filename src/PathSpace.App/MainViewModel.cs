@@ -24,13 +24,16 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private bool _isExecutingAction;
     private string _actionStatus = "Select an actionable recommendation to preview it.";
     private readonly ActionCoordinator _actionCoordinator;
+    private readonly IAuditLog _auditLog;
     private string _resultFilter = string.Empty;
 
     public MainViewModel() : this(new EngineClient()) { }
-    public MainViewModel(IEngineClient engineClient, ActionCoordinator? actionCoordinator = null)
+    public MainViewModel(IEngineClient engineClient, ActionCoordinator? actionCoordinator = null, IAuditLog? auditLog = null)
     {
         _engineClient = engineClient;
         _actionCoordinator = actionCoordinator ?? new ActionCoordinator(new WorkerActionExecutor(), new EngineActionVerifier(engineClient));
+        _auditLog = auditLog ?? new LocalAuditLog(Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PathSpace", "Audit"));
         AnalyzeCommand = new RelayCommand(() => _ = AnalyzeAsync(), () => !IsScanning && !string.IsNullOrWhiteSpace(TargetPath));
         CancelCommand = new RelayCommand(Cancel, () => IsScanning);
         PreviewActionCommand = new RelayCommand(() => _ = PreviewSelectedAsync(), () => SelectedRecommendation?.Actionable == true && !IsScanning && !IsExecutingAction);
@@ -124,6 +127,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         Diagnostics = [];
         Progress = null;
         Status = "Analyzing local storage…";
+        _auditLog.Record("scan", "started", new { targetType = Path.GetPathRoot(TargetPath) == TargetPath ? "drive" : "folder" });
         try
         {
             var progress = new Progress<ScanProgress>(value => { Progress = value; Status = $"Analyzing {value.CurrentPath}"; });
@@ -136,8 +140,15 @@ public sealed class MainViewModel : INotifyPropertyChanged
             catch (Exception exception) { Recommendations = []; optionalWarnings.Add($"recommendations unavailable: {exception.Message}"); }
             var finalStatus = Snapshot.Complete ? $"Analysis complete: {Snapshot.FileCount:N0} files measured." : "Analysis cancelled. Partial results are read-only.";
             Status = optionalWarnings.Count == 0 ? finalStatus : $"{finalStatus} {string.Join("; ", optionalWarnings)}";
+            _auditLog.Record("scan", Snapshot.Complete ? "completed" : "cancelled", new
+            {
+                Snapshot.LogicalBytes,
+                Snapshot.FileCount,
+                Snapshot.DirectoryCount,
+                warningCount = Snapshot.Warnings.Count
+            });
         }
-        catch (Exception exception) { Status = $"Analysis failed: {exception.Message}"; }
+        catch (Exception exception) { Status = $"Analysis failed: {exception.Message}"; _auditLog.Record("scan", "failed", new { errorType = exception.GetType().Name }); }
         finally
         {
             IsScanning = false;
@@ -156,8 +167,9 @@ public sealed class MainViewModel : INotifyPropertyChanged
             CurrentPreview=await _engineClient.PreviewAsync(SelectedRecommendation.Id, null, CancellationToken.None);
             HasConfirmedPreview=false;
             ActionStatus=$"Preview ready: {CurrentPreview.Targets.Count} target(s), up to {CurrentPreview.EstimatedBytes:N0} measured bytes.";
+            _auditLog.Record("action.preview", "completed", new { CurrentPreview.ActionId, targetCount = CurrentPreview.Targets.Count, CurrentPreview.EstimatedBytes, CurrentPreview.RequiresElevation });
         }
-        catch(Exception exception){CurrentPreview=null;ActionStatus=$"Preview unavailable: {exception.Message}";}
+        catch(Exception exception){CurrentPreview=null;ActionStatus=$"Preview unavailable: {exception.Message}";_auditLog.Record("action.preview", "failed", new { actionId = SelectedRecommendation?.Id, errorType = exception.GetType().Name });}
     }
     public async Task ExecutePreviewAsync()
     {
@@ -171,8 +183,9 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 ? "Action finished, but recovery could not be verified; no success claim was recorded."
                 : $"Action {outcome.Status}. Measured recovery: {outcome.MeasuredRecoveredBytes.GetValueOrDefault():N0} bytes.";
             HasConfirmedPreview=false;
+            _auditLog.Record("action.execute", outcome.Status, new { CurrentPreview.ActionId, outcome.Result.TargetsProcessed, outcome.Result.TargetsSkipped, outcome.MeasuredRecoveredBytes });
         }
-        catch(Exception exception){ActionStatus=$"Action failed safely: {exception.Message}";}
+        catch(Exception exception){ActionStatus=$"Action failed safely: {exception.Message}";_auditLog.Record("action.execute", "failed", new { actionId = CurrentPreview.ActionId, errorType = exception.GetType().Name });}
         finally{IsExecutingAction=false;}
     }
     public async Task RunProtectedDiagnosticsAsync()
@@ -183,9 +196,10 @@ public sealed class MainViewModel : INotifyPropertyChanged
             Diagnostics=await _engineClient.DiagnoseProtectedAsync(CancellationToken.None);
             if(Snapshot?.Complete==true) Recommendations=await _engineClient.RecommendAsync(Snapshot,Diagnostics,CancellationToken.None);
             Status="Protected diagnostics complete. No cleanup action was performed.";
+            _auditLog.Record("diagnostics.protected", "completed", new { diagnosticCount = Diagnostics.Count });
         }
-        catch(OperationCanceledException exception){Status=exception.Message;}
-        catch(Exception exception){Status=$"Protected diagnostics failed safely: {exception.Message}";}
+        catch(OperationCanceledException exception){Status=exception.Message;_auditLog.Record("diagnostics.protected", "cancelled");}
+        catch(Exception exception){Status=$"Protected diagnostics failed safely: {exception.Message}";_auditLog.Record("diagnostics.protected", "failed", new { errorType = exception.GetType().Name });}
     }
     private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

@@ -10,6 +10,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>..\..\assets\pathspace.ico</ApplicationIcon>
   </PropertyGroup>
 
 </Project>

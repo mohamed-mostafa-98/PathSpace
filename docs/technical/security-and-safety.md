@@ -28,6 +28,10 @@ The worker validates:
 
 The digest detects accidental or local manifest mutation; it is not a publisher code-signing certificate. Public distribution should add Authenticode signing for executables and scripts.
 
+## Local audit records
+
+The GUI records scan starts/completions/cancellations/failures, protected-diagnostic outcomes, action previews, and confirmed-action outcomes. Records are structured `audit.event` v1 JSON Lines under `%LOCALAPPDATA%\PathSpace\Audit`, bounded to five 5 MiB files. Raw target paths and exception messages are excluded; event type, outcome, counts, action ID, elevation flag, and measured-byte evidence may be included. These local records are not telemetry and are never uploaded. Audit write failures are non-fatal and never turn an otherwise safe scan or action into an application failure.
+
 ## Cleanup classifications
 
 - Temporary files and npm-cache cleanup permanently delete only unlocked children after confirmation.

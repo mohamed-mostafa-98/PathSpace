@@ -6,5 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Deterministic>true</Deterministic>
+    <Version>0.1.0</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <InformationalVersion>0.1.0-private</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Product>PathSpace</Product>
+    <Company>PathSpace Contributors</Company>
+    <Authors>PathSpace Contributors</Authors>
+    <Copyright>Copyright © 2026 PathSpace Contributors</Copyright>
+    <Description>Offline Windows storage analysis and explicitly confirmed safe cleanup guidance.</Description>
   </PropertyGroup>
 </Project>

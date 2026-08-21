@@ -1,5 +1,6 @@
 using PathSpace.App;
 using PathSpace.Contracts;
+using System.Text.Json;
 
 namespace PathSpace.App.Tests;
 
@@ -30,5 +31,35 @@ public sealed class ReportExporterTests
             Assert.True(File.Exists(Path.Combine(directory, "pathspace-1.jsonl")));
         }
         finally { if (Directory.Exists(directory)) Directory.Delete(directory, true); }
+    }
+
+    [Fact]
+    public void Local_audit_log_writes_structured_versioned_events()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"pathspace-log-{Guid.NewGuid():N}");
+        try
+        {
+            var log = new LocalAuditLog(directory);
+            log.Record("scan", "completed", new { fileCount = 2 });
+            using var entry = JsonDocument.Parse(File.ReadAllLines(Path.Combine(directory, "pathspace-0.jsonl"))[0]);
+            Assert.Equal(1, entry.RootElement.GetProperty("schemaVersion").GetInt32());
+            Assert.Equal("audit.event", entry.RootElement.GetProperty("kind").GetString());
+            Assert.Equal("scan", entry.RootElement.GetProperty("eventName").GetString());
+            Assert.Equal(2, entry.RootElement.GetProperty("details").GetProperty("fileCount").GetInt32());
+        }
+        finally { if (Directory.Exists(directory)) Directory.Delete(directory, true); }
+    }
+
+    [Fact]
+    public void Audit_write_failure_does_not_fail_the_primary_workflow()
+    {
+        var file = Path.GetTempFileName();
+        try
+        {
+            var log = new LocalAuditLog(file);
+            var exception = Record.Exception(() => log.Record("scan", "completed"));
+            Assert.Null(exception);
+        }
+        finally { File.Delete(file); }
     }
 }

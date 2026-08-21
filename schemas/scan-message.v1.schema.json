@@ -2,12 +2,14 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pathspace.local/schemas/scan-message.v1.schema.json",
   "title": "PathSpace scan message v1",
-  "type": "object",
-  "required": ["schemaVersion", "kind"],
-  "properties": {
-    "schemaVersion": { "const": 1 },
-    "kind": {
-      "enum": ["scan.progress", "scan.warning", "scan.snapshot"]
-    }
+  "oneOf": [{ "$ref": "#/$defs/progress" }, { "$ref": "#/$defs/snapshot" }, { "$ref": "#/$defs/error" }],
+  "$defs": {
+    "counter": { "type": "integer", "minimum": 0 },
+    "progress": { "type": "object", "additionalProperties": false, "required": ["schemaVersion", "kind", "scanId", "currentPath", "logicalBytes", "fileCount", "directoryCount"], "properties": { "schemaVersion": { "const": 1 }, "kind": { "const": "scan.progress" }, "scanId": { "type": "string", "minLength": 1 }, "currentPath": { "type": "string", "minLength": 1 }, "logicalBytes": { "$ref": "#/$defs/counter" }, "fileCount": { "$ref": "#/$defs/counter" }, "directoryCount": { "$ref": "#/$defs/counter" } } },
+    "aggregate": { "type": "object", "additionalProperties": false, "required": ["path", "logicalBytes", "fileCount", "directoryCount"], "properties": { "path": { "type": "string", "minLength": 1 }, "logicalBytes": { "$ref": "#/$defs/counter" }, "fileCount": { "$ref": "#/$defs/counter" }, "directoryCount": { "$ref": "#/$defs/counter" } } },
+    "largeFile": { "type": "object", "additionalProperties": false, "required": ["path", "logicalBytes", "lastWriteTimeUtc"], "properties": { "path": { "type": "string", "minLength": 1 }, "logicalBytes": { "$ref": "#/$defs/counter" }, "lastWriteTimeUtc": { "type": "string", "format": "date-time" } } },
+    "warning": { "type": "object", "additionalProperties": false, "required": ["path", "code", "message"], "properties": { "path": { "type": "string" }, "code": { "type": "string", "minLength": 1 }, "message": { "type": "string", "minLength": 1 } } },
+    "snapshot": { "type": "object", "additionalProperties": false, "required": ["schemaVersion", "kind", "scanId", "targetPath", "complete", "cancelled", "logicalBytes", "fileCount", "directoryCount", "aggregates", "largeFiles", "warnings"], "properties": { "schemaVersion": { "const": 1 }, "kind": { "const": "scan.snapshot" }, "scanId": { "type": "string", "minLength": 1 }, "targetPath": { "type": "string", "minLength": 1 }, "complete": { "type": "boolean" }, "cancelled": { "type": "boolean" }, "logicalBytes": { "$ref": "#/$defs/counter" }, "fileCount": { "$ref": "#/$defs/counter" }, "directoryCount": { "$ref": "#/$defs/counter" }, "aggregates": { "type": "array", "items": { "$ref": "#/$defs/aggregate" } }, "largeFiles": { "type": "array", "items": { "$ref": "#/$defs/largeFile" } }, "warnings": { "type": "array", "items": { "$ref": "#/$defs/warning" } } } },
+    "error": { "type": "object", "additionalProperties": false, "required": ["schemaVersion", "kind", "code", "message"], "properties": { "schemaVersion": { "const": 1 }, "kind": { "const": "scan.error" }, "code": { "type": "string", "minLength": 1 }, "message": { "type": "string", "minLength": 1 } } }
   }
 }

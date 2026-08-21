@@ -11,6 +11,7 @@ PathSpace is an offline Windows 10/11 storage analyzer and guided-cleanup applic
 - Export local JSON, redacted JSON, and CSV reports.
 - Operate fully offline with no telemetry, accounts, uploads, or network scanning.
 - Use guarded allow-listed actions with post-action verification.
+- Keep bounded, rotating workflow audit records locally without recording raw target paths.
 
 ## Run PathSpace
 
@@ -42,6 +43,7 @@ Basic workflow:
 - [Completion roadmap](docs/project-roadmap.md)
 - [Contributing and Definition of Done](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
+- [License](LICENSE) and [third-party notices](THIRD-PARTY-NOTICES.md)
 - [Windows compatibility record](docs/testing/windows-compatibility.md)
 - [Accessibility checklist](docs/testing/accessibility-checklist.md)
 
@@ -70,7 +72,11 @@ Invoke-Pester -Script '.\tests\engine'
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-portable.ps1
 ```
 
-Verified automated coverage on the merged build: 2 contract tests, 6 worker-security tests, 14 application/accessibility tests, and 21 PowerShell engine tests.
+Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, and 21 PowerShell engine tests.
+
+## Product identity and version
+
+The current private build is version `0.1.0-private`. Executables carry PathSpace product, company, copyright, file-version, and application-icon metadata. Source is licensed under the MIT License; redistribution must retain the license and applicable third-party notices.
 
 ## Safety boundaries
 

@@ -27,7 +27,7 @@ The engine accepts local fixed drives, removable drives, and individual local fo
 
 ### Contracts
 
-Contracts carry `schemaVersion` and `kind` fields. Principal message families are scan progress/snapshots, recommendations, application diagnostics, action previews, action manifests, and action results.
+Contracts carry `schemaVersion` and `kind` fields. Strict Draft 2020-12 schemas cover scan progress/snapshots/errors, recommendations, application diagnostics, action previews, action manifests, action results, and local audit events. Contract tests validate serialized .NET payloads and reject incorrect discriminators or unknown properties where the contract is strict.
 
 ### Worker and actions
 
@@ -42,7 +42,8 @@ The application requests a post-action scan where applicable. It distinguishes m
 - All analysis and reports remain local unless the user manually moves an exported file.
 - There is no telemetry, account, cloud sync, analytics endpoint, or updater.
 - Paths may contain private information; redacted JSON export replaces the user-profile prefix.
-- Local audit logs are bounded and rotated.
+- Workflow audit events are written under `%LOCALAPPDATA%\PathSpace\Audit` as versioned JSON Lines. The active file is capped at 5 MiB and rotated across at most five files.
+- Audit records contain workflow outcomes and numeric evidence but omit raw scan and action target paths. They never leave the computer automatically.
 
 ## Platform scope
 

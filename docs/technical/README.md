@@ -29,6 +29,7 @@ PathSpace is a Windows storage-analysis and guided-cleanup product built around 
 | `engine/PathSpace.Engine` | Scanner, recommendations, diagnostics, previews, and allow-listed actions |
 | `cli` | Scriptable JSONL entry points used by the UI and operators |
 | `schemas` | Machine-readable contract schemas |
+| `assets` | Original PathSpace icon artwork and Windows executable icon |
 | `tests` | xUnit, Pester, fixtures, security, and integration tests |
 | `legacy-toolkit` | Reviewed standalone guidance and migration utilities |
 | `scripts` | Portable build and package verification scripts |

@@ -1,9 +1,11 @@
 [CmdletBinding()]
-param([string]$Configuration='Release')
+param([string]$Configuration='Release',[string]$DotNetPath)
 $ErrorActionPreference='Stop'
 $projectRoot=(Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $artifact=Join-Path $projectRoot 'artifacts\PathSpace-win-x64'
-$dotnet=(Get-Command dotnet -ErrorAction SilentlyContinue).Source
+$dotnet=$DotNetPath
+if(-not $dotnet){$dotnet=(Get-Command dotnet -ErrorAction SilentlyContinue).Source}
+if($dotnet -and -not [IO.File]::Exists($dotnet)){throw "The supplied .NET executable does not exist: $dotnet"}
 if($dotnet -and -not (& $dotnet --list-sdks)){$dotnet=$null}
 if(-not $dotnet){$local=Resolve-Path (Join-Path $projectRoot '..\.dotnet\dotnet.exe') -ErrorAction SilentlyContinue;if($local){$dotnet=$local.Path}}
 if(-not $dotnet){throw '.NET 8 SDK was not found.'}
@@ -17,9 +19,10 @@ if($LASTEXITCODE -ne 0){throw 'Worker publish failed.'}
 foreach($name in @('engine','schemas','cli','legacy-toolkit')){Copy-Item -LiteralPath (Join-Path $projectRoot $name) -Destination $artifact -Recurse -Force}
 Copy-Item -LiteralPath (Join-Path $projectRoot 'engine') -Destination $worker -Recurse -Force
 Copy-Item -LiteralPath (Join-Path $projectRoot 'cli') -Destination $worker -Recurse -Force
-foreach($name in @('README.md','PROJECT_STATUS.md','CONTRIBUTING.md','CHANGELOG.md')){
+foreach($name in @('README.md','PROJECT_STATUS.md','CONTRIBUTING.md','CHANGELOG.md','LICENSE','THIRD-PARTY-NOTICES.md')){
     Copy-Item -LiteralPath (Join-Path $projectRoot $name) -Destination $artifact
 }
+Copy-Item -LiteralPath (Join-Path $projectRoot 'assets\pathspace-icon.png') -Destination $artifact
 Copy-Item -LiteralPath (Join-Path $projectRoot 'docs') -Destination $artifact -Recurse -Force
 Get-ChildItem -LiteralPath $artifact -Recurse -File | Get-FileHash -Algorithm SHA256 | ForEach-Object {"$($_.Hash)  $($_.Path.Substring($artifact.Length+1))"} | Set-Content (Join-Path $artifact 'SHA256SUMS.txt') -Encoding UTF8
 Write-Output $artifact

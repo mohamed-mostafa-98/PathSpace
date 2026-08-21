@@ -9,10 +9,10 @@ The verified private portable build is delivered. The following work is tracked 
 
 ## M8 — Engineering Completeness
 
-- **MOH-25:** Wire bounded local audit logging into application workflows.
-- **MOH-26:** Complete JSON Schema coverage and contract validation.
+- **MOH-25 — completed:** Bounded local audit logging is connected to scan, diagnostic, preview, and action workflows.
+- **MOH-26 — completed:** Draft 2020-12 schemas and automated validation cover every emitted v1 message family.
 - **MOH-27:** Add full packaged GUI end-to-end workflow tests.
-- **MOH-28:** Add licensing, third-party notices, icon, and version metadata.
+- **MOH-28 — completed:** MIT licensing, third-party notices, original icon assets, and version/product metadata are included.
 - **MOH-32:** Enforce documentation updates in the Definition of Done.
 
 MOH-27 depends on MOH-25 and MOH-26 so the E2E suite validates the final observable workflows and contracts.
