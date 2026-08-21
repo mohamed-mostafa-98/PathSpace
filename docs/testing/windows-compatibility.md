@@ -14,7 +14,7 @@
 |---|---|---|
 | Non-admin GUI launch | Passed: packaged process started without elevation on build 26200.9168 | Requires separate host |
 | Local folder scan | Passed: rebuilt packaged CLI measured 64 bytes / 1 file and emitted schema-v1 JSON | Requires separate host |
-| Fixed drive scan | Not run against whole system drive | Requires separate host |
+| Fixed drive scan | Passed: final packaged CLI completed a read-only E: root scan of 227,235 files / 54,369,251,583 logical bytes; four protected-path warnings were reported without failing the scan | Requires separate host |
 | Removable drive scan | Requires removable media | Requires separate host/media |
 | Cancellation and incomplete label | Covered by automated state tests | Requires separate host |
 | UAC cancellation | Requires interactive confirmation | Requires separate host |
