@@ -118,6 +118,7 @@
                                     <TextBlock Text="{Binding Id}" FontWeight="SemiBold"/>
                                     <TextBlock Text="{Binding Available, StringFormat=Available: {0}}"/>
                                     <TextBlock Text="{Binding Reason}" TextWrapping="Wrap"/>
+                                    <TextBox Text="{Binding Data}" IsReadOnly="True" TextWrapping="Wrap" Margin="0,3,0,0" MaxHeight="120" VerticalScrollBarVisibility="Auto"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -134,6 +135,10 @@
                         <TextBlock Margin="0,12,0,0" Text="Pagefile — diagnose memory pressure and crash-dump requirements; never delete pagefile.sys manually." TextWrapping="Wrap"/>
                         <TextBlock Margin="0,12,0,0" Text="Hibernation — disabling it is reversible but removes Hibernate and may affect Fast Startup." TextWrapping="Wrap"/>
                         <TextBlock Margin="0,12,0,0" Text="Volume optimization — PathSpace uses Windows Optimize-Volume and lets media type select retrim or defragment behavior." TextWrapping="Wrap"/>
+                        <TextBlock Margin="0,16,0,4" Text="Validated read-only commands" FontWeight="SemiBold"/>
+                        <TextBox Text="wsl --list --verbose" IsReadOnly="True"/>
+                        <TextBox Text="wsl -d Ubuntu -- docker system df -v" IsReadOnly="True" Margin="0,5,0,0"/>
+                        <TextBox Text="docker system df -v" IsReadOnly="True" Margin="0,5,0,0"/>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
