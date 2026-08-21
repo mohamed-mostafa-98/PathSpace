@@ -34,6 +34,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         CancelCommand = new RelayCommand(Cancel, () => IsScanning);
         PreviewActionCommand = new RelayCommand(() => _ = PreviewSelectedAsync(), () => SelectedRecommendation?.Actionable == true && !IsScanning && !IsExecutingAction);
         ExecuteActionCommand = new RelayCommand(() => _ = ExecutePreviewAsync(), () => CurrentPreview is not null && HasConfirmedPreview && Snapshot?.Complete == true && !IsScanning && !IsExecutingAction);
+        ProtectedDiagnosticsCommand = new RelayCommand(() => _ = RunProtectedDiagnosticsAsync(), () => !IsScanning && !IsExecutingAction);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -41,6 +42,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public RelayCommand CancelCommand { get; }
     public RelayCommand PreviewActionCommand { get; }
     public RelayCommand ExecuteActionCommand { get; }
+    public RelayCommand ProtectedDiagnosticsCommand { get; }
     public IReadOnlyList<string> AvailableDrives { get; } = DriveInfo.GetDrives()
         .Where(value => value.DriveType is DriveType.Fixed or DriveType.Removable)
         .Select(value => value.RootDirectory.FullName).ToArray();
@@ -55,6 +57,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
             CancelCommand.RaiseCanExecuteChanged();
             PreviewActionCommand.RaiseCanExecuteChanged();
             ExecuteActionCommand.RaiseCanExecuteChanged();
+            ProtectedDiagnosticsCommand.RaiseCanExecuteChanged();
         }
     }
     public string Status { get => _status; private set => SetField(ref _status, value); }
@@ -85,7 +88,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     }
     public ActionPreview? CurrentPreview { get => _currentPreview; private set { if(SetField(ref _currentPreview,value)) ExecuteActionCommand.RaiseCanExecuteChanged(); } }
     public bool HasConfirmedPreview { get => _hasConfirmedPreview; set { if(SetField(ref _hasConfirmedPreview,value)) ExecuteActionCommand.RaiseCanExecuteChanged(); } }
-    public bool IsExecutingAction { get => _isExecutingAction; private set { if(SetField(ref _isExecutingAction,value)){PreviewActionCommand.RaiseCanExecuteChanged();ExecuteActionCommand.RaiseCanExecuteChanged();} } }
+    public bool IsExecutingAction { get => _isExecutingAction; private set { if(SetField(ref _isExecutingAction,value)){PreviewActionCommand.RaiseCanExecuteChanged();ExecuteActionCommand.RaiseCanExecuteChanged();ProtectedDiagnosticsCommand.RaiseCanExecuteChanged();} } }
     public string ActionStatus { get => _actionStatus; private set => SetField(ref _actionStatus,value); }
 
     public async Task AnalyzeAsync()
@@ -149,6 +152,18 @@ public sealed class MainViewModel : INotifyPropertyChanged
         }
         catch(Exception exception){ActionStatus=$"Action failed safely: {exception.Message}";}
         finally{IsExecutingAction=false;}
+    }
+    public async Task RunProtectedDiagnosticsAsync()
+    {
+        try
+        {
+            Status="Requesting administrator approval for a read-only protected scan…";
+            Diagnostics=await _engineClient.DiagnoseProtectedAsync(CancellationToken.None);
+            if(Snapshot?.Complete==true) Recommendations=await _engineClient.RecommendAsync(Snapshot,Diagnostics,CancellationToken.None);
+            Status="Protected diagnostics complete. No cleanup action was performed.";
+        }
+        catch(OperationCanceledException exception){Status=exception.Message;}
+        catch(Exception exception){Status=$"Protected diagnostics failed safely: {exception.Message}";}
     }
     private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

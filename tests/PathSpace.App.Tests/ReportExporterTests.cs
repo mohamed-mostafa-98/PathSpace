@@ -16,4 +16,19 @@ public sealed class ReportExporterTests
         Assert.DoesNotContain(@"C:\Users\Example", json, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("\"C:\\Users\\Example\\Data,One\"", csv);
     }
+
+    [Fact]
+    public void Local_audit_log_rotates_at_the_bounded_size()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"pathspace-log-{Guid.NewGuid():N}");
+        try
+        {
+            var log = new LocalAuditLog(directory);
+            log.Append(new string('x', 5 * 1024 * 1024));
+            log.Append("next");
+            Assert.True(File.Exists(Path.Combine(directory, "pathspace-0.jsonl")));
+            Assert.True(File.Exists(Path.Combine(directory, "pathspace-1.jsonl")));
+        }
+        finally { if (Directory.Exists(directory)) Directory.Delete(directory, true); }
+    }
 }

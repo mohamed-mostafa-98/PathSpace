@@ -12,6 +12,7 @@ public interface IEngineClient
     Task<IReadOnlyList<Recommendation>> RecommendAsync(ScanSnapshot snapshot, CancellationToken cancellationToken) => Task.FromResult<IReadOnlyList<Recommendation>>([]);
     Task<IReadOnlyList<Recommendation>> RecommendAsync(ScanSnapshot snapshot, IReadOnlyList<AppDiagnostic> diagnostics, CancellationToken cancellationToken) => RecommendAsync(snapshot, cancellationToken);
     Task<IReadOnlyList<AppDiagnostic>> DiagnoseAsync(CancellationToken cancellationToken) => Task.FromResult<IReadOnlyList<AppDiagnostic>>([]);
+    Task<IReadOnlyList<AppDiagnostic>> DiagnoseProtectedAsync(CancellationToken cancellationToken) => DiagnoseAsync(cancellationToken);
     Task<ActionPreview> PreviewAsync(string actionId, string? driveLetter, CancellationToken cancellationToken) => throw new NotSupportedException();
 }
 
@@ -71,6 +72,27 @@ public sealed class EngineClient : IEngineClient
 
     public Task<IReadOnlyList<AppDiagnostic>> DiagnoseAsync(CancellationToken cancellationToken) =>
         RunJsonLinesAsync<AppDiagnostic>(["diagnose"], "app.diagnostic", cancellationToken);
+
+    public async Task<IReadOnlyList<AppDiagnostic>> DiagnoseProtectedAsync(CancellationToken cancellationToken)
+    {
+        var output = Path.Combine(Path.GetTempPath(), $"pathspace-{Guid.NewGuid():N}.diagnostics.jsonl");
+        var info = new ProcessStartInfo("powershell.exe") { UseShellExecute=true,Verb="runas" };
+        foreach(var argument in new[]{"-NoProfile","-ExecutionPolicy","Bypass","-File",_cliPath,"diagnose","-OutputPath",output}) info.ArgumentList.Add(argument);
+        try
+        {
+            using var process=Process.Start(info) ?? throw new InvalidOperationException("Protected diagnostics did not start.");
+            await process.WaitForExitAsync(cancellationToken);
+            if(process.ExitCode!=0) throw new InvalidOperationException("Protected diagnostics reported a failure.");
+            if(!File.Exists(output)) throw new InvalidDataException("Protected diagnostics produced no output.");
+            var values=new List<AppDiagnostic>();
+            foreach(var line in await File.ReadAllLinesAsync(output,cancellationToken))
+                if(!string.IsNullOrWhiteSpace(line)) values.Add(JsonSerializer.Deserialize<AppDiagnostic>(line,JsonOptions) ?? throw new JsonException("Empty diagnostic message."));
+            return values;
+        }
+        catch(System.ComponentModel.Win32Exception exception) when(exception.NativeErrorCode==1223)
+        { throw new OperationCanceledException("Administrator approval was cancelled; no protected scan was run.",exception,cancellationToken); }
+        finally { File.Delete(output); }
+    }
 
     public async Task<ActionPreview> PreviewAsync(string actionId, string? driveLetter, CancellationToken cancellationToken)
     {

@@ -67,6 +67,15 @@ public sealed class MainViewModelTests
         Assert.Equal(0, executor.Calls);
     }
 
+    [Fact]
+    public async Task Protected_diagnostics_are_user_initiated_and_read_only()
+    {
+        var viewModel = new MainViewModel(new ProtectedDiagnosticEngine());
+        await viewModel.RunProtectedDiagnosticsAsync();
+        Assert.Single(viewModel.Diagnostics);
+        Assert.Contains("No cleanup action was performed", viewModel.Status);
+    }
+
     private sealed class StubEngineClient(Task<ScanSnapshot> result) : IEngineClient
     {
         public Task<ScanSnapshot> ScanAsync(string target, IProgress<ScanProgress> progress, CancellationToken cancellationToken) => result;
@@ -91,6 +100,12 @@ public sealed class MainViewModelTests
         public Task<ScanSnapshot> ScanAsync(string target, IProgress<ScanProgress> progress, CancellationToken token) => throw new NotSupportedException();
         public Task<ActionPreview> PreviewAsync(string actionId, string? driveLetter, CancellationToken token) =>
             Task.FromResult(new ActionPreview(1, "action.preview", actionId, "Temp", [new ActionTarget("temp", @"C:\Temp", false)], 10, RecoveryRisk.Low, Reversibility.Reversible, false));
+    }
+    private sealed class ProtectedDiagnosticEngine : IEngineClient
+    {
+        public Task<ScanSnapshot> ScanAsync(string target, IProgress<ScanProgress> progress, CancellationToken token) => throw new NotSupportedException();
+        public Task<IReadOnlyList<AppDiagnostic>> DiagnoseProtectedAsync(CancellationToken token) =>
+            Task.FromResult<IReadOnlyList<AppDiagnostic>>([new AppDiagnostic(1,"app.diagnostic","pagefile",true,default,"fixture")]);
     }
     private sealed class RecordingExecutor : IActionExecutor
     {

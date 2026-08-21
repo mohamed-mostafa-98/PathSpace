@@ -10,6 +10,8 @@ param(
 
     [string] $DiagnosticsPath,
 
+    [string] $OutputPath,
+
     [string] $ActionId,
 
     [string] $DriveLetter,
@@ -55,7 +57,11 @@ try {
             Get-PathSpaceRecommendation -Snapshot $snapshot -Diagnostics $diagnostics | ForEach-Object { $_ | ConvertTo-Json -Depth 10 -Compress }
         }
         'diagnose' {
-            Get-PathSpaceAppDiagnostic | ForEach-Object { $_ | ConvertTo-Json -Depth 10 -Compress }
+            $lines=@(Get-PathSpaceAppDiagnostic | ForEach-Object { $_ | ConvertTo-Json -Depth 10 -Compress })
+            if($OutputPath){
+                if(-not [IO.Path]::IsPathFullyQualified($OutputPath) -or $OutputPath.StartsWith('\\')){throw 'Diagnostics output must be an absolute local path.'}
+                [IO.File]::WriteAllLines($OutputPath,[string[]]$lines,[Text.UTF8Encoding]::new($false))
+            }else{$lines}
         }
         'preview' {
             if(-not $ActionId){throw '-ActionId is required for preview.'}

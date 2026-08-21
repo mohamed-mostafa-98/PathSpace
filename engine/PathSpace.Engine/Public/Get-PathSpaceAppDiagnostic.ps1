@@ -31,7 +31,8 @@ function Get-PathSpaceAppDiagnostic {
     try{
         $pagefiles=@(Get-CimInstance Win32_PageFileUsage -ErrorAction Stop|ForEach-Object{[pscustomobject]@{name=$_.Name;allocatedBytes=[long]$_.AllocatedBaseSize*1MB;currentBytes=[long]$_.CurrentUsage*1MB;peakBytes=[long]$_.PeakUsage*1MB}})
         $memory=Get-CimInstance Win32_OperatingSystem -ErrorAction Stop
-        $pageData=@{pagefiles=$pagefiles;totalVisibleMemoryBytes=[long]$memory.TotalVisibleMemorySize*1KB;freePhysicalMemoryBytes=[long]$memory.FreePhysicalMemory*1KB;automaticManagedPagefile=(Get-CimInstance Win32_ComputerSystem -ErrorAction SilentlyContinue).AutomaticManagedPagefile}
+        $recovery=Get-CimInstance Win32_OSRecoveryConfiguration -ErrorAction SilentlyContinue
+        $pageData=@{pagefiles=$pagefiles;totalVisibleMemoryBytes=[long]$memory.TotalVisibleMemorySize*1KB;freePhysicalMemoryBytes=[long]$memory.FreePhysicalMemory*1KB;automaticManagedPagefile=(Get-CimInstance Win32_ComputerSystem -ErrorAction SilentlyContinue).AutomaticManagedPagefile;debugInfoType=$recovery.DebugInfoType;dumpFile=$recovery.DebugFilePath;overwriteExistingDebugFile=$recovery.OverwriteExistingDebugFile}
         [pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='pagefile';available=$true;data=$pageData;reason='Keep system-managed sizing unless committed-memory pressure and crash-dump requirements support a change.'}
     }catch{[pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='pagefile';available=$false;data=@();reason=$_.Exception.Message}}
     $hiber=Join-Path $env:SystemDrive 'hiberfil.sys';[pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='hibernation';available=[IO.File]::Exists($hiber);data=@{path=$hiber;bytes=$(if([IO.File]::Exists($hiber)){([IO.FileInfo]::new($hiber)).Length}else{0})};reason='Disabling hibernation also disables Hibernate and may affect Fast Startup.'}
