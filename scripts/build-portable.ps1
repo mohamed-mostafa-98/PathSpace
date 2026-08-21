@@ -14,7 +14,7 @@ if($LASTEXITCODE -ne 0){throw 'GUI publish failed.'}
 $worker=Join-Path $artifact 'worker';New-Item -ItemType Directory -Path $worker | Out-Null
 & $dotnet publish (Join-Path $projectRoot 'src\PathSpace.Worker\PathSpace.Worker.csproj') -c $Configuration -r win-x64 --self-contained false -o $worker
 if($LASTEXITCODE -ne 0){throw 'Worker publish failed.'}
-foreach($name in @('engine','schemas','cli')){Copy-Item -LiteralPath (Join-Path $projectRoot $name) -Destination $artifact -Recurse -Force}
+foreach($name in @('engine','schemas','cli','legacy-toolkit')){Copy-Item -LiteralPath (Join-Path $projectRoot $name) -Destination $artifact -Recurse -Force}
 Copy-Item -LiteralPath (Join-Path $projectRoot 'engine') -Destination $worker -Recurse -Force
 Copy-Item -LiteralPath (Join-Path $projectRoot 'cli') -Destination $worker -Recurse -Force
 Copy-Item -LiteralPath (Join-Path $projectRoot 'README.md') -Destination $artifact
