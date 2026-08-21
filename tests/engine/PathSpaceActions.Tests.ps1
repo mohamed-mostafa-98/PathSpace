@@ -26,4 +26,22 @@ Describe 'PathSpace action catalog' {
         $message = try { Get-PathSpaceActionPreview -ActionId 'volume.optimize' -Parameters @{ DriveLetter='*' } } catch { $_.Exception.Message }
         $message | Should Match 'drive letter'
     }
+
+    It 'executes only confirmed disposable children and reports measured recovery' {
+        $previousTemp=$env:TEMP
+        try {
+            $env:TEMP=$TestDrive
+            [IO.File]::WriteAllBytes((Join-Path $TestDrive 'remove.bin'),([byte[]]::new(24)))
+            $message=try{Invoke-PathSpaceAction -ActionId 'temp.user'}catch{$_.Exception.Message}
+            $message | Should Match 'explicit.*Confirmed'
+            [IO.File]::Exists((Join-Path $TestDrive 'remove.bin')) | Should Be $true
+            $preview=Get-PathSpaceActionPreview -ActionId 'temp.user'
+
+            $result=Invoke-PathSpaceAction -ActionId 'temp.user' -Confirmed
+
+            [IO.File]::Exists((Join-Path $TestDrive 'remove.bin')) | Should Be $false
+            $result.recoveredBytes | Should Be $preview.estimatedBytes
+            $result.status | Should Be 'completed'
+        } finally {$env:TEMP=$previousTemp}
+    }
 }

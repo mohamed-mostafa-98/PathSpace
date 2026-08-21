@@ -24,6 +24,28 @@ public sealed class EngineClientTests
         Assert.Equal(10, snapshot.LogicalBytes);
     }
 
+    [Fact]
+    public async Task Real_cli_scans_recommends_and_previews_without_shell_concatenation()
+    {
+        var cli = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "cli", "pathspace.ps1"));
+        var root = Path.Combine(Path.GetTempPath(), $"pathspace-engine-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(Path.Combine(root, "npm-cache"));
+        await File.WriteAllBytesAsync(Path.Combine(root, "npm-cache", "package.bin"), new byte[32]);
+        try
+        {
+            var client = new EngineClient(cli);
+            var snapshot = await client.ScanAsync(root, new InlineProgress<ScanProgress>(_ => { }), CancellationToken.None);
+            var recommendations = await client.RecommendAsync(snapshot, CancellationToken.None);
+            var preview = await client.PreviewAsync("volume.optimize", "C", CancellationToken.None);
+
+            Assert.True(snapshot.Complete);
+            Assert.Contains(recommendations, value => value.Id == "cache.npm");
+            Assert.Equal("volume.optimize", preview.ActionId);
+            Assert.Equal(@"C:\", Assert.Single(preview.Targets).Path);
+        }
+        finally { Directory.Delete(root, true); }
+    }
+
     private sealed class InlineProgress<T>(Action<T> report) : IProgress<T>
     {
         public void Report(T value) => report(value);

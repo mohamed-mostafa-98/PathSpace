@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using PathSpace.Contracts;
 
 namespace PathSpace.App;
@@ -8,11 +9,14 @@ namespace PathSpace.App;
 public interface IEngineClient
 {
     Task<ScanSnapshot> ScanAsync(string target, IProgress<ScanProgress> progress, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Recommendation>> RecommendAsync(ScanSnapshot snapshot, CancellationToken cancellationToken) => Task.FromResult<IReadOnlyList<Recommendation>>([]);
+    Task<IReadOnlyList<AppDiagnostic>> DiagnoseAsync(CancellationToken cancellationToken) => Task.FromResult<IReadOnlyList<AppDiagnostic>>([]);
+    Task<ActionPreview> PreviewAsync(string actionId, string? driveLetter, CancellationToken cancellationToken) => throw new NotSupportedException();
 }
 
 public sealed class EngineClient : IEngineClient
 {
-    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } };
     private readonly string _cliPath;
 
     public EngineClient(string? cliPath = null) =>
@@ -49,6 +53,46 @@ public sealed class EngineClient : IEngineClient
         {
             File.Delete(cancellationFile);
         }
+    }
+
+    public async Task<IReadOnlyList<Recommendation>> RecommendAsync(ScanSnapshot snapshot, CancellationToken cancellationToken)
+    {
+        var input = Path.Combine(Path.GetTempPath(), $"pathspace-{Guid.NewGuid():N}.snapshot.json");
+        await File.WriteAllTextAsync(input, JsonSerializer.Serialize(snapshot, JsonOptions), cancellationToken);
+        try { return await RunJsonLinesAsync<Recommendation>(["recommend", "-InputPath", input], "recommendation", cancellationToken); }
+        finally { File.Delete(input); }
+    }
+
+    public Task<IReadOnlyList<AppDiagnostic>> DiagnoseAsync(CancellationToken cancellationToken) =>
+        RunJsonLinesAsync<AppDiagnostic>(["diagnose"], "app.diagnostic", cancellationToken);
+
+    public async Task<ActionPreview> PreviewAsync(string actionId, string? driveLetter, CancellationToken cancellationToken)
+    {
+        var arguments = new List<string> { "preview", "-ActionId", actionId };
+        if (!string.IsNullOrWhiteSpace(driveLetter)) { arguments.Add("-DriveLetter"); arguments.Add(driveLetter); }
+        var result = await RunJsonLinesAsync<ActionPreview>(arguments, "action.preview", cancellationToken);
+        return result.Single();
+    }
+
+    private async Task<IReadOnlyList<T>> RunJsonLinesAsync<T>(IEnumerable<string> commandArguments, string expectedKind, CancellationToken cancellationToken)
+    {
+        var info = new ProcessStartInfo { FileName="powershell.exe",UseShellExecute=false,RedirectStandardOutput=true,RedirectStandardError=true,CreateNoWindow=true };
+        foreach(var argument in new[]{"-NoProfile","-ExecutionPolicy","Bypass","-File",_cliPath}) info.ArgumentList.Add(argument);
+        foreach(var argument in commandArguments) info.ArgumentList.Add(argument);
+        using var process=Process.Start(info) ?? throw new InvalidOperationException("The PathSpace engine could not be started.");
+        var values=new List<T>();
+        while(await process.StandardOutput.ReadLineAsync(cancellationToken) is { } line)
+        {
+            if(string.IsNullOrWhiteSpace(line)) continue;
+            using var document=JsonDocument.Parse(line);
+            var kind=document.RootElement.GetProperty("kind").GetString();
+            if(kind=="scan.error") throw new InvalidOperationException(document.RootElement.GetProperty("message").GetString());
+            if(kind==expectedKind) values.Add(JsonSerializer.Deserialize<T>(line,JsonOptions) ?? throw new JsonException($"Empty {expectedKind} message."));
+        }
+        var error=await process.StandardError.ReadToEndAsync(cancellationToken);
+        await process.WaitForExitAsync(cancellationToken);
+        if(process.ExitCode!=0) throw new InvalidOperationException(string.IsNullOrWhiteSpace(error)?"The PathSpace engine failed.":error.Trim());
+        return values;
     }
 
     public static async Task<ScanSnapshot> ParseJsonLinesAsync(TextReader reader, IProgress<ScanProgress> progress, CancellationToken cancellationToken)

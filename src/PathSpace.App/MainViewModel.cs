@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.IO;
 using PathSpace.Contracts;
 
 namespace PathSpace.App;
@@ -15,18 +16,34 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private ScanSnapshot? _snapshot;
     private ResultViewModel? _results;
     private bool _isAdvancedMode;
+    private IReadOnlyList<Recommendation> _recommendations = [];
+    private IReadOnlyList<AppDiagnostic> _diagnostics = [];
+    private Recommendation? _selectedRecommendation;
+    private ActionPreview? _currentPreview;
+    private bool _hasConfirmedPreview;
+    private bool _isExecutingAction;
+    private string _actionStatus = "Select an actionable recommendation to preview it.";
+    private readonly ActionCoordinator _actionCoordinator;
 
     public MainViewModel() : this(new EngineClient()) { }
-    public MainViewModel(IEngineClient engineClient)
+    public MainViewModel(IEngineClient engineClient, ActionCoordinator? actionCoordinator = null)
     {
         _engineClient = engineClient;
+        _actionCoordinator = actionCoordinator ?? new ActionCoordinator(new WorkerActionExecutor(), new EngineActionVerifier(engineClient));
         AnalyzeCommand = new RelayCommand(() => _ = AnalyzeAsync(), () => !IsScanning && !string.IsNullOrWhiteSpace(TargetPath));
         CancelCommand = new RelayCommand(Cancel, () => IsScanning);
+        PreviewActionCommand = new RelayCommand(() => _ = PreviewSelectedAsync(), () => SelectedRecommendation?.Actionable == true && !IsScanning && !IsExecutingAction);
+        ExecuteActionCommand = new RelayCommand(() => _ = ExecutePreviewAsync(), () => CurrentPreview is not null && HasConfirmedPreview && Snapshot?.Complete == true && !IsScanning && !IsExecutingAction);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
     public RelayCommand AnalyzeCommand { get; }
     public RelayCommand CancelCommand { get; }
+    public RelayCommand PreviewActionCommand { get; }
+    public RelayCommand ExecuteActionCommand { get; }
+    public IReadOnlyList<string> AvailableDrives { get; } = DriveInfo.GetDrives()
+        .Where(value => value.DriveType is DriveType.Fixed or DriveType.Removable)
+        .Select(value => value.RootDirectory.FullName).ToArray();
     public string TargetPath { get => _targetPath; set { if (SetField(ref _targetPath, value)) AnalyzeCommand.RaiseCanExecuteChanged(); } }
     public bool IsScanning
     {
@@ -36,6 +53,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
             if (!SetField(ref _isScanning, value)) return;
             AnalyzeCommand.RaiseCanExecuteChanged();
             CancelCommand.RaiseCanExecuteChanged();
+            PreviewActionCommand.RaiseCanExecuteChanged();
+            ExecuteActionCommand.RaiseCanExecuteChanged();
         }
     }
     public string Status { get => _status; private set => SetField(ref _status, value); }
@@ -52,6 +71,22 @@ public sealed class MainViewModel : INotifyPropertyChanged
         }
     }
     public bool ShowAdvancedDiagnostics => IsAdvancedMode;
+    public IReadOnlyList<Recommendation> Recommendations { get => _recommendations; private set => SetField(ref _recommendations, value); }
+    public IReadOnlyList<AppDiagnostic> Diagnostics { get => _diagnostics; private set => SetField(ref _diagnostics, value); }
+    public Recommendation? SelectedRecommendation
+    {
+        get => _selectedRecommendation;
+        set
+        {
+            if(!SetField(ref _selectedRecommendation,value)) return;
+            CurrentPreview=null; HasConfirmedPreview=false;
+            PreviewActionCommand.RaiseCanExecuteChanged(); ExecuteActionCommand.RaiseCanExecuteChanged();
+        }
+    }
+    public ActionPreview? CurrentPreview { get => _currentPreview; private set { if(SetField(ref _currentPreview,value)) ExecuteActionCommand.RaiseCanExecuteChanged(); } }
+    public bool HasConfirmedPreview { get => _hasConfirmedPreview; set { if(SetField(ref _hasConfirmedPreview,value)) ExecuteActionCommand.RaiseCanExecuteChanged(); } }
+    public bool IsExecutingAction { get => _isExecutingAction; private set { if(SetField(ref _isExecutingAction,value)){PreviewActionCommand.RaiseCanExecuteChanged();ExecuteActionCommand.RaiseCanExecuteChanged();} } }
+    public string ActionStatus { get => _actionStatus; private set => SetField(ref _actionStatus,value); }
 
     public async Task AnalyzeAsync()
     {
@@ -60,6 +95,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         IsScanning = true;
         Snapshot = null;
         Results = null;
+        Recommendations = [];
+        Diagnostics = [];
         Progress = null;
         Status = "Analyzing local storage…";
         try
@@ -67,6 +104,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
             var progress = new Progress<ScanProgress>(value => { Progress = value; Status = $"Analyzing {value.CurrentPath}"; });
             Snapshot = await _engineClient.ScanAsync(TargetPath, progress, _scanCancellation.Token);
             Results = ResultViewModel.FromSnapshot(Snapshot);
+            Recommendations = await _engineClient.RecommendAsync(Snapshot, _scanCancellation.Token);
+            Diagnostics = await _engineClient.DiagnoseAsync(_scanCancellation.Token);
             Status = Snapshot.Complete ? $"Analysis complete: {Snapshot.FileCount:N0} files measured." : "Analysis cancelled. Partial results are read-only.";
         }
         catch (Exception exception) { Status = $"Analysis failed: {exception.Message}"; }
@@ -79,6 +118,34 @@ public sealed class MainViewModel : INotifyPropertyChanged
     }
 
     private void Cancel() { Status = "Cancelling safely…"; _scanCancellation?.Cancel(); }
+    public async Task PreviewSelectedAsync()
+    {
+        if(SelectedRecommendation?.Actionable != true) return;
+        try
+        {
+            ActionStatus="Building an exact, read-only preview…";
+            CurrentPreview=await _engineClient.PreviewAsync(SelectedRecommendation.Id, null, CancellationToken.None);
+            HasConfirmedPreview=false;
+            ActionStatus=$"Preview ready: {CurrentPreview.Targets.Count} target(s), up to {CurrentPreview.EstimatedBytes:N0} measured bytes.";
+        }
+        catch(Exception exception){CurrentPreview=null;ActionStatus=$"Preview unavailable: {exception.Message}";}
+    }
+    public async Task ExecutePreviewAsync()
+    {
+        if(CurrentPreview is null || !HasConfirmedPreview || Snapshot?.Complete != true) return;
+        IsExecutingAction=true;
+        try
+        {
+            ActionStatus="Executing the confirmed preview…";
+            var outcome=await _actionCoordinator.ExecuteAsync(CurrentPreview,CancellationToken.None);
+            ActionStatus=outcome.Status=="unverified"
+                ? "Action finished, but recovery could not be verified; no success claim was recorded."
+                : $"Action {outcome.Status}. Measured recovery: {outcome.MeasuredRecoveredBytes.GetValueOrDefault():N0} bytes.";
+            HasConfirmedPreview=false;
+        }
+        catch(Exception exception){ActionStatus=$"Action failed safely: {exception.Message}";}
+        finally{IsExecutingAction=false;}
+    }
     private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
         if (EqualityComparer<T>.Default.Equals(field, value)) return false;

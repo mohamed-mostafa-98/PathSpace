@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace PathSpace.Contracts;
 
@@ -28,4 +29,13 @@ public sealed record Recommendation(
     [property: JsonPropertyName("risk")] RecoveryRisk Risk,
     [property: JsonPropertyName("reversibility")] Reversibility Reversibility,
     [property: JsonPropertyName("requiresElevation")] bool RequiresElevation,
-    [property: JsonPropertyName("priority")] int Priority);
+    [property: JsonPropertyName("priority")] int Priority,
+    [property: JsonPropertyName("actionable")] bool Actionable);
+
+public sealed record AppDiagnostic(
+    [property: JsonPropertyName("schemaVersion")] int SchemaVersion,
+    [property: JsonPropertyName("kind")] string Kind,
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("available")] bool Available,
+    [property: JsonPropertyName("data")] JsonElement Data,
+    [property: JsonPropertyName("reason")] string? Reason);

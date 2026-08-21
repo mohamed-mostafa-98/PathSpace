@@ -1,10 +1,12 @@
 function Get-PathSpaceAppDiagnostic {
     [CmdletBinding()]
     param([hashtable]$FixtureOutputs)
-    $wslText = if($FixtureOutputs){$FixtureOutputs.wsl}else{try{(& wsl.exe --list --verbose 2>$null | Out-String)}catch{$null}}
-    $dockerText = if($FixtureOutputs){$FixtureOutputs.docker}else{try{(& docker.exe system df 2>$null | Out-String)}catch{$null}}
+    $wslCommand = if($FixtureOutputs){$null}else{Invoke-DiagnosticCommand -FileName 'wsl.exe' -Arguments @('--list','--verbose') -TimeoutSeconds 10}
+    $dockerCommand = if($FixtureOutputs){$null}else{Invoke-DiagnosticCommand -FileName 'docker.exe' -Arguments @('system','df') -TimeoutSeconds 10}
+    $wslText = if($FixtureOutputs){$FixtureOutputs.wsl}elseif($wslCommand.available){$wslCommand.output}else{$null}
+    $dockerText = if($FixtureOutputs){$FixtureOutputs.docker}elseif($dockerCommand.available){$dockerCommand.output}else{$null}
     if($wslText){[pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='wsl';available=$true;data=@(ConvertFrom-WslList $wslText);reason=$null}}else{[pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='wsl';available=$false;data=@();reason='WSL command is unavailable or returned no distributions.'}}
-    if($dockerText){[pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='docker';available=$true;data=ConvertFrom-DockerSystemDf $dockerText;reason=$null}}else{[pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='docker';available=$false;data=$null;reason='Docker engine is unavailable; no cleanup command was attempted.'}}
+    if($dockerText){[pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='docker';available=$true;data=ConvertFrom-DockerSystemDf $dockerText;reason='This result belongs to the current Windows Docker context. WSL Docker storage is separate.'}}else{[pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='docker';available=$false;data=$null;reason=$(if($dockerCommand){$dockerCommand.error}else{'Docker engine is unavailable; no cleanup command was attempted.'})}}
     if($FixtureOutputs){return}
     $notion = Join-Path $env:APPDATA 'Notion\Partitions'
     [pscustomobject]@{schemaVersion=1;kind='app.diagnostic';id='notion';available=[IO.Directory]::Exists($notion);data=@{path=$notion};reason='Confirm Notion synchronization before using its Reset local data control.'}

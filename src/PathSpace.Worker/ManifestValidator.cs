@@ -1,6 +1,4 @@
 using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
 using PathSpace.Contracts;
 
 namespace PathSpace.Worker;
@@ -12,14 +10,7 @@ public static class ManifestValidator
     private static readonly HashSet<string> DeletionActions = ["temp.user", "temp.windows", "cache.npm"];
 
     public static string CreateDigest(ActionManifest manifest)
-    {
-        var canonical = JsonSerializer.SerializeToUtf8Bytes(new
-        {
-            manifest.SchemaVersion, manifest.Kind, manifest.ActionId, manifest.Nonce,
-            manifest.CreatedAt, manifest.ExpiresAt, manifest.Targets
-        });
-        return Convert.ToHexString(SHA256.HashData(canonical));
-    }
+        => ActionManifestDigest.Create(manifest);
 
     public static void Validate(ActionManifest manifest, ReadOnlySpan<byte> manifestBytes, DateTimeOffset? now = null)
     {

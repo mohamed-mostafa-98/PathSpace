@@ -16,11 +16,14 @@
             <TextBlock Text="Understand local storage before changing it." Margin="0,4,0,18" Foreground="#5A6472"/>
         </StackPanel>
         <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <ComboBox ItemsSource="{Binding AvailableDrives}" SelectedItem="{Binding TargetPath}" MinHeight="36" Margin="0,0,8,0"
+                      AutomationProperties.Name="Local fixed or removable drive"/>
             <TextBox Text="{Binding TargetPath, UpdateSourceTrigger=PropertyChanged}" MinHeight="36" Padding="9,6"
-                     AutomationProperties.Name="Local drive or folder path"/>
-            <Button Grid.Column="1" Content="Analyze" Command="{Binding AnalyzeCommand}" Margin="10,0,0,0" Padding="18,7"/>
-            <Button Grid.Column="2" Content="Cancel" Command="{Binding CancelCommand}" Margin="8,0,0,0" Padding="18,7"/>
+                     Grid.Column="1" AutomationProperties.Name="Local drive or folder path"/>
+            <Button Grid.Column="2" Content="Browse…" Click="BrowseButton_Click" Margin="8,0,0,0" Padding="18,7"/>
+            <Button Grid.Column="3" Content="Analyze" Command="{Binding AnalyzeCommand}" Margin="8,0,0,0" Padding="18,7"/>
+            <Button Grid.Column="4" Content="Cancel" Command="{Binding CancelCommand}" Margin="8,0,0,0" Padding="18,7"/>
         </Grid>
         <StackPanel Grid.Row="2" Margin="0,18">
             <ProgressBar Height="8" IsIndeterminate="{Binding IsScanning}"/>
@@ -34,6 +37,11 @@
                     <TextBlock Margin="0,8,0,0" Text="{Binding Snapshot.LogicalBytes, StringFormat=Measured bytes: {0:N0}}"/>
                     <TextBlock Margin="0,8,0,0" Text="{Binding Snapshot.FileCount, StringFormat=Files: {0:N0}}"/>
                     <TextBlock Margin="0,8,0,0" Text="Cleanup actions are never preselected. Preview and confirmation are required." Foreground="#5A6472"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button Content="Export JSON…" Click="ExportJsonButton_Click" Padding="14,6"/>
+                        <Button Content="Export redacted JSON…" Click="ExportRedactedButton_Click" Padding="14,6" Margin="8,0,0,0"/>
+                        <Button Content="Export CSV…" Click="ExportCsvButton_Click" Padding="14,6" Margin="8,0,0,0"/>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Categories">
@@ -56,6 +64,43 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
+            <TabItem Header="Recommendations">
+                <Grid Margin="14">
+                    <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                    <ListBox ItemsSource="{Binding Recommendations}" SelectedItem="{Binding SelectedRecommendation}"
+                             AutomationProperties.Name="Storage recovery recommendations" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="#D7DCE2" BorderThickness="1" CornerRadius="6" Padding="14" Margin="0,0,0,10">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="16"/>
+                                        <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" Margin="0,6,0,0"/>
+                                        <TextBlock Text="{Binding EstimatedMaxBytes, StringFormat=Measured upper bound: {0:N0} bytes}" Margin="0,6,0,0"/>
+                                        <TextBlock Text="{Binding Risk, StringFormat=Risk: {0}}" Margin="0,4,0,0"/>
+                                        <TextBlock Text="{Binding Reversibility, StringFormat=Recovery: {0}}"/>
+                                        <TextBlock Text="{Binding RequiresElevation, StringFormat=Administrator required: {0}}"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Border Grid.Row="1" BorderBrush="#B8C0CA" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,10,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Action preview and confirmation" FontWeight="SemiBold"/>
+                            <Button Content="Preview selected action" Command="{Binding PreviewActionCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,8,0,0"/>
+                            <TextBlock Text="{Binding CurrentPreview.Title, StringFormat=Preview: {0}}" Margin="0,8,0,0"/>
+                            <TextBlock Text="{Binding CurrentPreview.EstimatedBytes, StringFormat=Measured upper bound: {0:N0} bytes}"/>
+                            <ItemsControl ItemsSource="{Binding CurrentPreview.Targets}" Margin="0,5,0,0">
+                                <ItemsControl.ItemTemplate><DataTemplate><TextBlock Text="{Binding Path}" TextWrapping="Wrap"/></DataTemplate></ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <CheckBox Content="I reviewed these exact targets and explicitly confirm this action"
+                                      IsChecked="{Binding HasConfirmedPreview}" Margin="0,8,0,0"/>
+                            <Button Content="Execute confirmed preview" Command="{Binding ExecuteActionCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,8,0,0"/>
+                            <TextBlock Text="{Binding ActionStatus}" TextWrapping="Wrap" Margin="0,8,0,0" AutomationProperties.LiveSetting="Polite"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
             <TabItem Header="Advanced">
                 <StackPanel Margin="18">
                     <CheckBox Content="Show raw diagnostics" IsChecked="{Binding IsAdvancedMode}"/>
@@ -63,6 +108,18 @@
                                   Visibility="{Binding ShowAdvancedDiagnostics, Converter={StaticResource BooleanToVisibility}}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate><TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="0,3"/></DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <ItemsControl Margin="0,14,0,0" ItemsSource="{Binding Diagnostics}"
+                                  Visibility="{Binding ShowAdvancedDiagnostics, Converter={StaticResource BooleanToVisibility}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,5">
+                                    <TextBlock Text="{Binding Id}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding Available, StringFormat=Available: {0}}"/>
+                                    <TextBlock Text="{Binding Reason}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>

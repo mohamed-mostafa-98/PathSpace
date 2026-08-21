@@ -1,6 +1,10 @@
 function Resolve-ActionDefinition {
     param([string] $ActionId, [hashtable] $Parameters)
-    $catalog = Import-PowerShellDataFile (Join-Path $PSScriptRoot '..\catalog\actions.v1.psd1')
+    $catalogPath = Join-Path $PSScriptRoot '..\catalog\actions.v1.psd1'
+    $tokens=$null;$parseErrors=$null
+    $ast=[Management.Automation.Language.Parser]::ParseFile($catalogPath,[ref]$tokens,[ref]$parseErrors)
+    if($parseErrors.Count -gt 0){throw "The bundled action catalog is invalid: $($parseErrors[0].Message)"}
+    $catalog=$ast.EndBlock.Statements[0].PipelineElements[0].Expression.SafeGetValue()
     if (-not $catalog.Actions.ContainsKey($ActionId)) { throw "Action '$ActionId' is not allow-listed by PathSpace." }
     $definition = $catalog.Actions[$ActionId]
     $targets = @()

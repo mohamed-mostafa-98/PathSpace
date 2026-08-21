@@ -49,6 +49,24 @@ public sealed class MainViewModelTests
         Assert.True(viewModel.AnalyzeCommand.CanExecute(null));
     }
 
+    [Fact]
+    public async Task Action_requires_preview_and_explicit_confirmation_before_execution()
+    {
+        var engine = new PreviewEngineClient();
+        var executor = new RecordingExecutor();
+        var coordinator = new ActionCoordinator(executor, new MissingActionVerifier());
+        var viewModel = new MainViewModel(engine, coordinator);
+        viewModel.SelectedRecommendation = new Recommendation(1, "recommendation", "temp.user", "Temp", "Review", [], 0, 10, RecoveryRisk.Low, Reversibility.Reversible, false, 1, true);
+
+        await viewModel.PreviewSelectedAsync();
+        Assert.NotNull(viewModel.CurrentPreview);
+        Assert.False(viewModel.ExecuteActionCommand.CanExecute(null));
+
+        viewModel.HasConfirmedPreview = true;
+        Assert.False(viewModel.ExecuteActionCommand.CanExecute(null)); // a complete scan is also required
+        Assert.Equal(0, executor.Calls);
+    }
+
     private sealed class StubEngineClient(Task<ScanSnapshot> result) : IEngineClient
     {
         public Task<ScanSnapshot> ScanAsync(string target, IProgress<ScanProgress> progress, CancellationToken cancellationToken) => result;
@@ -67,5 +85,20 @@ public sealed class MainViewModelTests
     {
         public Task<ScanSnapshot> ScanAsync(string target, IProgress<ScanProgress> progress, CancellationToken cancellationToken) =>
             Task.FromException<ScanSnapshot>(new InvalidOperationException("fixture failure"));
+    }
+    private sealed class PreviewEngineClient : IEngineClient
+    {
+        public Task<ScanSnapshot> ScanAsync(string target, IProgress<ScanProgress> progress, CancellationToken token) => throw new NotSupportedException();
+        public Task<ActionPreview> PreviewAsync(string actionId, string? driveLetter, CancellationToken token) =>
+            Task.FromResult(new ActionPreview(1, "action.preview", actionId, "Temp", [new ActionTarget("temp", @"C:\Temp", false)], 10, RecoveryRisk.Low, Reversibility.Reversible, false));
+    }
+    private sealed class RecordingExecutor : IActionExecutor
+    {
+        public int Calls { get; private set; }
+        public Task<ActionResult> ExecuteAsync(ActionPreview preview, CancellationToken token) { Calls++; return Task.FromResult(new ActionResult(1,"action.result",preview.ActionId,"completed",0,1,0,[])); }
+    }
+    private sealed class MissingActionVerifier : IActionVerifier
+    {
+        public Task<ScanSnapshot?> VerifyAsync(ActionPreview preview, CancellationToken token) => Task.FromResult<ScanSnapshot?>(null);
     }
 }

@@ -28,8 +28,8 @@ function Get-PathSpaceRecommendation {
     $rules = @(
         [pscustomobject]@{ id='temp.user'; pattern='[\\/]AppData[\\/]Local[\\/]Temp$'; title='Review user temporary files'; summary='Preview and remove disposable per-user temporary files.'; priority=10; risk='Low'; reversibility='Reversible'; elevation=$false; minFactor=0.5 },
         [pscustomobject]@{ id='cache.npm'; pattern='[\\/]npm-cache$'; title='Clear npm download cache'; summary='Verify and clear the rebuildable npm package cache.'; priority=20; risk='Low'; reversibility='Reversible'; elevation=$false; minFactor=0.8 },
-        [pscustomobject]@{ id='cache.browser'; pattern='[\\/](Cache|Code Cache|GPUCache)$'; title='Review browser caches'; summary='Clear cached files through the owning browser when possible.'; priority=30; risk='Low'; reversibility='Reversible'; elevation=$false; minFactor=0.5 },
-        [pscustomobject]@{ id='app.notion'; pattern='[\\/]Notion[\\/]Partitions$'; title='Review Notion local partitions'; summary='Confirm synchronization, then use Notion reset controls rather than deleting application data manually.'; priority=40; risk='Medium'; reversibility='BackupRecommended'; elevation=$false; minFactor=0.25 }
+        [pscustomobject]@{ id='cache.browser'; pattern='[\\/](Cache|Code Cache|GPUCache)$'; title='Review browser caches'; summary='Clear cached files through the owning browser when possible.'; priority=30; risk='Low'; reversibility='Reversible'; elevation=$false; minFactor=0.5; actionable=$false },
+        [pscustomobject]@{ id='app.notion'; pattern='[\\/]Notion[\\/]Partitions$'; title='Review Notion local partitions'; summary='Confirm synchronization, then use Notion reset controls rather than deleting application data manually.'; priority=40; risk='Medium'; reversibility='BackupRecommended'; elevation=$false; minFactor=0.25; actionable=$false }
     )
 
     $recommendations = New-Object 'System.Collections.Generic.List[object]'
@@ -52,7 +52,7 @@ function Get-PathSpaceRecommendation {
             reversibility = $rule.reversibility
             requiresElevation = $rule.elevation
             priority = $rule.priority
-            actionable = $true
+            actionable = $(if($null -eq $rule.actionable){$true}else{[bool]$rule.actionable})
         })
     }
 
