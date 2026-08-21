@@ -1,21 +1,27 @@
 # Project status
 
-## Implemented and verified
+## Delivered and verified
 
-- Offline PowerShell scanner with safe local-path validation, progress, cancellation, and JSONL output
-- Evidence-based recommendations and guarded cleanup catalog
-- Responsive .NET 8 WPF shell with simple and advanced result views
-- Manifest-validating elevated worker and post-action verification contracts
-- Docker, WSL, Notion, Claude, pagefile, hibernation, and Optimize-Volume guidance
-- JSON/CSV/redacted exports and bounded local audit logs
-- 17 passing PowerShell tests and 15 passing .NET tests
-- Portable x64 build with zero-warning Release compilation
-- Packaged non-admin startup, read-only scan, and zero observed TCP connections on Windows build 26200.9168
+- Merged implementation on `master` in `E:\SIDE PROJECT\PartitionClearner`
+- Offline scanner with local-path validation, progress, cancellation, filtering, warnings, and JSONL output
+- Evidence-based recommendations and guarded allow-listed cleanup actions
+- Responsive .NET 8 WPF interface with simple and advanced views
+- Strict short-lived manifest validation, narrow elevation, and post-action verification
+- Docker, WSL, Notion, Claude, pagefile, hibernation, and `Optimize-Volume` guidance
+- JSON, redacted JSON, CSV exports, and bounded local audit logs
+- 21 passing PowerShell engine tests
+- 14 passing application/integration/accessibility tests
+- 6 passing worker-security tests
+- 2 passing contract tests
+- Checksummed portable x64 package with tested worker and zero observed GUI TCP connections
+- Completed read-only local-folder and E: fixed-drive package scans
 
-## Manual release sign-off still required
+## Public-release validation still required
 
-- Windows 10 x64 compatibility host
+- Windows 10 x64 host validation
 - Removable-media scan
-- Interactive UAC cancellation and disposable safe-action fixture
-- Keyboard, Narrator, 200% scaling, high-contrast, and contrast checks
+- Interactive UAC cancellation walkthrough
+- Keyboard-only and Narrator walkthrough
+- Manual 200% scaling, high-contrast, and contrast review
 
+These outstanding checks are tracked in Linear and in `docs/testing` rather than being represented as completed.

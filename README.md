@@ -1,63 +1,87 @@
 # PathSpace
 
-PathSpace is an offline Windows 10/11 storage analyzer and guided cleanup application. It combines a .NET 8 WPF interface with a reusable PowerShell/CLI engine.
+PathSpace is an offline Windows 10/11 storage analyzer and guided-cleanup application. It explains where local disk space is used, recommends evidence-based recovery options, and requires an exact preview plus explicit confirmation before any supported cleanup action.
 
-## Current status
+## Highlights
 
-The first portable implementation is ready for private Windows 11 evaluation. It includes versioned contracts, an offline PowerShell analysis engine, deterministic recommendations, a responsive WPF shell, guarded actions, an elevated worker, guided diagnostics, and exports. Windows 10 and interactive accessibility sign-off remain explicitly tracked release gates.
+- Analyze local fixed drives, removable drives, or individual folders.
+- View categorized usage, large files, warnings, filters, and raw diagnostics.
+- Diagnose Docker, WSL, Notion, Claude, pagefile, hibernation, and volume storage.
+- Run normally; request administrator approval only for protected diagnostics or actions.
+- Export local JSON, redacted JSON, and CSV reports.
+- Operate fully offline with no telemetry, accounts, uploads, or network scanning.
+- Use guarded allow-listed actions with post-action verification.
 
-- [Design specification](docs/superpowers/specs/2026-08-20-pathspace-design.md)
-- [Implementation plan](docs/superpowers/plans/2026-08-20-pathspace-implementation.md)
-- [Linear project](https://linear.app/mohamed-mostafa/project/pathspace-04c36f87d38a)
-- [Linear product brief](https://linear.app/mohamed-mostafa/document/pathspace-product-brief-and-delivery-map-1d643a7fda3b)
+## Run PathSpace
 
-## Planned architecture
+The current portable build is located at:
 
-- `src/PathSpace.App` — .NET 8 WPF interface
-- `src/PathSpace.Contracts` — versioned JSON contracts
-- `src/PathSpace.Worker` — narrow elevated worker
-- `engine/PathSpace.Engine` — reusable PowerShell module
-- `cli/pathspace.ps1` — command-line entry point
-- `schemas` — JSON schemas
-- `tests` — .NET and Pester tests
-- `legacy-toolkit` — diagnostic scripts developed before the product project
+```text
+artifacts\PathSpace-win-x64\PathSpace.App.exe
+```
 
-## Project constraints
+The package is framework-dependent and requires the .NET 8 Desktop Runtime.
 
-- Windows 10 and Windows 11 x64
-- Fully offline; no telemetry or accounts
-- Local fixed/removable drives and local folders only
-- Normal non-admin launch; elevation only for confirmed protected actions
-- Preview, confirmation, recovery safeguards, and post-action verification
-- No registry cleaner, custom defragmenter, network scanning, or v1 plugin framework
+Basic workflow:
+
+1. Select a drive or browse to a local folder.
+2. Choose **Analyze** and wait for the complete snapshot.
+3. Review Summary, Categories, Large files, Recommendations, Advanced diagnostics, and Guidance.
+4. Export a report or select an actionable recommendation.
+5. Review the exact preview and risk label before confirming an action.
+
+## Documentation
+
+- [Documentation hub](docs/README.md)
+- [Technical documentation](docs/technical/README.md)
+- [Architecture](docs/technical/architecture.md)
+- [CLI reference](docs/technical/cli-reference.md)
+- [Security and cleanup safety](docs/technical/security-and-safety.md)
+- [Build, test, and release guide](docs/technical/build-test-release.md)
+- [User use cases](docs/use-cases/README.md)
+- [Windows compatibility record](docs/testing/windows-compatibility.md)
+- [Accessibility checklist](docs/testing/accessibility-checklist.md)
+
+## Repository structure
+
+| Path | Purpose |
+|---|---|
+| `src/PathSpace.App` | .NET 8 WPF graphical application |
+| `src/PathSpace.Contracts` | Versioned JSON contracts |
+| `src/PathSpace.Worker` | Strict normal/elevated action worker |
+| `engine/PathSpace.Engine` | Reusable PowerShell scanner, diagnostics, recommendations, and actions |
+| `cli` | JSONL command-line interface |
+| `schemas` | JSON schema definitions |
+| `tests` | xUnit, Pester, fixtures, and integration tests |
+| `legacy-toolkit` | Reviewed standalone diagnostics and guided migration tools |
+| `scripts` | Build and package verification scripts |
 
 ## Build and test
 
-Install the .NET 8 SDK, then run:
-
 ```powershell
-dotnet restore PathSpace.sln
-dotnet build PathSpace.sln -c Release --no-restore
-dotnet test PathSpace.sln -c Release --no-build
+dotnet restore .\PathSpace.sln
+dotnet test .\tests\PathSpace.Contracts.Tests\PathSpace.Contracts.Tests.csproj
+dotnet test .\tests\PathSpace.Worker.Tests\PathSpace.Worker.Tests.csproj
+dotnet test .\tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj
+Invoke-Pester -Script '.\tests\engine'
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-portable.ps1
 ```
 
-The PowerShell engine test command will become available with the analysis-engine milestone:
+Verified automated coverage on the merged build: 2 contract tests, 6 worker-security tests, 14 application/accessibility tests, and 21 PowerShell engine tests.
 
-```powershell
-Invoke-Pester tests/engine -Output Detailed
-```
+## Safety boundaries
 
-Build the portable x64 folder with:
+- Cleanup actions are never preselected.
+- Unknown commands, wildcards, UNC deletion targets, and drive-root deletions are rejected.
+- Docker volumes, WSL distributions, and unknown application data are guided only.
+- Registry cleaning is deliberately out of scope.
+- Volume optimization uses Windows `Optimize-Volume`; PathSpace does not implement a custom defragmenter.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\build-portable.ps1
-```
+## Project tracking
 
-The output is `artifacts\PathSpace-win-x64`. PathSpace makes no network requests and does not include telemetry. Cleanup actions are never preselected and require preview plus explicit confirmation.
+- [Project status](PROJECT_STATUS.md)
+- [Linear project](https://linear.app/mohamed-mostafa/project/pathspace-04c36f87d38a)
+- [Design specification](docs/superpowers/specs/2026-08-20-pathspace-design.md)
+- [Implementation plan](docs/superpowers/plans/2026-08-20-pathspace-implementation.md)
 
-Verify the packaged non-elevated worker against a disposable temporary fixture with:
-
-```powershell
-pwsh -NoProfile -File scripts\verify-portable-action.ps1
-```
-
+The private Windows 11 build is verified. Windows 10, removable-media, Narrator, and manual 200% scaling checks remain explicit public-release gates.
