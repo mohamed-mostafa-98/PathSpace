@@ -77,6 +77,8 @@ This creates and removes only its own disposable temporary fixture.
 
 `.github\workflows\windows-ci.yml` runs on pushes and pull requests targeting `master` or `main`, plus manual dispatch. It uses a least-privilege read-only repository token and a 30-minute timeout. The job restores .NET, treats build warnings as errors through repository properties, runs the .NET and Pester suites, validates local Markdown links and JSON contracts, builds the portable package, verifies every SHA-256 entry, and smoke-tests the packaged worker.
 
+The Windows PowerShell step explicitly enables TLS 1.2, bootstraps the NuGet package provider, trusts PSGallery for the ephemeral runner, and pins Pester 4.10.1 to match the Windows PowerShell 5.1-compatible engine suite. No installed module is included in the product artifact.
+
 CI retains test results and the portable package for 30 days. It does not sign binaries, access production credentials, upload runtime scan data, or exercise the interactive packaged GUI. Signing is a separate MOH-30 gate, and interactive GUI/accessibility runs require an unlocked Windows desktop.
 
 Local equivalents for the standalone CI checks are:
