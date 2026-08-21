@@ -99,6 +99,8 @@ The current private build is version `0.1.0-private`. Executables carry PathSpac
 ## Project tracking
 
 - [Project status](PROJECT_STATUS.md)
+- [GitHub repository](https://github.com/mohamed-mostafa-98/PathSpace)
+- [Windows CI](https://github.com/mohamed-mostafa-98/PathSpace/actions/workflows/windows-ci.yml)
 - [Linear project](https://linear.app/mohamed-mostafa/project/pathspace-04c36f87d38a)
 - [Design specification](docs/superpowers/specs/2026-08-20-pathspace-design.md)
 - [Implementation plan](docs/superpowers/plans/2026-08-20-pathspace-implementation.md)

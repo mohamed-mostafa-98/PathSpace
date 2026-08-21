@@ -15,6 +15,7 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - Reusable local Markdown-link and package-checksum validation scripts matching hosted CI gates.
 - Validator path defaults resolve inside the script body for Windows PowerShell 5.1 compatibility.
 - Hosted Windows PowerShell CI now bootstraps NuGet/TLS and pins Pester 4.10.1 non-interactively on ephemeral runners.
+- GitHub remote and hosted Windows CI activated; the first fully verified run retained passing test evidence and the checksummed portable package.
 - Repository-wide documentation Definition of Done in `AGENTS.md`, `CONTRIBUTING.md`, and the documentation policy.
 - Linear milestones M8 Engineering Completeness and M9 Public Release Readiness.
 - Linear issues MOH-25 through MOH-32 covering audit logging, schemas, GUI E2E testing, legal/product identity, CI, signing, installer/runtime delivery, and documentation governance.

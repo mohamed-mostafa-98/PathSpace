@@ -31,11 +31,10 @@ These outstanding checks are tracked in Linear and in `docs/testing` rather than
 
 ## CI status
 
-The Windows CI workflow and reusable Markdown/package validators are implemented locally. The repository currently has no configured remote, so the first hosted GitHub Actions run is still required before MOH-29 can be marked complete.
+The repository is connected to [mohamed-mostafa-98/PathSpace](https://github.com/mohamed-mostafa-98/PathSpace). Windows CI run 2 passed every test, validation, packaging, checksum, worker-smoke, and artifact-upload step for commit `4a97a1c`; test evidence and the portable package were retained successfully.
 
 ## Engineering-completeness backlog
 
-- MOH-29 — Windows CI and package pipeline
 - MOH-30 — Authenticode signing and release integrity
 - MOH-31 — installer and runtime-prerequisite strategy
 

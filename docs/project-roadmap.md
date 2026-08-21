@@ -19,7 +19,7 @@ MOH-27 validated the final observable workflows after MOH-25 and MOH-26 complete
 
 ## M9 — Public Release Readiness
 
-- **MOH-29 — in progress:** Repository-side Windows CI, deterministic validators, and artifact retention are implemented; private remote creation and the first hosted green run remain.
+- **MOH-29 — completed:** The GitHub remote and Windows CI pipeline are active; hosted run 2 passed all quality/package gates and retained test plus portable artifacts.
 - **MOH-30:** Implement Authenticode signing and release integrity.
 - **MOH-31:** Create the Windows installer and runtime-prerequisite strategy.
 - **MOH-23:** Complete external Windows and accessibility validation against the release candidate.

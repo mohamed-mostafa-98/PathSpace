@@ -81,6 +81,8 @@ The Windows PowerShell step explicitly enables TLS 1.2, bootstraps the NuGet pac
 
 CI retains test results and the portable package for 30 days. It does not sign binaries, access production credentials, upload runtime scan data, or exercise the interactive packaged GUI. Signing is a separate MOH-30 gate, and interactive GUI/accessibility runs require an unlocked Windows desktop.
 
+The first verified hosted pipeline completed successfully on 2026-08-21 for commit `4a97a1c` ([Windows CI run 2](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32490124664)). Every step passed, including both artifact uploads.
+
 Local equivalents for the standalone CI checks are:
 
 ```powershell
