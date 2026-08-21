@@ -44,6 +44,7 @@ The application requests a post-action scan where applicable. It distinguishes m
 - Paths may contain private information; redacted JSON export replaces the user-profile prefix.
 - Workflow audit events are written under `%LOCALAPPDATA%\PathSpace\Audit` as versioned JSON Lines. The active file is capped at 5 MiB and rotated across at most five files.
 - Audit records contain workflow outcomes and numeric evidence but omit raw scan and action target paths. They never leave the computer automatically.
+- Managed deployments and the disposable E2E harness may set `PATHSPACE_AUDIT_DIRECTORY` to an absolute non-UNC local directory; otherwise the default location is used.
 
 ## Platform scope
 

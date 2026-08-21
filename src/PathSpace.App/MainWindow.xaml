@@ -20,17 +20,17 @@
             <ComboBox ItemsSource="{Binding AvailableDrives}" SelectedItem="{Binding TargetPath}" MinHeight="36" Margin="0,0,8,0"
                       AutomationProperties.Name="Local fixed or removable drive"/>
             <TextBox Text="{Binding TargetPath, UpdateSourceTrigger=PropertyChanged}" MinHeight="36" Padding="9,6"
-                     Grid.Column="1" AutomationProperties.Name="Local drive or folder path"/>
-            <Button Grid.Column="2" Content="Browse…" Click="BrowseButton_Click" Margin="8,0,0,0" Padding="18,7"/>
-            <Button Grid.Column="3" Content="Analyze" Command="{Binding AnalyzeCommand}" Margin="8,0,0,0" Padding="18,7"/>
-            <Button Grid.Column="4" Content="Cancel" Command="{Binding CancelCommand}" Margin="8,0,0,0" Padding="18,7"/>
+                     Grid.Column="1" AutomationProperties.Name="Local drive or folder path" AutomationProperties.AutomationId="TargetPath"/>
+            <Button Grid.Column="2" Content="Browse…" Click="BrowseButton_Click" Margin="8,0,0,0" Padding="18,7" AutomationProperties.AutomationId="BrowseButton"/>
+            <Button Grid.Column="3" Content="Analyze" Command="{Binding AnalyzeCommand}" Margin="8,0,0,0" Padding="18,7" AutomationProperties.AutomationId="AnalyzeButton"/>
+            <Button Grid.Column="4" Content="Cancel" Command="{Binding CancelCommand}" Margin="8,0,0,0" Padding="18,7" AutomationProperties.AutomationId="CancelButton"/>
         </Grid>
         <StackPanel Grid.Row="2" Margin="0,18">
             <ProgressBar Height="8" IsIndeterminate="{Binding IsScanning}"/>
-            <TextBlock Text="{Binding Status}" Margin="0,8,0,0" AutomationProperties.LiveSetting="Polite"/>
+            <TextBlock Text="{Binding Status}" Margin="0,8,0,0" AutomationProperties.LiveSetting="Polite" AutomationProperties.AutomationId="StatusText"/>
         </StackPanel>
         <TabControl Grid.Row="3" AutomationProperties.Name="Analysis results">
-            <TabItem Header="Summary">
+            <TabItem Header="Summary" AutomationProperties.AutomationId="SummaryTab">
                 <StackPanel Margin="18">
                     <TextBlock Text="Analysis summary" FontSize="20" FontWeight="SemiBold"/>
                     <TextBlock Margin="0,16,0,0" Text="{Binding Snapshot.TargetPath, StringFormat=Target: {0}, TargetNullValue=No completed scan yet}"/>
@@ -38,15 +38,15 @@
                     <TextBlock Margin="0,8,0,0" Text="{Binding Snapshot.FileCount, StringFormat=Files: {0:N0}}"/>
                     <TextBlock Margin="0,8,0,0" Text="Cleanup actions are never preselected. Preview and confirmation are required." Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                     <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
-                        <Button Content="Export JSON…" Click="ExportJsonButton_Click" Padding="14,6"/>
+                        <Button Content="Export JSON…" Click="ExportJsonButton_Click" Padding="14,6" AutomationProperties.AutomationId="ExportJsonButton"/>
                         <Button Content="Export redacted JSON…" Click="ExportRedactedButton_Click" Padding="14,6" Margin="8,0,0,0"/>
                         <Button Content="Export CSV…" Click="ExportCsvButton_Click" Padding="14,6" Margin="8,0,0,0"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Categories">
+            <TabItem Header="Categories" AutomationProperties.AutomationId="CategoriesTab">
                 <DockPanel>
-                    <TextBox DockPanel.Dock="Top" Text="{Binding ResultFilter, UpdateSourceTrigger=PropertyChanged}" Margin="8" Padding="8,5" AutomationProperties.Name="Filter result paths"/>
+                    <TextBox DockPanel.Dock="Top" Text="{Binding ResultFilter, UpdateSourceTrigger=PropertyChanged}" Margin="8" Padding="8,5" AutomationProperties.Name="Filter result paths" AutomationProperties.AutomationId="ResultFilter"/>
                     <DataGrid ItemsSource="{Binding FilteredCategories}" AutoGenerateColumns="False" IsReadOnly="True"
                               EnableRowVirtualization="True" EnableColumnVirtualization="True" AutomationProperties.Name="Storage categories">
                         <DataGrid.Columns>
@@ -70,10 +70,10 @@
                     </DataGrid>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Recommendations">
+            <TabItem Header="Recommendations" AutomationProperties.AutomationId="RecommendationsTab">
                 <Grid Margin="14">
                     <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-                    <ListBox ItemsSource="{Binding Recommendations}" SelectedItem="{Binding SelectedRecommendation}"
+                    <ListBox ItemsSource="{Binding Recommendations}" SelectedItem="{Binding SelectedRecommendation}" AutomationProperties.AutomationId="RecommendationList"
                              AutomationProperties.Name="Storage recovery recommendations" ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -93,16 +93,16 @@
                     <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,10,0,0">
                         <StackPanel>
                             <TextBlock Text="Action preview and confirmation" FontWeight="SemiBold"/>
-                            <Button Content="Preview selected action" Command="{Binding PreviewActionCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,8,0,0"/>
+                            <Button Content="Preview selected action" Command="{Binding PreviewActionCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,8,0,0" AutomationProperties.AutomationId="PreviewActionButton"/>
                             <TextBlock Text="{Binding CurrentPreview.Title, StringFormat=Preview: {0}}" Margin="0,8,0,0"/>
                             <TextBlock Text="{Binding CurrentPreview.EstimatedBytes, StringFormat=Measured upper bound: {0:N0} bytes}"/>
                             <ItemsControl ItemsSource="{Binding CurrentPreview.Targets}" Margin="0,5,0,0">
                                 <ItemsControl.ItemTemplate><DataTemplate><TextBlock Text="{Binding Path}" TextWrapping="Wrap"/></DataTemplate></ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <CheckBox Content="I reviewed these exact targets and explicitly confirm this action"
+                            <CheckBox Content="I reviewed these exact targets and explicitly confirm this action" AutomationProperties.AutomationId="ConfirmActionCheckBox"
                                       IsChecked="{Binding HasConfirmedPreview}" Margin="0,8,0,0"/>
-                            <Button Content="Execute confirmed preview" Command="{Binding ExecuteActionCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,8,0,0"/>
-                            <TextBlock Text="{Binding ActionStatus}" TextWrapping="Wrap" Margin="0,8,0,0" AutomationProperties.LiveSetting="Polite"/>
+                            <Button Content="Execute confirmed preview" Command="{Binding ExecuteActionCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,8,0,0" AutomationProperties.AutomationId="ExecuteActionButton"/>
+                            <TextBlock Text="{Binding ActionStatus}" TextWrapping="Wrap" Margin="0,8,0,0" AutomationProperties.LiveSetting="Polite" AutomationProperties.AutomationId="ActionStatusText"/>
                         </StackPanel>
                     </Border>
                 </Grid>

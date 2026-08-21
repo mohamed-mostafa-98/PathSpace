@@ -12,6 +12,7 @@ PathSpace is an offline Windows 10/11 storage analyzer and guided-cleanup applic
 - Operate fully offline with no telemetry, accounts, uploads, or network scanning.
 - Use guarded allow-listed actions with post-action verification.
 - Keep bounded, rotating workflow audit records locally without recording raw target paths.
+- Validate the packaged WPF workflow with opt-in disposable-fixture GUI automation.
 
 ## Run PathSpace
 
@@ -72,7 +73,13 @@ Invoke-Pester -Script '.\tests\engine'
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-portable.ps1
 ```
 
-Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, and 21 PowerShell engine tests.
+Run the packaged GUI E2E suite from an interactive Windows desktop:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-packaged-gui.ps1 -DotNetPath 'C:\path\to\dotnet.exe'
+```
+
+Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, 21 PowerShell engine tests, and 2 opt-in packaged GUI workflows.
 
 ## Product identity and version
 

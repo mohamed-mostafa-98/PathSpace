@@ -32,8 +32,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     {
         _engineClient = engineClient;
         _actionCoordinator = actionCoordinator ?? new ActionCoordinator(new WorkerActionExecutor(), new EngineActionVerifier(engineClient));
-        _auditLog = auditLog ?? new LocalAuditLog(Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PathSpace", "Audit"));
+        _auditLog = auditLog ?? new LocalAuditLog(DefaultAuditDirectory());
         AnalyzeCommand = new RelayCommand(() => _ = AnalyzeAsync(), () => !IsScanning && !string.IsNullOrWhiteSpace(TargetPath));
         CancelCommand = new RelayCommand(Cancel, () => IsScanning);
         PreviewActionCommand = new RelayCommand(() => _ = PreviewSelectedAsync(), () => SelectedRecommendation?.Actionable == true && !IsScanning && !IsExecutingAction);
@@ -207,5 +206,13 @@ public sealed class MainViewModel : INotifyPropertyChanged
         field = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         return true;
+    }
+
+    private static string DefaultAuditDirectory()
+    {
+        var configured = Environment.GetEnvironmentVariable("PATHSPACE_AUDIT_DIRECTORY");
+        if (!string.IsNullOrWhiteSpace(configured) && Path.IsPathFullyQualified(configured) && !configured.StartsWith(@"\\", StringComparison.Ordinal))
+            return Path.GetFullPath(configured);
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PathSpace", "Audit");
     }
 }

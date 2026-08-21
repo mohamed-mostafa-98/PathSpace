@@ -10,6 +10,7 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - Audit-file permission or I/O failures are non-fatal to the primary application workflow.
 - Strict Draft 2020-12 schemas for every emitted v1 scan, recommendation, diagnostic, preview, manifest, result, and audit message family, plus serialized-contract validation tests.
 - Version `0.1.0-private` product/assembly metadata, original PathSpace PNG/ICO artwork, MIT license, and third-party notices.
+- Opt-in packaged WPF E2E automation for complete scan/filter/export/preview/confirm/worker/verification and cancellation/read-only workflows, using disposable fixtures and TRX release evidence.
 - Repository-wide documentation Definition of Done in `AGENTS.md`, `CONTRIBUTING.md`, and the documentation policy.
 - Linear milestones M8 Engineering Completeness and M9 Public Release Readiness.
 - Linear issues MOH-25 through MOH-32 covering audit logging, schemas, GUI E2E testing, legal/product identity, CI, signing, installer/runtime delivery, and documentation governance.
@@ -20,6 +21,7 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - Scan snapshots now retain their engine-issued `scanId` in the shared .NET contract.
 - Portable packaging now includes the license, third-party notices, and product artwork.
 - Portable builds accept an explicit `-DotNetPath` for private SDK installations.
+- Stable UI Automation identifiers were added to visible workflow controls; managed tests may redirect audit files with an absolute local `PATHSPACE_AUDIT_DIRECTORY`.
 - Root README and project status now link delivered behavior, documentation, and outstanding public-release work.
 - Portable packaging now includes project status, contribution policy, and changelog so all packaged README links resolve.
 

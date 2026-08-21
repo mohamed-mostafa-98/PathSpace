@@ -20,6 +20,18 @@ Invoke-Pester -Script '.\tests\engine'
 
 The current build passes 11 contract/schema, 6 worker-security, 17 application/accessibility, and 21 engine tests. Contract tests use JsonSchema.Net to validate representative serialized v1 messages against every schema and confirm invalid discriminators/unknown properties are rejected.
 
+## Packaged GUI E2E tests
+
+From an unlocked interactive Windows desktop, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-packaged-gui.ps1 -DotNetPath 'C:\path\to\dotnet.exe'
+```
+
+The script rebuilds the portable package and then enables two otherwise-skipped FlaUI tests. The complete workflow selects a disposable target, scans, filters categories, exports JSON through the Windows Save dialog, selects the npm-cache recommendation, previews exact targets, explicitly confirms, hands off to the packaged worker, verifies recovery, checks an unrelated file survived, and confirms a local audit event. The second workflow immediately cancels a large disposable scan and verifies partial results remain read-only.
+
+Only the child process receives redirected `LOCALAPPDATA` and `PATHSPACE_AUDIT_DIRECTORY` values. Cleanup is therefore limited to the generated fixture. Results are written to `artifacts\test-results\PathSpace-packaged-gui.trx`. Do not run GUI automation in a locked or non-interactive desktop session.
+
 ## Build portable package
 
 ```powershell

@@ -7,9 +7,11 @@ The development and test toolchain uses the following packages. They are not shi
 | Component | Version | Purpose | License |
 |---|---:|---|---|
 | JsonSchema.Net | 7.3.4 | JSON Schema contract tests | MIT |
+| FlaUI.Core and FlaUI.UIA3 | 5.0.0 | Packaged Windows GUI automation | MIT |
 | Microsoft.NET.Test.Sdk | 17.11.1 | .NET test host | MIT |
 | xUnit.net | 2.9.2 | Unit testing | Apache-2.0 |
 | xunit.runner.visualstudio | 2.8.2 | Visual Studio test adapter | Apache-2.0 |
+| Xunit.SkippableFact | 1.4.13 | Opt-in GUI test skipping | MIT |
 | coverlet.collector | 6.0.2 | Test coverage collection | MIT |
 
 PowerShell and Pester may be used to run the CLI and engine tests on the developer or user machine. Their licenses remain with their respective projects.
