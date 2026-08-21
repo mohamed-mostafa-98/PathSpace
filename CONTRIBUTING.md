@@ -32,7 +32,7 @@ Documentation-only changes still require link validation and a changelog entry w
 dotnet test .\tests\PathSpace.Contracts.Tests\PathSpace.Contracts.Tests.csproj
 dotnet test .\tests\PathSpace.Worker.Tests\PathSpace.Worker.Tests.csproj
 dotnet test .\tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj
-Invoke-Pester -Script '.\tests\engine'
+Invoke-Pester -Script @('.\tests\engine','.\tests\signing')
 ```
 
 Package-affecting changes must rebuild `artifacts\PathSpace-win-x64`, verify `SHA256SUMS.txt`, and run `scripts\verify-portable-action.ps1` where relevant.
@@ -41,7 +41,7 @@ Before opening or merging a pull request, run the same local checks used by Wind
 
 ```powershell
 dotnet test .\PathSpace.sln -c Release
-Invoke-Pester -Script '.\tests\engine'
+Invoke-Pester -Script @('.\tests\engine','.\tests\signing')
 .\scripts\test-markdown-links.ps1
 .\scripts\build-portable.ps1
 .\scripts\test-package-checksums.ps1

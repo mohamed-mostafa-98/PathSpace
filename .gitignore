@@ -6,5 +6,9 @@ TestResults/
 *.user
 *.suo
 *.log
+*.pfx
+*.p12
+*.snk
+.env
+.env.*
 *-report.txt
-

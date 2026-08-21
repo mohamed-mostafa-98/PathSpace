@@ -26,7 +26,7 @@ The worker validates:
 - canonical SHA-256 manifest digest;
 - elevation expectations.
 
-The digest detects accidental or local manifest mutation; it is not a publisher code-signing certificate. Public distribution should add Authenticode signing for executables and scripts.
+The digest detects accidental or local manifest mutation; it is not a publisher code-signing certificate. The release pipeline separately Authenticode-signs executables, libraries, and PowerShell files, requires the expected publisher thumbprint and trusted timestamp, and generates transport checksums only after signing. See [Authenticode signing and release integrity](signing-and-release-integrity.md).
 
 ## Local audit records
 

@@ -39,6 +39,7 @@ Basic workflow:
 - [Architecture](docs/technical/architecture.md)
 - [CLI reference](docs/technical/cli-reference.md)
 - [Security and cleanup safety](docs/technical/security-and-safety.md)
+- [Authenticode signing and release integrity](docs/technical/signing-and-release-integrity.md)
 - [Build, test, and release guide](docs/technical/build-test-release.md)
 - [User use cases](docs/use-cases/README.md)
 - [Completion roadmap](docs/project-roadmap.md)
@@ -70,7 +71,7 @@ dotnet restore .\PathSpace.sln
 dotnet test .\tests\PathSpace.Contracts.Tests\PathSpace.Contracts.Tests.csproj
 dotnet test .\tests\PathSpace.Worker.Tests\PathSpace.Worker.Tests.csproj
 dotnet test .\tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj
-Invoke-Pester -Script '.\tests\engine'
+Invoke-Pester -Script @('.\tests\engine','.\tests\signing')
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-portable.ps1
 ```
 
@@ -80,7 +81,7 @@ Run the packaged GUI E2E suite from an interactive Windows desktop:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-packaged-gui.ps1 -DotNetPath 'C:\path\to\dotnet.exe'
 ```
 
-Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, 21 PowerShell engine tests, and 2 opt-in packaged GUI workflows.
+Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, 22 PowerShell engine/signing tests, and 2 opt-in packaged GUI workflows.
 
 The Windows CI workflow runs the non-interactive quality suites, Markdown/schema checks, portable build, checksum verification, and packaged-worker smoke test. It retains test evidence and the checksummed portable package for 30 days. Packaged GUI automation remains an interactive desktop gate because hosted CI sessions do not provide a reliable unlocked desktop.
 

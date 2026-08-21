@@ -48,7 +48,7 @@ jobs:
             Install-Module Pester -RequiredVersion 4.10.1 -Scope CurrentUser -Force -SkipPublisherCheck
           }
           Import-Module Pester -RequiredVersion 4.10.1 -Force
-          $result = Invoke-Pester -Script '.\tests\engine' -OutputFormat NUnitXml -OutputFile '.\artifacts\test-results\PathSpace-engine.xml' -PassThru
+          $result = Invoke-Pester -Script @('.\tests\engine','.\tests\signing') -OutputFormat NUnitXml -OutputFile '.\artifacts\test-results\PathSpace-powershell.xml' -PassThru
           if ($result.FailedCount -ne 0) { exit 1 }
 
       - name: Validate Markdown links

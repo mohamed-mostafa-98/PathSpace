@@ -24,5 +24,5 @@ foreach($name in @('README.md','PROJECT_STATUS.md','CONTRIBUTING.md','CHANGELOG.
 }
 Copy-Item -LiteralPath (Join-Path $projectRoot 'assets\pathspace-icon.png') -Destination $artifact
 Copy-Item -LiteralPath (Join-Path $projectRoot 'docs') -Destination $artifact -Recurse -Force
-Get-ChildItem -LiteralPath $artifact -Recurse -File | Get-FileHash -Algorithm SHA256 | ForEach-Object {"$($_.Hash)  $($_.Path.Substring($artifact.Length+1))"} | Set-Content (Join-Path $artifact 'SHA256SUMS.txt') -Encoding UTF8
+& (Join-Path $PSScriptRoot 'new-package-checksums.ps1') -ArtifactPath $artifact | Out-Null
 Write-Output $artifact

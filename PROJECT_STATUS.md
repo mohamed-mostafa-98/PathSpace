@@ -12,7 +12,7 @@
 - Complete v1 JSON Schema set with serialized-contract validation tests
 - Version 0.1.0-private product metadata, original PathSpace icon, MIT license, and third-party notices
 - Two passing opt-in packaged GUI workflows covering complete scan/export/preview/confirm/worker/verify and cancellation/read-only behavior
-- 21 passing PowerShell engine tests
+- 22 passing PowerShell engine/signing tests
 - 17 passing application/integration/accessibility tests
 - 6 passing worker-security tests
 - 11 passing contract and JSON Schema tests
@@ -32,6 +32,10 @@ These outstanding checks are tracked in Linear and in `docs/testing` rather than
 ## CI status
 
 The repository is connected to [mohamed-mostafa-98/PathSpace](https://github.com/mohamed-mostafa-98/PathSpace). Windows CI run 2 passed every test, validation, packaging, checksum, worker-smoke, and artifact-upload step for commit `4a97a1c`; test evidence and the portable package were retained successfully.
+
+## Signing status
+
+Publisher signing scripts, strict signature/timestamp verification, post-signing checksums, a protected release workflow, and disposable tamper tests are implemented. A real publicly trusted certificate and separate clean-host validation are still required before MOH-30 or any public release can be completed.
 
 ## Engineering-completeness backlog
 

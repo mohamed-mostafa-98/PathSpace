@@ -15,10 +15,10 @@ dotnet restore .\PathSpace.sln
 dotnet test .\tests\PathSpace.Contracts.Tests\PathSpace.Contracts.Tests.csproj
 dotnet test .\tests\PathSpace.Worker.Tests\PathSpace.Worker.Tests.csproj
 dotnet test .\tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj
-Invoke-Pester -Script '.\tests\engine'
+Invoke-Pester -Script @('.\tests\engine','.\tests\signing')
 ```
 
-The current build passes 11 contract/schema, 6 worker-security, 17 application/accessibility, and 21 engine tests. Contract tests use JsonSchema.Net to validate representative serialized v1 messages against every schema and confirm invalid discriminators/unknown properties are rejected.
+The current build passes 11 contract/schema, 6 worker-security, 17 application/accessibility, and 22 PowerShell tests: 21 engine tests plus one disposable Authenticode signing/tamper test. Contract tests use JsonSchema.Net to validate representative serialized v1 messages against every schema and confirm invalid discriminators/unknown properties are rejected.
 
 ## Packaged GUI E2E tests
 
@@ -79,7 +79,7 @@ This creates and removes only its own disposable temporary fixture.
 
 The Windows PowerShell step explicitly enables TLS 1.2, bootstraps the NuGet package provider, trusts PSGallery for the ephemeral runner, and pins Pester 4.10.1 to match the Windows PowerShell 5.1-compatible engine suite. No installed module is included in the product artifact.
 
-CI retains test results and the portable package for 30 days. It does not sign binaries, access production credentials, upload runtime scan data, or exercise the interactive packaged GUI. Signing is a separate MOH-30 gate, and interactive GUI/accessibility runs require an unlocked Windows desktop.
+CI retains test results and the unsigned portable package for 30 days. It does not access production credentials, upload runtime scan data, or exercise the interactive packaged GUI. `.github\workflows\windows-release.yml` is a separate manually dispatched, protected-environment path that refuses to upload unless publisher signatures, timestamps, post-signing checksums, and the signed-worker smoke test pass. Interactive GUI/accessibility runs still require an unlocked Windows desktop.
 
 The first verified hosted pipeline completed successfully on 2026-08-21 for commit `4a97a1c` ([Windows CI run 2](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32490124664)). Every step passed, including both artifact uploads.
 

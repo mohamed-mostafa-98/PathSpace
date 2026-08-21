@@ -1,0 +1,77 @@
+name: Signed Windows Release Candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_label:
+        description: Human-readable release candidate label
+        required: true
+        default: 0.1.0-rc
+
+permissions:
+  contents: read
+
+jobs:
+  sign-and-package:
+    name: Sign and verify release candidate
+    runs-on: windows-latest
+    environment: release-signing
+    timeout-minutes: 30
+    env:
+      SIGNING_PFX_BASE64: ${{ secrets.PATHSPACE_SIGNING_PFX_BASE64 }}
+      SIGNING_PFX_PASSWORD: ${{ secrets.PATHSPACE_SIGNING_PFX_PASSWORD }}
+      SIGNING_CERT_THUMBPRINT: ${{ secrets.PATHSPACE_SIGNING_CERT_THUMBPRINT }}
+      TIMESTAMP_URL: ${{ vars.PATHSPACE_TIMESTAMP_URL }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore and test .NET projects
+        shell: pwsh
+        run: |
+          dotnet restore .\PathSpace.sln
+          dotnet test .\PathSpace.sln -c Release --no-restore
+
+      - name: Build unsigned portable package
+        shell: powershell
+        run: .\scripts\build-portable.ps1
+
+      - name: Sign package with protected release certificate
+        shell: powershell
+        run: |
+          $required=@('SIGNING_PFX_BASE64','SIGNING_PFX_PASSWORD','SIGNING_CERT_THUMBPRINT','TIMESTAMP_URL')
+          foreach($name in $required){if([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($name))){throw "Required release-signing configuration is missing: $name"}}
+          $pfx=Join-Path $env:RUNNER_TEMP 'pathspace-release-signing.pfx'
+          try {
+            [IO.File]::WriteAllBytes($pfx,[Convert]::FromBase64String($env:SIGNING_PFX_BASE64))
+            $password=ConvertTo-SecureString $env:SIGNING_PFX_PASSWORD -AsPlainText -Force
+            .\scripts\sign-package.ps1 -CertificatePath $pfx -CertificatePassword $password -ExpectedThumbprint $env:SIGNING_CERT_THUMBPRINT -TimestampServer $env:TIMESTAMP_URL
+          } finally {
+            Remove-Item -LiteralPath $pfx -Force -ErrorAction SilentlyContinue
+          }
+
+      - name: Verify publisher signatures and timestamps
+        shell: powershell
+        run: .\scripts\test-package-signatures.ps1 -ExpectedThumbprint $env:SIGNING_CERT_THUMBPRINT
+
+      - name: Verify post-signing checksums
+        shell: pwsh
+        run: .\scripts\test-package-checksums.ps1
+
+      - name: Smoke-test signed worker
+        shell: pwsh
+        run: .\scripts\verify-portable-action.ps1
+
+      - name: Upload signed release candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: PathSpace-${{ inputs.release_label }}-signed-win-x64
+          path: artifacts/PathSpace-win-x64
+          if-no-files-found: error
+          retention-days: 30
