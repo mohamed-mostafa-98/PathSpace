@@ -33,7 +33,7 @@ These outstanding checks are tracked in Linear and in `docs/testing` rather than
 
 ## CI status
 
-The repository is connected to [mohamed-mostafa-98/PathSpace](https://github.com/mohamed-mostafa-98/PathSpace). Windows CI run 2 passed every test, validation, packaging, checksum, worker-smoke, and artifact-upload step for commit `4a97a1c`; test evidence and the portable package were retained successfully.
+The repository is connected to [mohamed-mostafa-98/PathSpace](https://github.com/mohamed-mostafa-98/PathSpace). [Windows CI run 5](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32753914372) passed every test, validation, portable/MSI build, ICE/extraction, checksum, worker-smoke, and artifact-upload step for commit `9b30825`; test evidence, the portable package, and the self-contained MSI were retained successfully.
 
 ## Signing status
 

@@ -93,7 +93,7 @@ The Windows PowerShell step explicitly enables TLS 1.2, bootstraps the NuGet pac
 
 CI retains test results, the unsigned portable package, and the unsigned MSI for 30 days. It does not access production credentials, upload runtime scan data, or exercise the interactive packaged GUI. `.github\workflows\windows-release.yml` is a separate manually dispatched, protected-environment path that signs the portable package and MSI payload, builds and signs the MSI container, and refuses both uploads unless publisher signatures, timestamps, post-signing checksums, worker smoke testing, and MSI extraction pass. Interactive GUI/accessibility and install/upgrade/uninstall runs still require suitable Windows hosts.
 
-The first verified hosted pipeline completed successfully on 2026-08-21 for commit `4a97a1c` ([Windows CI run 2](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32490124664)). Every step passed, including both artifact uploads.
+The installer-enabled pipeline completed successfully on 2026-08-24 for commit `9b30825` ([Windows CI run 5](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32753914372)). Every quality, portable, MSI build, ICE/extraction, checksum, smoke, and upload step passed. The run retained `pathspace-test-results-5`, `PathSpace-win-x64-5`, and `PathSpace-installer-win-x64-5`.
 
 Local equivalents for the standalone CI checks are:
 
