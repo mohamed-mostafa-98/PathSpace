@@ -11,7 +11,7 @@
 - JSON, redacted JSON, CSV exports, and connected bounded local audit logging for observable workflows
 - Complete v1 JSON Schema set with serialized-contract validation tests
 - Version 0.1.0-private product metadata, original PathSpace icon, MIT license, and third-party notices
-- Two passing opt-in packaged GUI workflows covering complete scan/export/preview/confirm/worker/verify and cancellation/read-only behavior
+- Three passing opt-in packaged GUI workflows covering complete scan/export/preview/confirm/worker/verify, cancellation/read-only behavior, and keyboard-only operation
 - 22 passing PowerShell engine/signing tests
 - 17 passing application/integration/accessibility tests
 - 6 passing worker-security tests
@@ -25,7 +25,7 @@
 - Windows 10 x64 host validation
 - Removable-media scan
 - Interactive UAC cancellation walkthrough
-- Keyboard-only and Narrator walkthrough
+- Narrator walkthrough
 - Manual 200% scaling, high-contrast, and contrast review
 - Signed MSI clean install, major upgrade, and uninstall on Windows 10 and Windows 11
 

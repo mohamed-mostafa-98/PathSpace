@@ -23,5 +23,6 @@
 | Offline/no connections | Passed: rebuilt packaged GUI process observed with 0 TCP connections | Requires separate host |
 | MSI structure/extraction | Passed locally and in hosted Windows CI run 5: version/product/upgrade metadata, Start-menu definition, embedded runtime/legal files, ICE validation, checksum, and disposable administrative extraction | Requires separate host |
 | Signed MSI install/upgrade/uninstall | Requires elevated clean-host lifecycle run with two signed versions | Requires elevated clean host |
+| Keyboard-only application workflow | Passed in packaged automation: target, Analyze, tabs, filter, recommendation, preview, confirmation, Execute, and verified result used keyboard input | Requires separate host |
 
 No unsupported manual result is marked as passed. Windows 10 release sign-off requires running this matrix on Windows 10 x64.

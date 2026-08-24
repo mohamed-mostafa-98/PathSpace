@@ -75,6 +75,50 @@ public sealed class PackagedGuiWorkflowTests
         session.SelectTab("RecommendationsTab");
         Assert.False(session.Button("ExecuteActionButton").IsEnabled);
     }
+
+    [SkippableFact]
+    public void Keyboard_only_navigation_can_scan_filter_preview_confirm_and_execute()
+    {
+        Skip.IfNot(Enabled, "Set PATHSPACE_RUN_PACKAGED_E2E=1 and build the portable package first.");
+        using var fixture = PackagedFixture.Create();
+        File.WriteAllBytes(Path.Combine(fixture.NpmCache, "keyboard-data.bin"), new byte[4096]);
+
+        using var session = GuiSession.Launch(fixture);
+        session.Element("TargetPath").FocusNative();
+        Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.KEY_A);
+        Keyboard.Type(fixture.Root);
+        Keyboard.Press(VirtualKeyShort.TAB);
+        session.WaitForFocus("BrowseButton");
+        Keyboard.Press(VirtualKeyShort.TAB);
+        session.WaitForFocus("AnalyzeButton");
+        Keyboard.Press(VirtualKeyShort.ENTER);
+        session.WaitForText("StatusText", value => value.Contains("Analysis complete", StringComparison.Ordinal));
+
+        session.Element("SummaryTab").FocusNative();
+        Keyboard.Press(VirtualKeyShort.RIGHT);
+        Assert.True(session.Element("CategoriesTab").AsTabItem().IsSelected);
+        session.TabTo("ResultFilter");
+        Keyboard.Type("npm-cache");
+        Assert.NotNull(session.Window.FindFirstDescendant(value => value.ByName(fixture.NpmCache)));
+
+        Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.TAB);
+        Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.TAB);
+        Assert.True(session.Element("RecommendationsTab").AsTabItem().IsSelected);
+        session.TabToAny(ControlType.ListItem, ControlType.List);
+        Keyboard.Press(VirtualKeyShort.HOME);
+        session.TabTo("PreviewActionButton");
+        Keyboard.Press(VirtualKeyShort.ENTER);
+        session.WaitForText("ActionStatusText", value => value.Contains("Preview ready", StringComparison.Ordinal));
+        session.TabTo("ConfirmActionCheckBox");
+        Keyboard.TypeSimultaneously(VirtualKeyShort.ALT, VirtualKeyShort.KEY_I);
+        Assert.True(Retry.WhileFalse(() => session.Element("ConfirmActionCheckBox").AsCheckBox().IsChecked == true, TimeSpan.FromSeconds(5)).Success);
+        session.WaitForEnabled("ExecuteActionButton");
+        session.TabTo("ExecuteActionButton");
+        Keyboard.Press(VirtualKeyShort.ENTER);
+        session.WaitForText("ActionStatusText", value => value.Contains("Action completed", StringComparison.Ordinal));
+
+        Assert.Empty(Directory.EnumerateFileSystemEntries(fixture.NpmCache));
+    }
 }
 
 internal sealed class GuiSession : IDisposable
@@ -107,6 +151,38 @@ internal sealed class GuiSession : IDisposable
     {
         var result = Retry.WhileFalse(() => predicate(Element(id).Name ?? string.Empty), timeout ?? TimeSpan.FromSeconds(45), TimeSpan.FromMilliseconds(200));
         Assert.True(result.Success, $"Timed out waiting for '{id}'. Last text: {Element(id).Name}");
+    }
+    public void WaitForFocus(string id)
+    {
+        var result = Retry.WhileFalse(() => _automation.FocusedElement()?.AutomationId == id, TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(100));
+        Assert.True(result.Success, $"Timed out waiting for keyboard focus on '{id}'. Focus was '{_automation.FocusedElement()?.AutomationId}'.");
+    }
+    public void WaitForEnabled(string id)
+    {
+        Assert.True(Retry.WhileFalse(() => Element(id).IsEnabled, TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(100)).Success, $"Timed out waiting for '{id}' to become enabled.");
+    }
+    public void TabTo(string id, int maximumTabs = 30)
+    {
+        var visited = new List<string>();
+        for (var index = 0; index < maximumTabs; index++)
+        {
+            var focused = _automation.FocusedElement();
+            visited.Add($"{focused?.AutomationId}:{focused?.Name}:{focused?.ControlType}");
+            if (focused?.AutomationId == id) return;
+            Keyboard.Press(VirtualKeyShort.TAB);
+            if (Retry.WhileFalse(() => _automation.FocusedElement()?.AutomationId == id, TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(50)).Success) return;
+        }
+        throw new InvalidOperationException($"Keyboard traversal did not reach '{id}'. Visited: {string.Join(" -> ", visited)}");
+    }
+    public void TabToAny(params ControlType[] controlTypes)
+    {
+        for (var index = 0; index < 30; index++)
+        {
+            if (_automation.FocusedElement() is { } focused && controlTypes.Contains(focused.ControlType)) return;
+            Keyboard.Press(VirtualKeyShort.TAB);
+            Thread.Sleep(100);
+        }
+        throw new InvalidOperationException($"Keyboard traversal did not reach any of: {string.Join(", ", controlTypes)}.");
     }
     public void CompleteSaveDialog(string path)
     {

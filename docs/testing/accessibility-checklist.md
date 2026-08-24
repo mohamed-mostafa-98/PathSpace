@@ -5,10 +5,11 @@
 - [x] Accessible names for target input, live status, results, categories, and large-file tables.
 - [x] Virtualized result grids.
 - [x] Keyboard-focusable, accessible path filters for category and large-file results.
+- [x] Explicit confirmation exposes the `Alt+I` access key for direct keyboard activation.
 - [x] System color brushes replace fixed decorative colors for high-contrast compatibility.
-- [ ] Manual keyboard-only walkthrough on packaged build.
+- [x] Packaged keyboard-only automation covers target entry, Analyze activation, tab selection, path filtering, recommendation selection, preview, explicit confirmation, and execution.
 - [ ] Manual Narrator announcement verification.
 - [ ] Manual 200% scaling and high-contrast verification.
 - [ ] Manual color-contrast measurement and remediation if needed.
 
-Manual checks remain release-signoff work because they require an interactive desktop and assistive technology.
+Narrator, scaling, high-contrast, and measured contrast checks remain manual release-signoff work because they require assistive technology or visual inspection.

@@ -21,6 +21,7 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - Pinned WiX 5 per-machine MSI with self-contained .NET 8 desktop runtime, stable major-upgrade identity, Start-menu registration, portable fallback, and clean-host lifecycle harness.
 - MSI metadata, embedded-runtime, shortcut, and disposable administrative-extraction verification in local and hosted Windows build flows.
 - Embedded .NET runtime license and third-party notice files in the self-contained installer payload.
+- Packaged keyboard-only GUI automation covering scan, tab navigation, filtering, recommendation preview, explicit confirmation, execution, and verified recovery.
 - Repository-wide documentation Definition of Done in `AGENTS.md`, `CONTRIBUTING.md`, and the documentation policy.
 - Linear milestones M8 Engineering Completeness and M9 Public Release Readiness.
 - Linear issues MOH-25 through MOH-32 covering audit logging, schemas, GUI E2E testing, legal/product identity, CI, signing, installer/runtime delivery, and documentation governance.

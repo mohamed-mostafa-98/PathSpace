@@ -99,7 +99,7 @@
                             <ItemsControl ItemsSource="{Binding CurrentPreview.Targets}" Margin="0,5,0,0">
                                 <ItemsControl.ItemTemplate><DataTemplate><TextBlock Text="{Binding Path}" TextWrapping="Wrap"/></DataTemplate></ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <CheckBox Content="I reviewed these exact targets and explicitly confirm this action" AutomationProperties.AutomationId="ConfirmActionCheckBox"
+                            <CheckBox Content="_I reviewed these exact targets and explicitly confirm this action" AutomationProperties.AutomationId="ConfirmActionCheckBox"
                                       IsChecked="{Binding HasConfirmedPreview}" Margin="0,8,0,0"/>
                             <Button Content="Execute confirmed preview" Command="{Binding ExecuteActionCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,8,0,0" AutomationProperties.AutomationId="ExecuteActionButton"/>
                             <TextBlock Text="{Binding ActionStatus}" TextWrapping="Wrap" Margin="0,8,0,0" AutomationProperties.LiveSetting="Polite" AutomationProperties.AutomationId="ActionStatusText"/>
