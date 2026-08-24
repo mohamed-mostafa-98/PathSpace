@@ -18,6 +18,9 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - GitHub remote and hosted Windows CI activated; the first fully verified run retained passing test evidence and the checksummed portable package.
 - Authenticode package signing, expected-publisher/timestamp verification, post-signing checksum generation, signing manifest, protected manual release workflow, and disposable tamper test.
 - Certificate ownership, secret handling, renewal/revocation responsibilities, release ordering, and clean-host signing gate documentation.
+- Pinned WiX 5 per-machine MSI with self-contained .NET 8 desktop runtime, stable major-upgrade identity, Start-menu registration, portable fallback, and clean-host lifecycle harness.
+- MSI metadata, embedded-runtime, shortcut, and disposable administrative-extraction verification in local and hosted Windows build flows.
+- Embedded .NET runtime license and third-party notice files in the self-contained installer payload.
 - Repository-wide documentation Definition of Done in `AGENTS.md`, `CONTRIBUTING.md`, and the documentation policy.
 - Linear milestones M8 Engineering Completeness and M9 Public Release Readiness.
 - Linear issues MOH-25 through MOH-32 covering audit logging, schemas, GUI E2E testing, legal/product identity, CI, signing, installer/runtime delivery, and documentation governance.
@@ -31,6 +34,7 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - Stable UI Automation identifiers were added to visible workflow controls; managed tests may redirect audit files with an absolute local `PATHSPACE_AUDIT_DIRECTORY`.
 - Root README and project status now link delivered behavior, documentation, and outstanding public-release work.
 - Portable packaging now includes project status, contribution policy, and changelog so all packaged README links resolve.
+- Release signing now covers PathSpace-owned binaries, packaged PowerShell, and the MSI container while preserving vendor signatures on the embedded Microsoft runtime.
 
 ### Verified
 

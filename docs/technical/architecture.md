@@ -48,4 +48,4 @@ The application requests a post-action scan where applicable. It distinguishes m
 
 ## Platform scope
 
-The product is designed for Windows 10/11 x64. The current portable package is framework-dependent and requires the .NET 8 Desktop Runtime. Windows-native integrations include WPF, PowerShell, DISM, `powercfg`, WSL/Docker diagnostics, and `Optimize-Volume`.
+The product is designed for Windows 10/11 x64. The portable package is framework-dependent and requires the .NET 8 Desktop Runtime; the WiX MSI embeds the .NET 8 Windows Desktop runtime for deterministic offline installation. Windows-native integrations include WPF, Windows Installer, PowerShell, DISM, `powercfg`, WSL/Docker diagnostics, and `Optimize-Volume`.

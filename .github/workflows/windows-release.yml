@@ -16,7 +16,7 @@ jobs:
     name: Sign and verify release candidate
     runs-on: windows-latest
     environment: release-signing
-    timeout-minutes: 30
+    timeout-minutes: 45
     env:
       SIGNING_PFX_BASE64: ${{ secrets.PATHSPACE_SIGNING_PFX_BASE64 }}
       SIGNING_PFX_PASSWORD: ${{ secrets.PATHSPACE_SIGNING_PFX_PASSWORD }}
@@ -42,6 +42,10 @@ jobs:
         shell: powershell
         run: .\scripts\build-portable.ps1
 
+      - name: Build unsigned self-contained MSI
+        shell: powershell
+        run: .\scripts\build-installer.ps1
+
       - name: Sign package with protected release certificate
         shell: powershell
         run: |
@@ -52,26 +56,47 @@ jobs:
             [IO.File]::WriteAllBytes($pfx,[Convert]::FromBase64String($env:SIGNING_PFX_BASE64))
             $password=ConvertTo-SecureString $env:SIGNING_PFX_PASSWORD -AsPlainText -Force
             .\scripts\sign-package.ps1 -CertificatePath $pfx -CertificatePassword $password -ExpectedThumbprint $env:SIGNING_CERT_THUMBPRINT -TimestampServer $env:TIMESTAMP_URL
+            .\scripts\sign-package.ps1 -ArtifactPath .\artifacts\installer-build\payload -CertificatePath $pfx -CertificatePassword $password -ExpectedThumbprint $env:SIGNING_CERT_THUMBPRINT -TimestampServer $env:TIMESTAMP_URL
+            .\scripts\build-installer.ps1 -PayloadPath .\artifacts\installer-build\payload -SkipPayloadBuild
+            .\scripts\sign-package.ps1 -ArtifactPath .\artifacts\installer -CertificatePath $pfx -CertificatePassword $password -ExpectedThumbprint $env:SIGNING_CERT_THUMBPRINT -TimestampServer $env:TIMESTAMP_URL
           } finally {
             Remove-Item -LiteralPath $pfx -Force -ErrorAction SilentlyContinue
           }
 
       - name: Verify publisher signatures and timestamps
         shell: powershell
-        run: .\scripts\test-package-signatures.ps1 -ExpectedThumbprint $env:SIGNING_CERT_THUMBPRINT
+        run: |
+          .\scripts\test-package-signatures.ps1 -ExpectedThumbprint $env:SIGNING_CERT_THUMBPRINT
+          .\scripts\test-package-signatures.ps1 -ArtifactPath .\artifacts\installer-build\payload -ExpectedThumbprint $env:SIGNING_CERT_THUMBPRINT
+          .\scripts\test-package-signatures.ps1 -ArtifactPath .\artifacts\installer -ExpectedThumbprint $env:SIGNING_CERT_THUMBPRINT
 
       - name: Verify post-signing checksums
         shell: pwsh
-        run: .\scripts\test-package-checksums.ps1
+        run: |
+          .\scripts\test-package-checksums.ps1
+          .\scripts\test-package-checksums.ps1 -ArtifactPath .\artifacts\installer-build\payload
+          .\scripts\test-package-checksums.ps1 -ArtifactPath .\artifacts\installer
 
       - name: Smoke-test signed worker
         shell: pwsh
         run: .\scripts\verify-portable-action.ps1
+
+      - name: Verify signed MSI structure
+        shell: powershell
+        run: .\scripts\test-installer.ps1
 
       - name: Upload signed release candidate
         uses: actions/upload-artifact@v4
         with:
           name: PathSpace-${{ inputs.release_label }}-signed-win-x64
           path: artifacts/PathSpace-win-x64
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload signed installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: PathSpace-${{ inputs.release_label }}-signed-installer-win-x64
+          path: artifacts/installer
           if-no-files-found: error
           retention-days: 30

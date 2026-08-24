@@ -28,14 +28,15 @@ The workflow writes the PFX only to `RUNNER_TEMP`, loads the private key ephemer
 ## Signing order
 
 1. Build and test the exact release commit.
-2. Build a fresh unsigned portable directory.
+2. Build a fresh unsigned portable directory and self-contained MSI payload.
 3. Validate certificate private key, code-signing EKU, validity window, and expected thumbprint.
-4. SHA-256-sign every packaged `.exe`, `.dll`, `.ps1`, `.psm1`, and `.psd1` with the configured timestamp service.
+4. SHA-256-sign PathSpace-owned `.exe`/`.dll` files and packaged `.ps1`/`.psm1`/`.psd1` files with the configured timestamp service; retain vendor signatures on embedded runtime files.
 5. Require every signature to be `Valid`, from the expected thumbprint, and timestamped.
 6. Write `SIGNING-MANIFEST.json` without secrets.
 7. Generate `SHA256SUMS.txt` after signing.
-8. Verify every checksum and smoke-test the signed worker.
-9. Upload only after all checks pass.
+8. Build the MSI from the signed self-contained payload, then sign and timestamp the MSI container.
+9. Verify every portable, payload, and MSI checksum; smoke-test the signed worker; structurally extract the signed MSI.
+10. Upload either package only after all checks pass.
 
 Any missing secret, certificate mismatch, expired/not-yet-valid certificate, missing code-signing purpose, failed timestamp, invalid signature, missing timestamp, checksum mismatch, or worker failure stops artifact publication.
 

@@ -24,6 +24,14 @@ artifacts\PathSpace-win-x64\PathSpace.App.exe
 
 The package is framework-dependent and requires the .NET 8 Desktop Runtime.
 
+The MSI build embeds the .NET 8 Desktop Runtime for offline installation and is located at:
+
+```text
+artifacts\installer\PathSpace-0.1.0-win-x64.msi
+```
+
+Public distribution remains gated on publisher signing and clean Windows 10/11 install, upgrade, and uninstall evidence.
+
 Basic workflow:
 
 1. Select a drive or browse to a local folder.
@@ -40,6 +48,7 @@ Basic workflow:
 - [CLI reference](docs/technical/cli-reference.md)
 - [Security and cleanup safety](docs/technical/security-and-safety.md)
 - [Authenticode signing and release integrity](docs/technical/signing-and-release-integrity.md)
+- [Installer and runtime strategy](docs/technical/installer-and-runtime.md)
 - [Build, test, and release guide](docs/technical/build-test-release.md)
 - [User use cases](docs/use-cases/README.md)
 - [Completion roadmap](docs/project-roadmap.md)
@@ -63,6 +72,7 @@ Basic workflow:
 | `tests` | xUnit, Pester, fixtures, and integration tests |
 | `legacy-toolkit` | Reviewed standalone diagnostics and guided migration tools |
 | `scripts` | Build and package verification scripts |
+| `installer` | WiX MSI definition and stable product/upgrade identity |
 
 ## Build and test
 
@@ -73,6 +83,8 @@ dotnet test .\tests\PathSpace.Worker.Tests\PathSpace.Worker.Tests.csproj
 dotnet test .\tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj
 Invoke-Pester -Script @('.\tests\engine','.\tests\signing')
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-portable.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-installer.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-installer.ps1
 ```
 
 Run the packaged GUI E2E suite from an interactive Windows desktop:
@@ -83,7 +95,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-packaged-gui.
 
 Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, 22 PowerShell engine/signing tests, and 2 opt-in packaged GUI workflows.
 
-The Windows CI workflow runs the non-interactive quality suites, Markdown/schema checks, portable build, checksum verification, and packaged-worker smoke test. It retains test evidence and the checksummed portable package for 30 days. Packaged GUI automation remains an interactive desktop gate because hosted CI sessions do not provide a reliable unlocked desktop.
+The Windows CI workflow runs the non-interactive quality suites, Markdown/schema checks, portable build, checksum verification, packaged-worker smoke test, self-contained MSI build, and MSI structural/extraction verification. It retains test evidence and both package forms for 30 days. Packaged GUI automation and real installer lifecycle testing remain interactive host gates.
 
 ## Product identity and version
 

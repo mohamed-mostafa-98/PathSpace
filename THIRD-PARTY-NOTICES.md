@@ -1,6 +1,6 @@
 # Third-party notices
 
-PathSpace application binaries use the [.NET 8 runtime](https://github.com/dotnet/runtime), licensed by Microsoft under the MIT License. Framework components may include their own notices in the installed .NET runtime distribution.
+PathSpace application binaries use the [.NET 8 runtime](https://github.com/dotnet/runtime), licensed by Microsoft under the MIT License. The self-contained MSI carries `DOTNET-RUNTIME-LICENSE.txt`, `DOTNET-RUNTIME-THIRD-PARTY-NOTICES.txt`, and `DOTNET-WINDOWSDESKTOP-LICENSE.txt` beside the application; the framework-dependent portable package relies on the separately installed runtime's notices.
 
 The development and test toolchain uses the following packages. They are not shipped as PathSpace application code in the framework-dependent portable package unless a package explicitly becomes a runtime dependency:
 
@@ -13,6 +13,7 @@ The development and test toolchain uses the following packages. They are not shi
 | xunit.runner.visualstudio | 2.8.2 | Visual Studio test adapter | Apache-2.0 |
 | Xunit.SkippableFact | 1.4.13 | Opt-in GUI test skipping | MIT |
 | coverlet.collector | 6.0.2 | Test coverage collection | MIT |
+| WiX Toolset | 5.0.2 | Windows Installer build and ICE validation | Microsoft Reciprocal License |
 
 PowerShell and Pester may be used to run the CLI and engine tests on the developer or user machine. Their licenses remain with their respective projects.
 

@@ -8,6 +8,7 @@ PathSpace is a Windows storage-analysis and guided-cleanup product built around 
 - [CLI reference](cli-reference.md)
 - [Security and cleanup safety](security-and-safety.md)
 - [Authenticode signing and release integrity](signing-and-release-integrity.md)
+- [Installer and runtime strategy](installer-and-runtime.md)
 - [Build, test, and release](build-test-release.md)
 - [Documentation maintenance policy](documentation-policy.md)
 
@@ -34,3 +35,4 @@ PathSpace is a Windows storage-analysis and guided-cleanup product built around 
 | `tests` | xUnit, Pester, fixtures, security, and integration tests |
 | `legacy-toolkit` | Reviewed standalone guidance and migration utilities |
 | `scripts` | Portable build and package verification scripts |
+| `installer` | WiX source for the self-contained per-machine MSI |

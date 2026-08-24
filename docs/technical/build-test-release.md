@@ -7,6 +7,7 @@
 - Windows PowerShell 5.1
 - Pester for engine tests
 - PowerShell 7 for the packaged-worker verification helper
+- Internet access during development/CI only to restore the pinned WiX 5.0.2 build tool; the produced installer and application remain offline
 
 ## Restore and test
 
@@ -50,7 +51,7 @@ Output:
 artifacts\PathSpace-win-x64
 ```
 
-The folder includes the GUI, worker, engine, CLI, schemas, documentation hub, README, project status, contribution policy, changelog, MIT license, third-party notices, product icon, guided toolkit, and `SHA256SUMS.txt`.
+The folder includes the GUI, worker, engine, CLI, schemas, documentation hub, README, project status, contribution policy, changelog, MIT license, third-party notices, PNG/ICO product artwork, guided toolkit, and `SHA256SUMS.txt`.
 
 ## Package smoke test
 
@@ -60,6 +61,15 @@ pwsh -NoProfile -File .\scripts\verify-portable-action.ps1
 
 This creates and removes only its own disposable temporary fixture.
 
+## Build and verify MSI
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-installer.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-installer.ps1
+```
+
+The MSI contains a self-contained x64 application and worker, so end users do not need to install .NET separately. The build runs standard Windows Installer ICE validation; the verifier reads MSI metadata and performs an administrative extraction into a unique temporary directory without registering the product. See [Installer and runtime strategy](installer-and-runtime.md) for clean-host lifecycle validation.
+
 ## Release checklist
 
 - Confirm the Git worktree is clean.
@@ -68,6 +78,8 @@ This creates and removes only its own disposable temporary fixture.
 - Verify every entry in `SHA256SUMS.txt`.
 - Confirm executable product version `0.1.0`, informational version `0.1.0-private`, and the PathSpace application icon.
 - Confirm `LICENSE` and `THIRD-PARTY-NOTICES.md` are present.
+- Build and structurally verify the self-contained MSI.
+- Verify signed MSI install, major upgrade, and uninstall on clean Windows 10 and Windows 11 x64 hosts.
 - Launch the packaged GUI as a normal user.
 - Confirm no unexpected TCP connections.
 - Scan a local folder and a fixed drive.
@@ -75,11 +87,11 @@ This creates and removes only its own disposable temporary fixture.
 
 ## Windows CI
 
-`.github\workflows\windows-ci.yml` runs on pushes and pull requests targeting `master` or `main`, plus manual dispatch. It uses a least-privilege read-only repository token and a 30-minute timeout. The job restores .NET, treats build warnings as errors through repository properties, runs the .NET and Pester suites, validates local Markdown links and JSON contracts, builds the portable package, verifies every SHA-256 entry, and smoke-tests the packaged worker.
+`.github\workflows\windows-ci.yml` runs on pushes and pull requests targeting `master` or `main`, plus manual dispatch. It uses a least-privilege read-only repository token and a 40-minute timeout. The job restores .NET, treats build warnings as errors through repository properties, runs the .NET and Pester suites, validates local Markdown links and JSON contracts, builds the portable package, verifies every SHA-256 entry, smoke-tests the packaged worker, then builds and structurally extracts the self-contained MSI.
 
 The Windows PowerShell step explicitly enables TLS 1.2, bootstraps the NuGet package provider, trusts PSGallery for the ephemeral runner, and pins Pester 4.10.1 to match the Windows PowerShell 5.1-compatible engine suite. No installed module is included in the product artifact.
 
-CI retains test results and the unsigned portable package for 30 days. It does not access production credentials, upload runtime scan data, or exercise the interactive packaged GUI. `.github\workflows\windows-release.yml` is a separate manually dispatched, protected-environment path that refuses to upload unless publisher signatures, timestamps, post-signing checksums, and the signed-worker smoke test pass. Interactive GUI/accessibility runs still require an unlocked Windows desktop.
+CI retains test results, the unsigned portable package, and the unsigned MSI for 30 days. It does not access production credentials, upload runtime scan data, or exercise the interactive packaged GUI. `.github\workflows\windows-release.yml` is a separate manually dispatched, protected-environment path that signs the portable package and MSI payload, builds and signs the MSI container, and refuses both uploads unless publisher signatures, timestamps, post-signing checksums, worker smoke testing, and MSI extraction pass. Interactive GUI/accessibility and install/upgrade/uninstall runs still require suitable Windows hosts.
 
 The first verified hosted pipeline completed successfully on 2026-08-21 for commit `4a97a1c` ([Windows CI run 2](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32490124664)). Every step passed, including both artifact uploads.
 

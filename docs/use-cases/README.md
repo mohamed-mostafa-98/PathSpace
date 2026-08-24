@@ -66,6 +66,16 @@ These use cases describe supported user goals and the safe application behavior 
 **Flow:** Complete a scan and export JSON, redacted JSON, or CSV. Use redacted JSON before sharing outside the device.  
 **Outcome:** The report is written locally; PathSpace never uploads it.
 
+## UC-11 — Install, upgrade, or remove PathSpace
+
+**Actor:** Windows administrator or user approving UAC
+
+**Preconditions:** A signed PathSpace x64 MSI from the release channel.
+
+**Flow:** Launch the MSI, approve the per-machine installation, then start PathSpace from the Start menu. Install a newer signed MSI to upgrade, or remove PathSpace from Windows Settings.
+
+**Outcome:** The embedded .NET desktop runtime permits offline use; upgrades preserve one product identity; uninstall removes installed product files and the Start-menu shortcut. The framework-dependent portable archive remains the no-registration fallback.
+
 ## Out of scope
 
 - Registry cleaning

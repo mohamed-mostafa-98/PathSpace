@@ -21,7 +21,7 @@ MOH-27 validated the final observable workflows after MOH-25 and MOH-26 complete
 
 - **MOH-29 — completed:** The GitHub remote and Windows CI pipeline are active; hosted run 2 passed all quality/package gates and retained test plus portable artifacts.
 - **MOH-30 — in progress:** Signing, secret handling, timestamp/signature enforcement, post-signing checksums, release workflow, and tamper tests are implemented; real-certificate and clean-host proof remain.
-- **MOH-31:** Create the Windows installer and runtime-prerequisite strategy.
+- **MOH-31 — in progress:** The WiX per-machine MSI, embedded-runtime strategy, stable upgrade/Start-menu identity, CI structural verification, and lifecycle harness are implemented; signed clean-host install/upgrade/uninstall evidence remains.
 - **MOH-23:** Complete external Windows and accessibility validation against the release candidate.
 
 Signing depends on legal/product identity plus CI. Installer validation follows identity and signing. External release validation follows the packaged E2E and installer work.

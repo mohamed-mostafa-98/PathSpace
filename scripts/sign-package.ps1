@@ -27,7 +27,10 @@ try {
     if(-not $hasCodeSigning){throw 'Certificate is not authorized for code signing.'}
     Remove-Item -LiteralPath (Join-Path $ArtifactPath 'SHA256SUMS.txt') -Force -ErrorAction SilentlyContinue
     Remove-Item -LiteralPath (Join-Path $ArtifactPath 'SIGNING-MANIFEST.json') -Force -ErrorAction SilentlyContinue
-    $files=@(Get-ChildItem -LiteralPath $ArtifactPath -Recurse -File | Where-Object Extension -In @('.exe','.dll','.ps1','.psm1','.psd1') | Sort-Object FullName)
+    $files=@(Get-ChildItem -LiteralPath $ArtifactPath -Recurse -File | Where-Object {
+        $_.Extension -In @('.ps1','.psm1','.psd1','.msi') -or
+        ($_.Extension -In @('.exe','.dll') -and $_.Name -like 'PathSpace.*')
+    } | Sort-Object FullName)
     if(-not $files.Count){throw 'No Authenticode-signable package files were found.'}
     foreach($file in $files){
         $parameters=@{LiteralPath=$file.FullName;Certificate=$certificate;HashAlgorithm='SHA256'}

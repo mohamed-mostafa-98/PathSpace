@@ -8,7 +8,10 @@ param(
 $ErrorActionPreference='Stop'
 if(-not $ArtifactPath){$ArtifactPath=Join-Path (Resolve-Path (Join-Path $PSScriptRoot '..')).Path 'artifacts\PathSpace-win-x64'}
 $expected=$ExpectedThumbprint.Replace(' ','').ToUpperInvariant()
-$files=@(Get-ChildItem -LiteralPath $ArtifactPath -Recurse -File | Where-Object Extension -In @('.exe','.dll','.ps1','.psm1','.psd1'))
+$files=@(Get-ChildItem -LiteralPath $ArtifactPath -Recurse -File | Where-Object {
+    $_.Extension -In @('.ps1','.psm1','.psd1','.msi') -or
+    ($_.Extension -In @('.exe','.dll') -and $_.Name -like 'PathSpace.*')
+})
 if(-not $files.Count){throw 'No Authenticode-signable package files were found.'}
 $failures=New-Object 'System.Collections.Generic.List[string]'
 foreach($file in $files){

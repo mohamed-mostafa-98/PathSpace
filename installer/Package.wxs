@@ -1,0 +1,41 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="PathSpace"
+           Manufacturer="PathSpace Contributors"
+           Version="$(Version)"
+           ProductCode="$(ProductCode)"
+           UpgradeCode="A24ED348-102B-4E29-B194-B2E9B13619E5"
+           Scope="perMachine">
+    <MajorUpgrade DowngradeErrorMessage="A newer version of PathSpace is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <Icon Id="PathSpaceIcon" SourceFile="$(Payload)\pathspace.ico" />
+    <Property Id="ARPPRODUCTICON" Value="PathSpaceIcon" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="PathSpace" />
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <Feature Id="Main" Title="PathSpace" Level="1">
+      <ComponentGroupRef Id="ProductFiles" />
+      <ComponentRef Id="StartMenuShortcut" />
+    </Feature>
+  </Package>
+
+  <Fragment>
+    <ComponentGroup Id="ProductFiles" Directory="INSTALLFOLDER">
+      <Files Include="$(Payload)\**">
+        <Exclude Files="$(Payload)\PathSpace.App.exe" />
+      </Files>
+    </ComponentGroup>
+    <Component Id="StartMenuShortcut" Directory="INSTALLFOLDER" Guid="*">
+      <File Id="PathSpaceExecutable" Source="$(Payload)\PathSpace.App.exe" KeyPath="yes">
+        <Shortcut Id="PathSpaceStartMenuShortcut"
+                  Directory="ProgramMenuFolder"
+                  Name="PathSpace"
+                  Description="Offline Windows storage analysis"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Advertise="yes" />
+      </File>
+    </Component>
+  </Fragment>
+</Wix>

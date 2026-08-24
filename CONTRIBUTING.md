@@ -35,7 +35,7 @@ dotnet test .\tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj
 Invoke-Pester -Script @('.\tests\engine','.\tests\signing')
 ```
 
-Package-affecting changes must rebuild `artifacts\PathSpace-win-x64`, verify `SHA256SUMS.txt`, and run `scripts\verify-portable-action.ps1` where relevant.
+Package-affecting changes must rebuild `artifacts\PathSpace-win-x64`, verify `SHA256SUMS.txt`, and run `scripts\verify-portable-action.ps1` where relevant. Installer changes must also run `scripts\build-installer.ps1` and `scripts\test-installer.ps1`; release acceptance requires the elevated lifecycle script on clean Windows 10/11 hosts.
 
 Before opening or merging a pull request, run the same local checks used by Windows CI:
 
@@ -46,6 +46,8 @@ Invoke-Pester -Script @('.\tests\engine','.\tests\signing')
 .\scripts\build-portable.ps1
 .\scripts\test-package-checksums.ps1
 pwsh -NoProfile -File .\scripts\verify-portable-action.ps1
+.\scripts\build-installer.ps1
+.\scripts\test-installer.ps1
 ```
 
 The hosted workflow must be green for its exact commit. Interactive packaged-GUI and external Windows/accessibility evidence remain separate required release gates and must not be represented as hosted-CI coverage.

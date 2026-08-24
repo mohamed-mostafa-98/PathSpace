@@ -16,9 +16,9 @@ concurrency:
 
 jobs:
   quality-and-package:
-    name: Quality and portable package
+    name: Quality and Windows packages
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     steps:
       - name: Check out repository
@@ -67,6 +67,18 @@ jobs:
         shell: pwsh
         run: .\scripts\verify-portable-action.ps1
 
+      - name: Build self-contained MSI
+        shell: powershell
+        run: .\scripts\build-installer.ps1
+
+      - name: Verify MSI structure and administrative extraction
+        shell: powershell
+        run: .\scripts\test-installer.ps1
+
+      - name: Verify MSI checksum
+        shell: pwsh
+        run: .\scripts\test-package-checksums.ps1 -ArtifactPath .\artifacts\installer
+
       - name: Upload test evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -82,5 +94,14 @@ jobs:
         with:
           name: PathSpace-win-x64-${{ github.run_number }}
           path: artifacts/PathSpace-win-x64
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload unsigned MSI
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PathSpace-installer-win-x64-${{ github.run_number }}
+          path: artifacts/installer
           if-no-files-found: error
           retention-days: 30
