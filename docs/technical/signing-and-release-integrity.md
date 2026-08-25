@@ -14,7 +14,7 @@ Prefer a CA-managed or hardware-backed private key. If a password-protected PFX 
 
 ## GitHub release-signing environment
 
-Create a protected GitHub environment named `release-signing`, require maintainer approval, and configure:
+The repository has a protected GitHub environment named `release-signing`. It requires approval from the repository maintainer and allows deployments only from `master`. Configure the following only after the production certificate and CA-approved timestamp service are issued:
 
 | Name | Type | Meaning |
 |---|---|---|
@@ -60,4 +60,4 @@ $password = Read-Host 'PFX password' -AsSecureString
 
 ## Current gate
 
-The signing implementation and disposable tamper test are delivered. MOH-30 remains incomplete until a real publisher certificate is configured and the resulting release artifact validates on a separate clean Windows host.
+The signing implementation, disposable tamper test, and protected GitHub environment are delivered. MOH-30 remains incomplete until a real publisher certificate and CA-approved timestamp URL are configured and the resulting release artifact validates on a separate clean Windows host.
