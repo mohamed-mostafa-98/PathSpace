@@ -23,6 +23,7 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - Embedded .NET runtime license and third-party notice files in the self-contained installer payload.
 - Packaged keyboard-only GUI automation covering scan, tab navigation, filtering, recommendation preview, explicit confirmation, execution, and verified recovery.
 - Windows CI now restores the default PowerShell Gallery registration when a hosted runner image omits it.
+- Windows 11 unsigned MSI lifecycle validation now proves baseline install, major upgrade, Start-menu/uninstall identity, complete uninstall, and zero installed residue.
 - Repository-wide documentation Definition of Done in `AGENTS.md`, `CONTRIBUTING.md`, and the documentation policy.
 - Linear milestones M8 Engineering Completeness and M9 Public Release Readiness.
 - Linear issues MOH-25 through MOH-32 covering audit logging, schemas, GUI E2E testing, legal/product identity, CI, signing, installer/runtime delivery, and documentation governance.

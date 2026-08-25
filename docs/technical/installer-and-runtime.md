@@ -38,4 +38,6 @@ From elevated PowerShell on a disposable clean Windows host, provide two signed 
 
 The check installs the baseline, verifies installed files and the Start-menu shortcut, upgrades, uninstalls, and verifies removal. Run it on Windows 10 x64 and Windows 11 x64. Logs are deleted after success and retained under `%TEMP%` on failure.
 
+An unsigned 0.1.0 to 0.1.1 lifecycle run passed on Windows 11 build 26200.9168 on 2026-08-25, including independent confirmation that the application file, Start-menu shortcut, and uninstall registration were absent afterward. This validates MSI mechanics but does not replace signed clean-host release evidence.
+
 MOH-31 remains incomplete until signed clean install/upgrade/uninstall evidence exists on both supported Windows versions.

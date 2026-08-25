@@ -6,8 +6,8 @@
 - Architecture: x64.
 - .NET SDK used: 8.0.424, locally installed for development.
 - Automated .NET tests: 11 contract/schema, 17 WPF/client/integration/accessibility-markup, and 6 worker security tests passed.
-- Automated PowerShell tests: 21 local-path, scan, cancellation, recommendation, action, Docker/WSL, and Claude relocation/rollback tests passed.
-- Packaged GUI E2E: 2 disposable-fixture workflows passed from an interactive Windows 11 desktop, with TRX evidence under `artifacts\test-results`.
+- Automated PowerShell tests: 22 engine/signing tests passed.
+- Packaged GUI E2E: 3 disposable-fixture workflows passed from an interactive Windows 11 desktop, with TRX evidence under `artifacts\test-results`.
 
 ## Manual matrix
 
@@ -21,8 +21,8 @@
 | UAC cancellation | Requires interactive confirmation | Requires separate host |
 | Confirmed safe action | Passed in packaged GUI automation: scan, filter, JSON export, npm preview, explicit confirmation, worker handoff, post-action verification, audit evidence, and unrelated-file survival | Requires separate host |
 | Offline/no connections | Passed: rebuilt packaged GUI process observed with 0 TCP connections | Requires separate host |
-| MSI structure/extraction | Passed locally and in hosted Windows CI run 5: version/product/upgrade metadata, Start-menu definition, embedded runtime/legal files, ICE validation, checksum, and disposable administrative extraction | Requires separate host |
-| Signed MSI install/upgrade/uninstall | Requires elevated clean-host lifecycle run with two signed versions | Requires elevated clean host |
+| MSI structure/extraction | Passed locally and in hosted Windows CI run 8: version/product/upgrade metadata, Start-menu definition, embedded runtime/legal files, ICE validation, checksum, and disposable administrative extraction | Requires separate host |
+| MSI install/upgrade/uninstall | Passed unsigned lifecycle on Windows 11 build 26200.9168: 0.1.0 install, 0.1.1 major upgrade, Start-menu/uninstall registration, uninstall, and zero file/shortcut/registration residue | Requires signed elevated clean-host run |
 | Keyboard-only application workflow | Passed in packaged automation: target, Analyze, tabs, filter, recommendation, preview, confirmation, Execute, and verified result used keyboard input | Requires separate host |
 
 No unsupported manual result is marked as passed. Windows 10 release sign-off requires running this matrix on Windows 10 x64.

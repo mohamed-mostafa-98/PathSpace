@@ -18,6 +18,7 @@
 - 11 passing contract and JSON Schema tests
 - Checksummed portable x64 package with tested worker and zero observed GUI TCP connections
 - WiX 5 self-contained x64 MSI with stable upgrade identity, Start-menu registration, embedded .NET desktop runtime, and verified administrative extraction
+- Passing unsigned Windows 11 MSI baseline-install, major-upgrade, and complete-uninstall lifecycle validation
 - Completed read-only local-folder and E: fixed-drive package scans
 
 ## Public-release validation still required
@@ -33,7 +34,7 @@ These outstanding checks are tracked in Linear and in `docs/testing` rather than
 
 ## CI status
 
-The repository is connected to [mohamed-mostafa-98/PathSpace](https://github.com/mohamed-mostafa-98/PathSpace). [Windows CI run 5](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32753914372) passed every test, validation, portable/MSI build, ICE/extraction, checksum, worker-smoke, and artifact-upload step for commit `9b30825`; test evidence, the portable package, and the self-contained MSI were retained successfully.
+The repository is connected to [mohamed-mostafa-98/PathSpace](https://github.com/mohamed-mostafa-98/PathSpace). [Windows CI run 8](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32842599878) passed every test, validation, portable/MSI build, ICE/extraction, checksum, worker-smoke, and artifact-upload step for commit `42d1fcc`; test evidence, the portable package, and the self-contained MSI were retained successfully.
 
 ## Signing status
 
@@ -42,6 +43,6 @@ Publisher signing scripts, strict signature/timestamp verification, post-signing
 ## Engineering-completeness backlog
 
 - MOH-30 — Authenticode signing and release integrity
-- MOH-31 — installer implementation delivered; signed clean-host lifecycle evidence remains
+- MOH-31 — installer implementation and unsigned Windows 11 lifecycle verified; signed Windows 10/11 clean-host lifecycle evidence remains
 
 MOH-25, MOH-26, MOH-27, MOH-28, and MOH-32 are complete. The remaining dependency order is documented in [docs/project-roadmap.md](docs/project-roadmap.md).
