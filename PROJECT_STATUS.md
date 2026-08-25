@@ -51,4 +51,4 @@ Publisher signing scripts, strict signature/timestamp verification, post-signing
 - MOH-77 — GitHub Pages website and versioned private-preview downloads
 - MOH-78 — embedded website documentation and annotated GUI walkthroughs
 
-MOH-25, MOH-26, MOH-27, MOH-28, MOH-32, MOH-77, and MOH-78 are complete. The remaining dependency order is documented in [docs/project-roadmap.md](docs/project-roadmap.md).
+MOH-25, MOH-26, MOH-27, MOH-28, MOH-32, MOH-77, MOH-78, and MOH-79 are complete. The remaining dependency order is documented in [docs/project-roadmap.md](docs/project-roadmap.md).
