@@ -40,7 +40,7 @@ The repository is connected to [mohamed-mostafa-98/PathSpace](https://github.com
 
 ## Signing status
 
-Publisher signing scripts, strict signature/timestamp verification, post-signing checksums, a protected release workflow, and disposable tamper tests are implemented. The GitHub `release-signing` environment requires maintainer approval and restricts deployment to `master`. A real publicly trusted certificate, CA timestamp configuration, and separate clean-host validation are still required before MOH-30 or any public release can be completed.
+Publisher signing scripts, strict signature/timestamp verification, post-signing checksums, a protected release workflow, disposable tamper tests, and an isolated full-package disposable signing check are implemented. The full-package check proves signed worker execution and signed payload preservation through MSI rebuilding and extraction. The GitHub `release-signing` environment requires maintainer approval and restricts deployment to `master`. A real publicly trusted certificate, CA timestamp configuration, and separate clean-host validation are still required before MOH-30 or any public release can be completed.
 
 ## Engineering-completeness backlog
 

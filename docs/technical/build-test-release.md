@@ -99,6 +99,8 @@ CI retains test results, the unsigned portable package, and the unsigned MSI for
 
 The installer-enabled pipeline completed successfully on 2026-08-25 for commit `42d1fcc` ([Windows CI run 8](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32842599878)). Every quality, portable, MSI build, ICE/extraction, checksum, smoke, and upload step passed. The run retained `pathspace-test-results-8`, `PathSpace-win-x64-8`, and `PathSpace-installer-win-x64-8`. An unsigned 0.1.0 to 0.1.1 install/major-upgrade/uninstall lifecycle also passed locally on Windows 11 build 26200.9168; signed Windows 10/11 clean-host runs remain release gates.
 
+Normal Windows CI also runs `scripts\test-disposable-signed-release.ps1` against isolated copies of the portable and self-contained installer payloads. Windows PowerShell performs Authenticode operations and the script launches the signed worker smoke check under PowerShell 7 for .NET 8 assembly compatibility. It uses a one-day self-signed test certificate, verifies checksums, rebuilds and signs an isolated MSI, then verifies signatures from its administrative extraction. This proves pipeline mechanics only; it is not publisher or clean-host evidence.
+
 Local equivalents for the standalone CI checks are:
 
 ```powershell

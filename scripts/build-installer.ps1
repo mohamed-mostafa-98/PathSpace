@@ -4,6 +4,7 @@ param(
     [string]$DotNetPath,
     [string]$Version,
     [string]$PayloadPath,
+    [string]$OutputPath,
     [switch]$SkipPayloadBuild
 )
 $ErrorActionPreference='Stop'
@@ -18,11 +19,13 @@ if($dotnet -and -not (& $dotnet --list-sdks)){$dotnet=$null}
 if(-not $dotnet){throw '.NET 8 SDK was not found. Supply -DotNetPath when it is installed privately.'}
 
 $buildRoot=Join-Path $projectRoot 'artifacts\installer-build'
-$outputRoot=Join-Path $projectRoot 'artifacts\installer'
+$customOutput=[bool]$OutputPath
+$outputRoot=if($customOutput){$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputPath)}else{Join-Path $projectRoot 'artifacts\installer'}
 $payload=if($PayloadPath){$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($PayloadPath)}else{Join-Path $buildRoot 'payload'}
 $output=Join-Path $outputRoot "PathSpace-$Version-win-x64.msi"
 if(-not $SkipPayloadBuild -and (Test-Path $buildRoot)){Remove-Item -LiteralPath $buildRoot -Recurse -Force}
-if(Test-Path $outputRoot){Remove-Item -LiteralPath $outputRoot -Recurse -Force}
+if($customOutput -and (Test-Path $outputRoot)){throw 'Custom installer output path must not already exist.'}
+if(-not $customOutput -and (Test-Path $outputRoot)){Remove-Item -LiteralPath $outputRoot -Recurse -Force}
 New-Item -ItemType Directory -Force -Path $buildRoot,$outputRoot | Out-Null
 $intermediate=Join-Path $buildRoot 'obj'
 if(Test-Path $intermediate){Remove-Item -LiteralPath $intermediate -Recurse -Force}

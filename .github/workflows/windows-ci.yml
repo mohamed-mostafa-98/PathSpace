@@ -92,6 +92,10 @@ jobs:
         shell: pwsh
         run: .\scripts\test-package-checksums.ps1 -ArtifactPath .\artifacts\installer
 
+      - name: Verify disposable full signed release
+        shell: powershell
+        run: .\scripts\test-disposable-signed-release.ps1
+
       - name: Upload test evidence
         if: always()
         uses: actions/upload-artifact@v4

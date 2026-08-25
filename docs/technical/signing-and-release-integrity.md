@@ -60,4 +60,4 @@ $password = Read-Host 'PFX password' -AsSecureString
 
 ## Current gate
 
-The signing implementation, disposable tamper test, and protected GitHub environment are delivered. MOH-30 remains incomplete until a real publisher certificate and CA-approved timestamp URL are configured and the resulting release artifact validates on a separate clean Windows host.
+The signing implementation, disposable tamper test, isolated full-package disposable signing check, and protected GitHub environment are delivered. The full-package check verifies signed worker execution and confirms the rebuilt MSI contains the signed payload. MOH-30 remains incomplete until a real publisher certificate and CA-approved timestamp URL are configured and the resulting release artifact validates on a separate clean Windows host.
