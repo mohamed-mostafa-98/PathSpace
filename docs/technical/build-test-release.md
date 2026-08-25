@@ -87,7 +87,7 @@ The MSI contains a self-contained x64 application and worker, so end users do no
 - Launch the packaged GUI as a normal user.
 - Confirm no unexpected TCP connections.
 - Scan a local folder and a fixed drive.
-- Complete Windows 10, removable-media, UAC-cancellation, Narrator, keyboard, scaling, and high-contrast checks before a public release.
+- Complete Windows 10 and removable-media checks before a public release. Windows 11 UAC cancellation, keyboard, Narrator, 200% scaling, high-contrast, and contrast review are recorded as passed.
 
 ## Windows CI
 
@@ -108,4 +108,4 @@ Local equivalents for the standalone CI checks are:
 .\scripts\test-package-checksums.ps1
 ```
 
-For reproducible external Windows 10/11 evidence, run `scripts\collect-windows-host-evidence.ps1` from the repository or `validation\collect-windows-host-evidence.ps1` from the portable package. Use `-ScanPath` to include a fixed/removable/folder CLI scan and `-ReportPath` to choose the local JSON destination. The collector is read-only, non-elevating, offline, and leaves manual accessibility/signing gates explicitly unresolved.
+For reproducible external Windows 10/11 evidence, run `scripts\collect-windows-host-evidence.ps1` from the repository or `validation\collect-windows-host-evidence.ps1` from the portable package. Use `-ScanPath` to include a fixed/removable/folder CLI scan and `-ReportPath` to choose the local JSON destination. The collector is read-only, non-elevating, offline, and leaves checks it cannot observe explicitly unresolved; manual results belong in the accessibility checklist.

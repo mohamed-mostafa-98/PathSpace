@@ -22,14 +22,13 @@
 - WiX 5 self-contained x64 MSI with stable upgrade identity, Start-menu registration, embedded .NET desktop runtime, and verified administrative extraction
 - Passing unsigned Windows 11 MSI baseline-install, major-upgrade, and complete-uninstall lifecycle validation
 - Passing packaged Windows 11 UAC-decline validation with safe status, no protected action, continued GUI operation, and cancellation audit evidence
+- User-attested Windows 11 manual accessibility validation covering Narrator announcements, 200% scaling, high-contrast presentation, and color contrast review
 - Completed read-only local-folder and E: fixed-drive package scans
 
 ## Public-release validation still required
 
 - Windows 10 x64 host validation
 - Removable-media scan
-- Narrator walkthrough
-- Manual 200% scaling, high-contrast, and contrast review
 - Signed MSI clean install, major upgrade, and uninstall on Windows 10 and Windows 11
 
 These outstanding checks are tracked in Linear and in `docs/testing` rather than being represented as completed.

@@ -29,6 +29,7 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - Portable packages now include a read-only, offline Windows host evidence collector for reproducible Windows 10/11, removable-media, DPI, high-contrast, GUI launch, TCP, and CLI scan records.
 - The GitHub `release-signing` environment now requires maintainer approval and permits deployments only from `master`; production certificate secrets and the CA timestamp URL remain intentionally unset until issued.
 - CI now performs an isolated disposable full-release signing check covering portable and installer payload signatures, signed worker execution, checksums, MSI structure, and signatures extracted from the rebuilt MSI.
+- Windows 11 manual accessibility sign-off is recorded from the project owner for Narrator announcements, 200% scaling, high-contrast presentation, and color contrast review.
 - Packaged UI Automation now verifies screen-reader-facing control names, roles, polite live regions, recommendation naming, and protected-diagnostics help text.
 - Repository-wide documentation Definition of Done in `AGENTS.md`, `CONTRIBUTING.md`, and the documentation policy.
 - Linear milestones M8 Engineering Completeness and M9 Public Release Readiness.
