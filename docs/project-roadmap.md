@@ -5,7 +5,7 @@ The verified private portable build is delivered. The following work is tracked 
 ## Open existing validation work
 
 - **MOH-14 — completed:** Result views, filtering/sorting coverage, and packaged keyboard navigation pass.
-- **MOH-23 — Windows compatibility and accessibility:** Windows 11 UAC cancellation and user-attested Narrator, 200% scaling, high-contrast, and contrast checks pass; Windows 10 and removable-media validation remain.
+- **MOH-23 — Windows compatibility and accessibility:** Windows 11 UAC cancellation, removable-media scan, and user-attested Narrator, 200% scaling, high-contrast, and contrast checks pass; Windows 10 validation remains.
 
 ## M8 — Engineering Completeness
 
@@ -22,7 +22,7 @@ MOH-27 validated the final observable workflows after MOH-25 and MOH-26 complete
 - **MOH-29 — completed:** The GitHub remote and Windows CI pipeline are active; hosted run 8 passed all quality/package/MSI gates and retained test, portable, and installer artifacts.
 - **MOH-30 — in progress:** Signing, secret handling, timestamp/signature enforcement, post-signing checksums, release workflow, tamper tests, and the protected `release-signing` GitHub environment are implemented; real-certificate, CA timestamp configuration, and clean-host proof remain.
 - **MOH-31 — in progress:** The WiX per-machine MSI, embedded-runtime strategy, stable upgrade/Start-menu identity, CI structural verification, lifecycle harness, and unsigned Windows 11 install/upgrade/uninstall proof are complete; signed Windows 10/11 clean-host evidence remains.
-- **MOH-23:** Complete Windows 10 and removable-media validation against the release candidate.
+- **MOH-23:** Complete Windows 10 validation against the release candidate.
 
 Signing depends on legal/product identity plus CI. Installer validation follows identity and signing. External release validation follows the packaged E2E and installer work.
 

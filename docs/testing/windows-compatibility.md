@@ -16,7 +16,7 @@
 | Non-admin GUI launch | Passed: packaged process started without elevation on build 26200.9168 | Requires separate host |
 | Local folder scan | Passed: rebuilt packaged CLI measured 64 bytes / 1 file and emitted schema-v1 JSON | Requires separate host |
 | Fixed drive scan | Passed: final packaged CLI completed a read-only E: root scan of 227,235 files / 54,369,251,583 logical bytes; four protected-path warnings were reported without failing the scan | Requires separate host |
-| Removable drive scan | Requires removable media | Requires separate host/media |
+| Removable drive scan | Passed: packaged CLI completed a read-only FAT32 `H:\` root scan of 187 files / 5,035,850,556 logical bytes with zero scan warnings; local report SHA-256 `03799EB4042C78006647AB7EC076D67E8CFB9EF7D25AAB6B57C1080C053C0CF0` | Requires separate host/media |
 | Cancellation and incomplete label | Passed in packaged GUI automation: immediate cancel produced partial read-only results and left Execute disabled | Requires separate host |
 | UAC cancellation | Passed in separately enabled packaged automation: declining protected-diagnostics consent left the GUI running, reported no action, and recorded a local cancellation event | Requires separate host |
 | Confirmed safe action | Passed in packaged GUI automation: scan, filter, JSON export, npm preview, explicit confirmation, worker handoff, post-action verification, audit evidence, and unrelated-file survival | Requires separate host |

@@ -87,7 +87,7 @@ The MSI contains a self-contained x64 application and worker, so end users do no
 - Launch the packaged GUI as a normal user.
 - Confirm no unexpected TCP connections.
 - Scan a local folder and a fixed drive.
-- Complete Windows 10 and removable-media checks before a public release. Windows 11 UAC cancellation, keyboard, Narrator, 200% scaling, high-contrast, and contrast review are recorded as passed.
+- Complete Windows 10 checks before a public release. Windows 11 removable-media, UAC cancellation, keyboard, Narrator, 200% scaling, high-contrast, and contrast review are recorded as passed.
 
 ## Windows CI
 

@@ -122,6 +122,6 @@ The current private build is version `0.1.0-private`. Executables carry PathSpac
 
 Every source, configuration, schema, test, packaging, or release change must update `CHANGELOG.md` and all affected documentation in the same commit, then record verification evidence in Linear. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [documentation policy](docs/technical/documentation-policy.md).
 
-The private Windows 11 build and manual accessibility walkthrough are verified. Windows 10 and removable-media checks remain explicit compatibility gates, alongside production signing and signed clean-host installer validation.
+The private Windows 11 build, removable-media scan, and manual accessibility walkthrough are verified. Windows 10 remains the explicit compatibility gate, alongside production signing and signed clean-host installer validation.
 
 On an external Windows 10/11 validation host, run `validation\collect-windows-host-evidence.ps1` from the portable package. It writes a local JSON report containing package identity, OS/build, drive/media types, DPI/high-contrast state, normal GUI launch/TCP evidence, and an optional CLI scan result; it never uploads data or performs cleanup.
