@@ -6,6 +6,7 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 
 ### Added
 
+- Complete Arabic RTL product and documentation website alongside English, with static language switching and no runtime translation dependency.
 - Connected bounded `audit.event` v1 JSONL logging for scans, protected diagnostics, previews, and confirmed actions under `%LOCALAPPDATA%\PathSpace\Audit`, without raw target paths.
 - Audit-file permission or I/O failures are non-fatal to the primary application workflow.
 - Strict Draft 2020-12 schemas for every emitted v1 scan, recommendation, diagnostic, preview, manifest, result, and audit message family, plus serialized-contract validation tests.

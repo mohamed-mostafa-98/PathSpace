@@ -26,6 +26,7 @@
 - Completed packaged read-only scan of a healthy FAT32 removable drive: 187 files, 5,035,850,556 logical bytes, zero scan warnings, and local offline evidence
 - Live dependency-free [GitHub Pages product/documentation website](https://mohamed-mostafa-98.github.io/PathSpace/) and [v0.1.0-private prerelease](https://github.com/mohamed-mostafa-98/PathSpace/releases/tag/v0.1.0-private) with exact CI-built portable/MSI downloads, public matching SHA-256 checksums, and explicit unsigned-preview warnings
 - Website-hosted documentation and real annotated GUI walkthroughs remove repository-Markdown detours for user-facing installation, analysis, results, cleanup, CLI, troubleshooting, release, roadmap, and license content
+- Complete Arabic RTL website mirrors the English product, download, documentation, screenshots, troubleshooting, release, roadmap, and license content with a static language switch
 - Completed read-only local-folder and E: fixed-drive package scans
 
 ## Public-release validation still required

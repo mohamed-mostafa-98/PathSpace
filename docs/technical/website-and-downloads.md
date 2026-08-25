@@ -1,6 +1,6 @@
 # Website and downloads
 
-The dependency-free static website lives under `site` and deploys to GitHub Pages through `.github/workflows/pages.yml`. It uses only committed HTML, CSS, JavaScript, original PathSpace artwork, and locally captured product screenshots; no analytics, telemetry, cookies, external fonts, or runtime services are loaded. User-facing documentation is rendered directly on the website instead of sending readers to repository Markdown.
+The dependency-free static website lives under `site` and deploys to GitHub Pages through `.github/workflows/pages.yml`. English is served from `site/index.html` and the complete Arabic RTL version from `site/ar/index.html`; each page links directly to the other and declares alternate-language metadata. It uses only committed HTML, CSS, JavaScript, original PathSpace artwork, and locally captured product screenshots; no analytics, telemetry, cookies, external fonts, runtime translation service, or other runtime service is loaded. User-facing documentation is rendered directly on the website instead of sending readers to repository Markdown.
 
 Run the offline validator before publishing:
 

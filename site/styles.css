@@ -23,6 +23,7 @@ a { color: inherit; }
 .brand img { border-radius: .6rem; }
 nav { display: flex; gap: 1.35rem; }
 nav a, .footer-links a { color: var(--muted); text-decoration: none; font-size: .92rem; }
+.language-link { padding-inline: .7rem; border: 1px solid var(--line); border-radius: 10rem; }
 nav a:hover, nav a:focus-visible, .footer-links a:hover { color: var(--accent); }
 main { overflow: hidden; }
 .hero, .section, footer { max-width: var(--max); margin: auto; padding: 6.5rem 1.5rem; }
@@ -108,6 +109,12 @@ kbd { padding: .15rem .35rem; border: 1px solid var(--line); border-bottom-width
 footer { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 2rem; padding-top: 2.5rem; padding-bottom: 2.5rem; border-top: 1px solid var(--line); color: var(--muted); }
 footer p { margin: .2rem 0; }
 .footer-links { display: flex; gap: 1rem; }
+
+[dir="rtl"] body { font-family: "Segoe UI", Tahoma, Arial, sans-serif; }
+[dir="rtl"] .warning, [dir="rtl"] .note, [dir="rtl"] .release-note { border-left: 0; border-right: 4px solid var(--warning); }
+[dir="rtl"] .note { border-right-color: var(--accent); }
+[dir="rtl"] .release-list { padding-left: 0; padding-right: 1.2rem; }
+[dir="rtl"] .trust-list li::before { margin-right: 0; margin-left: .45rem; }
 
 @media (max-width: 850px) {
   .site-header { position: relative; align-items: flex-start; }
