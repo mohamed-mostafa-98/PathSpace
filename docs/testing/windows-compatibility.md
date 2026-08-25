@@ -7,7 +7,7 @@
 - .NET SDK used: 8.0.424, locally installed for development.
 - Automated .NET tests: 12 contract/schema, 17 WPF/client/integration/accessibility-markup, and 6 worker security tests passed.
 - Automated PowerShell tests: 23 engine/CLI/signing tests passed, including Windows PowerShell 5.1 diagnostics-output compatibility.
-- Packaged GUI E2E: 3 disposable-fixture workflows passed from an interactive Windows 11 desktop, with TRX evidence under `artifacts\test-results`.
+- Packaged GUI E2E: 3 disposable-fixture workflows plus 1 screen-reader-semantics check passed from an interactive Windows 11 desktop, with TRX evidence under `artifacts\test-results`.
 
 ## Manual matrix
 

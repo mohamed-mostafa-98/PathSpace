@@ -27,6 +27,7 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - Fixed protected diagnostics under Windows PowerShell 5.1 by removing an unavailable .NET path API; opt-in packaged UAC-cancellation validation now exercises the real consent path without affecting the normal GUI suite.
 - Packaged Windows 11 UAC-decline validation passes with continued GUI operation, an explicit no-action message, and a local cancellation audit event.
 - Portable packages now include a read-only, offline Windows host evidence collector for reproducible Windows 10/11, removable-media, DPI, high-contrast, GUI launch, TCP, and CLI scan records.
+- Packaged UI Automation now verifies screen-reader-facing control names, roles, polite live regions, recommendation naming, and protected-diagnostics help text.
 - Repository-wide documentation Definition of Done in `AGENTS.md`, `CONTRIBUTING.md`, and the documentation policy.
 - Linear milestones M8 Engineering Completeness and M9 Public Release Readiness.
 - Linear issues MOH-25 through MOH-32 covering audit logging, schemas, GUI E2E testing, legal/product identity, CI, signing, installer/runtime delivery, and documentation governance.

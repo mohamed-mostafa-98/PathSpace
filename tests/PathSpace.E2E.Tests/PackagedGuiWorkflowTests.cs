@@ -122,6 +122,30 @@ public sealed class PackagedGuiWorkflowTests
     }
 
     [SkippableFact]
+    public void Packaged_controls_expose_screen_reader_names_roles_and_live_regions()
+    {
+        Skip.IfNot(Enabled, "Set PATHSPACE_RUN_PACKAGED_E2E=1 and build the portable package first.");
+        using var fixture = PackagedFixture.Create();
+        using var session = GuiSession.Launch(fixture);
+
+        Assert.Equal(ControlType.Edit, session.Element("TargetPath").ControlType);
+        Assert.Equal("Local drive or folder path", session.Element("TargetPath").Name);
+        Assert.Equal(ControlType.Button, session.Element("AnalyzeButton").ControlType);
+        Assert.Equal("Analyze", session.Element("AnalyzeButton").Name);
+        Assert.Equal(LiveSetting.Polite, session.Element("StatusText").Properties.LiveSetting.Value);
+
+        session.SelectTab("RecommendationsTab");
+        Assert.Equal("Storage recovery recommendations", session.Element("RecommendationList").Name);
+        Assert.Equal(LiveSetting.Polite, session.Element("ActionStatusText").Properties.LiveSetting.Value);
+
+        session.SelectTab("AdvancedTab");
+        var protectedDiagnostics = session.Element("ProtectedDiagnosticsButton");
+        Assert.Equal(ControlType.Button, protectedDiagnostics.ControlType);
+        Assert.Contains("administrator approval", protectedDiagnostics.HelpText, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("read-only", protectedDiagnostics.HelpText, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [SkippableFact]
     public void Declining_protected_diagnostics_uac_leaves_the_app_running_and_records_cancellation()
     {
         Skip.IfNot(Enabled && UacCancellationEnabled, "Set PATHSPACE_RUN_PACKAGED_E2E=1 and PATHSPACE_RUN_UAC_CANCEL_E2E=1, then decline the UAC prompt.");

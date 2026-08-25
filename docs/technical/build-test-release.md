@@ -29,7 +29,7 @@ From an unlocked interactive Windows desktop, run:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-packaged-gui.ps1 -DotNetPath 'C:\path\to\dotnet.exe'
 ```
 
-The script rebuilds the portable package and then enables three otherwise-skipped FlaUI tests. The complete workflow selects a disposable target, scans, filters categories, exports JSON through the Windows Save dialog, selects the npm-cache recommendation, previews exact targets, explicitly confirms, hands off to the packaged worker, verifies recovery, checks an unrelated file survived, and confirms a local audit event. The second workflow immediately cancels a large disposable scan and verifies partial results remain read-only. The third uses keyboard input only for target entry, Analyze, tabs, filtering, recommendation selection, preview, explicit confirmation, Execute, and verified recovery.
+The script rebuilds the portable package and then enables four otherwise-skipped FlaUI tests. Three cover complete, cancellation, and keyboard-only workflows. The fourth queries the live packaged UI Automation tree to verify screen-reader-facing control names and roles, protected-diagnostics help text, and polite scan/action status regions.
 
 Only the child process receives redirected `LOCALAPPDATA` and `PATHSPACE_AUDIT_DIRECTORY` values. Cleanup is therefore limited to the generated fixture. Results are written to `artifacts\test-results\PathSpace-packaged-gui.trx`. Do not run GUI automation in a locked or non-interactive desktop session.
 

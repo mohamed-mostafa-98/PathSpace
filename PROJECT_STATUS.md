@@ -12,6 +12,7 @@
 - Complete v1 JSON Schema set with serialized-contract validation tests
 - Version 0.1.0-private product metadata, original PathSpace icon, MIT license, and third-party notices
 - Three passing opt-in packaged GUI workflows covering complete scan/export/preview/confirm/worker/verify, cancellation/read-only behavior, and keyboard-only operation
+- Passing packaged UI Automation semantics check for screen-reader names, roles, help text, and live regions
 - 23 passing PowerShell engine/signing tests
 - 17 passing application/integration/accessibility tests
 - 6 passing worker-security tests
