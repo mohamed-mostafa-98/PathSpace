@@ -12,20 +12,20 @@
 - Complete v1 JSON Schema set with serialized-contract validation tests
 - Version 0.1.0-private product metadata, original PathSpace icon, MIT license, and third-party notices
 - Three passing opt-in packaged GUI workflows covering complete scan/export/preview/confirm/worker/verify, cancellation/read-only behavior, and keyboard-only operation
-- 22 passing PowerShell engine/signing tests
+- 23 passing PowerShell engine/signing tests
 - 17 passing application/integration/accessibility tests
 - 6 passing worker-security tests
 - 11 passing contract and JSON Schema tests
 - Checksummed portable x64 package with tested worker and zero observed GUI TCP connections
 - WiX 5 self-contained x64 MSI with stable upgrade identity, Start-menu registration, embedded .NET desktop runtime, and verified administrative extraction
 - Passing unsigned Windows 11 MSI baseline-install, major-upgrade, and complete-uninstall lifecycle validation
+- Passing packaged Windows 11 UAC-decline validation with safe status, no protected action, continued GUI operation, and cancellation audit evidence
 - Completed read-only local-folder and E: fixed-drive package scans
 
 ## Public-release validation still required
 
 - Windows 10 x64 host validation
 - Removable-media scan
-- Interactive UAC cancellation walkthrough
 - Narrator walkthrough
 - Manual 200% scaling, high-contrast, and contrast review
 - Signed MSI clean install, major upgrade, and uninstall on Windows 10 and Windows 11

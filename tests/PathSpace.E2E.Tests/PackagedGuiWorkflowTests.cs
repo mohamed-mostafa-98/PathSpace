@@ -17,6 +17,7 @@ public sealed class PackagedGuiCollection;
 public sealed class PackagedGuiWorkflowTests
 {
     private static bool Enabled => Environment.GetEnvironmentVariable("PATHSPACE_RUN_PACKAGED_E2E") == "1";
+    private static bool UacCancellationEnabled => Environment.GetEnvironmentVariable("PATHSPACE_RUN_UAC_CANCEL_E2E") == "1";
 
     [SkippableFact]
     public void Complete_scan_filter_export_preview_confirm_worker_and_verify()
@@ -119,6 +120,21 @@ public sealed class PackagedGuiWorkflowTests
 
         Assert.Empty(Directory.EnumerateFileSystemEntries(fixture.NpmCache));
     }
+
+    [SkippableFact]
+    public void Declining_protected_diagnostics_uac_leaves_the_app_running_and_records_cancellation()
+    {
+        Skip.IfNot(Enabled && UacCancellationEnabled, "Set PATHSPACE_RUN_PACKAGED_E2E=1 and PATHSPACE_RUN_UAC_CANCEL_E2E=1, then decline the UAC prompt.");
+        using var fixture = PackagedFixture.Create();
+        using var session = GuiSession.Launch(fixture);
+
+        session.SelectTab("AdvancedTab");
+        session.Button("ProtectedDiagnosticsButton").Invoke();
+        session.WaitForText("StatusText", value => value.Contains("Administrator approval was cancelled", StringComparison.Ordinal), TimeSpan.FromSeconds(60));
+
+        Assert.Contains(Directory.EnumerateFiles(fixture.Audit, "*.jsonl"), path => File.ReadAllText(path).Contains("diagnostics.protected", StringComparison.Ordinal) && File.ReadAllText(path).Contains("cancelled", StringComparison.Ordinal));
+        Assert.True(session.IsWindowVisible());
+    }
 }
 
 internal sealed class GuiSession : IDisposable
@@ -142,7 +158,10 @@ internal sealed class GuiSession : IDisposable
         return new GuiSession(application, automation, window!);
     }
 
-    public AutomationElement Element(string id) => Retry.WhileNull(() => Window.FindFirstDescendant(value => value.ByAutomationId(id)), TimeSpan.FromSeconds(10)).Result ?? throw new InvalidOperationException($"UI element '{id}' was not found.");
+    public AutomationElement Element(string id) => Retry.WhileNull(() =>
+        Window.FindFirstDescendant(value => value.ByAutomationId(id)) ??
+        _application.GetMainWindow(_automation)?.FindFirstDescendant(value => value.ByAutomationId(id)), TimeSpan.FromSeconds(10)).Result ?? throw new InvalidOperationException($"UI element '{id}' was not found.");
+    public bool IsWindowVisible() => !(_application.GetMainWindow(_automation)?.IsOffscreen ?? true);
     public Button Button(string id) => Element(id).AsButton();
     public TextBox TextBox(string id) => Element(id).AsTextBox();
     public void SelectTab(string id) => Element(id).AsTabItem().Select();

@@ -93,7 +93,7 @@ Run the packaged GUI E2E suite from an interactive Windows desktop:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-packaged-gui.ps1 -DotNetPath 'C:\path\to\dotnet.exe'
 ```
 
-Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, 22 PowerShell engine/signing tests, and 3 opt-in packaged GUI workflows.
+Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, 23 PowerShell engine/signing tests, and 3 standard plus 1 separately enabled UAC-cancellation packaged GUI workflow.
 
 The Windows CI workflow runs the non-interactive quality suites, Markdown/schema checks, portable build, checksum verification, packaged-worker smoke test, self-contained MSI build, and MSI structural/extraction verification. It retains test evidence and both package forms for 30 days. Packaged GUI automation and signed clean-host installer lifecycle testing remain interactive host gates; the unsigned Windows 11 lifecycle already passes.
 

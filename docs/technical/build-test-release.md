@@ -19,7 +19,7 @@ dotnet test .\tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj
 Invoke-Pester -Script @('.\tests\engine','.\tests\signing')
 ```
 
-The current build passes 11 contract/schema, 6 worker-security, 17 application/accessibility, and 22 PowerShell tests: 21 engine tests plus one disposable Authenticode signing/tamper test. Contract tests use JsonSchema.Net to validate representative serialized v1 messages against every schema and confirm invalid discriminators/unknown properties are rejected.
+The current build passes 11 contract/schema, 6 worker-security, 17 application/accessibility, and 23 PowerShell tests: 22 engine/CLI tests plus one disposable Authenticode signing/tamper test. Contract tests use JsonSchema.Net to validate representative serialized v1 messages against every schema and confirm invalid discriminators/unknown properties are rejected.
 
 ## Packaged GUI E2E tests
 
@@ -32,6 +32,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-packaged-gui.
 The script rebuilds the portable package and then enables three otherwise-skipped FlaUI tests. The complete workflow selects a disposable target, scans, filters categories, exports JSON through the Windows Save dialog, selects the npm-cache recommendation, previews exact targets, explicitly confirms, hands off to the packaged worker, verifies recovery, checks an unrelated file survived, and confirms a local audit event. The second workflow immediately cancels a large disposable scan and verifies partial results remain read-only. The third uses keyboard input only for target entry, Analyze, tabs, filtering, recommendation selection, preview, explicit confirmation, Execute, and verified recovery.
 
 Only the child process receives redirected `LOCALAPPDATA` and `PATHSPACE_AUDIT_DIRECTORY` values. Cleanup is therefore limited to the generated fixture. Results are written to `artifacts\test-results\PathSpace-packaged-gui.trx`. Do not run GUI automation in a locked or non-interactive desktop session.
+
+To validate real UAC cancellation, set both `PATHSPACE_RUN_PACKAGED_E2E=1` and `PATHSPACE_RUN_UAC_CANCEL_E2E=1`, run only `Declining_protected_diagnostics_uac_leaves_the_app_running_and_records_cancellation`, and choose **No** at the consent prompt. This separate opt-in test verifies the application remains open, reports cancellation, and writes a local cancellation audit event. The standard suite never requests elevation.
+
+This UAC-decline test passed on Windows 11 build 26200.9168 on 2026-08-25 with TRX evidence in `artifacts\test-results\PathSpace-uac-cancellation.trx`.
 
 ## Build portable package
 

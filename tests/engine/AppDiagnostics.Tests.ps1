@@ -23,4 +23,12 @@ Describe 'PathSpace application diagnostics' {
         ($result | Where-Object id -eq 'wsl').available | Should Be $false
         ($result | Where-Object id -eq 'docker').available | Should Be $false
     }
+    It 'writes diagnostics through the Windows PowerShell CLI to an absolute local path' {
+        $cli = (Resolve-Path (Join-Path (Split-Path $PSScriptRoot -Parent) '..\cli\pathspace.ps1')).Path
+        $output = Join-Path $TestDrive 'diagnostics.jsonl'
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $cli diagnose -OutputPath $output
+        $LASTEXITCODE | Should Be 0
+        [IO.File]::Exists($output) | Should Be $true
+        (Get-Content -LiteralPath $output -TotalCount 1 | ConvertFrom-Json).kind | Should Be 'app.diagnostic'
+    }
 }

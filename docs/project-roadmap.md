@@ -5,7 +5,7 @@ The verified private portable build is delivered. The following work is tracked 
 ## Open existing validation work
 
 - **MOH-14 — completed:** Result views, filtering/sorting coverage, and packaged keyboard navigation pass.
-- **MOH-23 — Windows compatibility and accessibility:** Windows 10, removable media, UAC cancellation, Narrator, 200% scaling, and manual contrast validation.
+- **MOH-23 — Windows compatibility and accessibility:** Windows 10, removable media, Narrator, 200% scaling, and manual contrast validation; Windows 11 UAC cancellation now passes.
 
 ## M8 — Engineering Completeness
 

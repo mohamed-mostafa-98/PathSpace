@@ -6,7 +6,7 @@
 - Architecture: x64.
 - .NET SDK used: 8.0.424, locally installed for development.
 - Automated .NET tests: 11 contract/schema, 17 WPF/client/integration/accessibility-markup, and 6 worker security tests passed.
-- Automated PowerShell tests: 22 engine/signing tests passed.
+- Automated PowerShell tests: 23 engine/CLI/signing tests passed, including Windows PowerShell 5.1 diagnostics-output compatibility.
 - Packaged GUI E2E: 3 disposable-fixture workflows passed from an interactive Windows 11 desktop, with TRX evidence under `artifacts\test-results`.
 
 ## Manual matrix
@@ -18,7 +18,7 @@
 | Fixed drive scan | Passed: final packaged CLI completed a read-only E: root scan of 227,235 files / 54,369,251,583 logical bytes; four protected-path warnings were reported without failing the scan | Requires separate host |
 | Removable drive scan | Requires removable media | Requires separate host/media |
 | Cancellation and incomplete label | Passed in packaged GUI automation: immediate cancel produced partial read-only results and left Execute disabled | Requires separate host |
-| UAC cancellation | Requires interactive confirmation | Requires separate host |
+| UAC cancellation | Passed in separately enabled packaged automation: declining protected-diagnostics consent left the GUI running, reported no action, and recorded a local cancellation event | Requires separate host |
 | Confirmed safe action | Passed in packaged GUI automation: scan, filter, JSON export, npm preview, explicit confirmation, worker handoff, post-action verification, audit evidence, and unrelated-file survival | Requires separate host |
 | Offline/no connections | Passed: rebuilt packaged GUI process observed with 0 TCP connections | Requires separate host |
 | MSI structure/extraction | Passed locally and in hosted Windows CI run 8: version/product/upgrade metadata, Start-menu definition, embedded runtime/legal files, ICE validation, checksum, and disposable administrative extraction | Requires separate host |

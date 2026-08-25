@@ -107,10 +107,10 @@
                     </Border>
                 </Grid>
             </TabItem>
-            <TabItem Header="Advanced">
+            <TabItem Header="Advanced" AutomationProperties.AutomationId="AdvancedTab">
                 <StackPanel Margin="18">
                     <CheckBox Content="Show raw diagnostics" IsChecked="{Binding IsAdvancedMode}"/>
-                    <Button Content="Run protected diagnostics…" Command="{Binding ProtectedDiagnosticsCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,10,0,0" AutomationProperties.HelpText="Requests administrator approval for a read-only scan of protected system settings."/>
+                    <Button Content="Run protected diagnostics…" Command="{Binding ProtectedDiagnosticsCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,10,0,0" AutomationProperties.AutomationId="ProtectedDiagnosticsButton" AutomationProperties.HelpText="Requests administrator approval for a read-only scan of protected system settings."/>
                     <ItemsControl Margin="0,14,0,0" ItemsSource="{Binding Results.Warnings}"
                                   Visibility="{Binding ShowAdvancedDiagnostics, Converter={StaticResource BooleanToVisibility}}">
                         <ItemsControl.ItemTemplate>
