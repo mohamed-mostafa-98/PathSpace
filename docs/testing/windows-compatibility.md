@@ -5,7 +5,7 @@
 - Host build observed: Windows NT 10.0.26200.0 (Windows 11 branch), build 26200.9168.
 - Architecture: x64.
 - .NET SDK used: 8.0.424, locally installed for development.
-- Automated .NET tests: 11 contract/schema, 17 WPF/client/integration/accessibility-markup, and 6 worker security tests passed.
+- Automated .NET tests: 12 contract/schema, 17 WPF/client/integration/accessibility-markup, and 6 worker security tests passed.
 - Automated PowerShell tests: 23 engine/CLI/signing tests passed, including Windows PowerShell 5.1 diagnostics-output compatibility.
 - Packaged GUI E2E: 3 disposable-fixture workflows passed from an interactive Windows 11 desktop, with TRX evidence under `artifacts\test-results`.
 
@@ -26,3 +26,15 @@
 | Keyboard-only application workflow | Passed in packaged automation: target, Analyze, tabs, filter, recommendation, preview, confirmation, Execute, and verified result used keyboard input | Requires separate host |
 
 No unsupported manual result is marked as passed. Windows 10 release sign-off requires running this matrix on Windows 10 x64.
+
+## External-host evidence collector
+
+The portable package includes `validation\collect-windows-host-evidence.ps1`. Run it normally, without elevation, and optionally supply a local fixed/removable folder to scan:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\validation\collect-windows-host-evidence.ps1 `
+  -ScanPath 'F:\PathSpace-Test' `
+  -ReportPath '.\PathSpace-host-evidence.json'
+```
+
+The local JSON report identifies the package checksum manifest and records OS/build, architecture, administrator state, system DPI/scale, high-contrast state, all drive types, normal GUI launch, observed GUI TCP connection count, and the optional packaged CLI scan outcome. It declares remaining human checks instead of marking Narrator, 200% scaling, high contrast, measured contrast, or signed installer lifecycle as passed. The script performs no cleanup, requests no elevation, and uploads nothing.

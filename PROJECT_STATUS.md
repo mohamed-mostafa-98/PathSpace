@@ -15,8 +15,9 @@
 - 23 passing PowerShell engine/signing tests
 - 17 passing application/integration/accessibility tests
 - 6 passing worker-security tests
-- 11 passing contract and JSON Schema tests
+- 12 passing contract and JSON Schema tests
 - Checksummed portable x64 package with tested worker and zero observed GUI TCP connections
+- Packaged offline Windows host evidence collector with versioned JSON Schema, disposable CLI smoke coverage, and explicit unresolved manual gates
 - WiX 5 self-contained x64 MSI with stable upgrade identity, Start-menu registration, embedded .NET desktop runtime, and verified administrative extraction
 - Passing unsigned Windows 11 MSI baseline-install, major-upgrade, and complete-uninstall lifecycle validation
 - Passing packaged Windows 11 UAC-decline validation with safe status, no protected action, continued GUI operation, and cancellation audit evidence

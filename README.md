@@ -93,7 +93,7 @@ Run the packaged GUI E2E suite from an interactive Windows desktop:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-packaged-gui.ps1 -DotNetPath 'C:\path\to\dotnet.exe'
 ```
 
-Current automated coverage includes 11 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, 23 PowerShell engine/signing tests, and 3 standard plus 1 separately enabled UAC-cancellation packaged GUI workflow.
+Current automated coverage includes 12 contract/schema tests, 6 worker-security tests, 17 application/accessibility tests, 23 PowerShell engine/signing tests, and 3 standard plus 1 separately enabled UAC-cancellation packaged GUI workflow.
 
 The Windows CI workflow runs the non-interactive quality suites, Markdown/schema checks, portable build, checksum verification, packaged-worker smoke test, self-contained MSI build, and MSI structural/extraction verification. It retains test evidence and both package forms for 30 days. Packaged GUI automation and signed clean-host installer lifecycle testing remain interactive host gates; the unsigned Windows 11 lifecycle already passes.
 
@@ -123,3 +123,5 @@ The current private build is version `0.1.0-private`. Executables carry PathSpac
 Every source, configuration, schema, test, packaging, or release change must update `CHANGELOG.md` and all affected documentation in the same commit, then record verification evidence in Linear. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [documentation policy](docs/technical/documentation-policy.md).
 
 The private Windows 11 build is verified. Windows 10, removable-media, Narrator, and manual 200% scaling checks remain explicit public-release gates.
+
+On an external Windows 10/11 validation host, run `validation\collect-windows-host-evidence.ps1` from the portable package. It writes a local JSON report containing package identity, OS/build, drive/media types, DPI/high-contrast state, normal GUI launch/TCP evidence, and an optional CLI scan result; it never uploads data or performs cleanup.

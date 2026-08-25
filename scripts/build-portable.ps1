@@ -45,5 +45,7 @@ foreach($name in @('README.md','PROJECT_STATUS.md','CONTRIBUTING.md','CHANGELOG.
 }
 foreach($name in @('pathspace-icon.png','pathspace.ico')){Copy-Item -LiteralPath (Join-Path $projectRoot "assets\$name") -Destination $artifact}
 Copy-Item -LiteralPath (Join-Path $projectRoot 'docs') -Destination $artifact -Recurse -Force
+$validation=Join-Path $artifact 'validation';New-Item -ItemType Directory -Path $validation | Out-Null
+Copy-Item -LiteralPath (Join-Path $projectRoot 'scripts\collect-windows-host-evidence.ps1') -Destination $validation
 & (Join-Path $PSScriptRoot 'new-package-checksums.ps1') -ArtifactPath $artifact | Out-Null
 Write-Output $artifact

@@ -27,6 +27,7 @@ public sealed class JsonSchemaValidationTests
         yield return ["action-manifest.v1.schema.json", manifest];
         yield return ["action-result.v1.schema.json", new ActionResult(1, "action.result", "temp.user", "completed", 10, 1, 0, [])];
         yield return ["audit-event.v1.schema.json", JsonNode.Parse("{\"schemaVersion\":1,\"kind\":\"audit.event\",\"timestamp\":\"2026-08-21T00:00:00Z\",\"eventName\":\"scan\",\"outcome\":\"completed\",\"details\":{}}")!];
+        yield return ["host-validation.v1.schema.json", JsonNode.Parse("{\"schemaVersion\":1,\"kind\":\"host.validation\",\"collectedAtUtc\":\"2026-08-25T00:00:00Z\",\"collectorNetworkAccess\":false,\"telemetry\":false,\"package\":{\"root\":\"C:\\\\PathSpace\",\"version\":\"0.1.0-private\",\"checksumManifestSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"host\":{\"caption\":\"Windows 11\",\"version\":\"10.0.26200\",\"buildNumber\":\"26200\",\"architecture\":\"64-bit\",\"powershell\":\"5.1\",\"administrator\":false,\"systemDpi\":96,\"scalePercent\":100,\"highContrast\":false},\"drives\":[{\"name\":\"C:\\\\\",\"type\":\"Fixed\",\"ready\":true,\"format\":\"NTFS\",\"totalBytes\":100,\"freeBytes\":50}],\"application\":{\"launched\":true,\"launchedFromNonAdministratorHost\":true,\"tcpConnectionCount\":0},\"scan\":null,\"manualChecksStillRequired\":[\"Narrator announcements\"]}")!];
     }
 
     [Theory]

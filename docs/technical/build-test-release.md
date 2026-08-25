@@ -19,7 +19,7 @@ dotnet test .\tests\PathSpace.App.Tests\PathSpace.App.Tests.csproj
 Invoke-Pester -Script @('.\tests\engine','.\tests\signing')
 ```
 
-The current build passes 11 contract/schema, 6 worker-security, 17 application/accessibility, and 23 PowerShell tests: 22 engine/CLI tests plus one disposable Authenticode signing/tamper test. Contract tests use JsonSchema.Net to validate representative serialized v1 messages against every schema and confirm invalid discriminators/unknown properties are rejected.
+The current build passes 12 contract/schema, 6 worker-security, 17 application/accessibility, and 23 PowerShell tests: 22 engine/CLI tests plus one disposable Authenticode signing/tamper test. Contract tests use JsonSchema.Net to validate representative serialized v1 messages against every schema, including the external-host evidence report, and confirm invalid discriminators/unknown properties are rejected.
 
 ## Packaged GUI E2E tests
 
@@ -91,7 +91,7 @@ The MSI contains a self-contained x64 application and worker, so end users do no
 
 ## Windows CI
 
-`.github\workflows\windows-ci.yml` runs on pushes and pull requests targeting `master` or `main`, plus manual dispatch. It uses a least-privilege read-only repository token and a 40-minute timeout. The job restores .NET, treats build warnings as errors through repository properties, runs the .NET and Pester suites, validates local Markdown links and JSON contracts, builds the portable package, verifies every SHA-256 entry, smoke-tests the packaged worker, then builds and structurally extracts the self-contained MSI.
+`.github\workflows\windows-ci.yml` runs on pushes and pull requests targeting `master` or `main`, plus manual dispatch. It uses a least-privilege read-only repository token and a 40-minute timeout. The job restores .NET, treats build warnings as errors through repository properties, runs the .NET and Pester suites, validates local Markdown links and JSON contracts, builds the portable package, verifies every SHA-256 entry, generates and validates an offline host-evidence report from a disposable CLI fixture, smoke-tests the packaged worker, then builds and structurally extracts the self-contained MSI.
 
 The Windows PowerShell step explicitly enables TLS 1.2, bootstraps the NuGet package provider, restores the default PSGallery registration when a runner image omits it, trusts that ephemeral registration, and pins Pester 4.10.1 to match the Windows PowerShell 5.1-compatible engine suite. No installed module is included in the product artifact.
 
@@ -105,3 +105,5 @@ Local equivalents for the standalone CI checks are:
 .\scripts\test-markdown-links.ps1
 .\scripts\test-package-checksums.ps1
 ```
+
+For reproducible external Windows 10/11 evidence, run `scripts\collect-windows-host-evidence.ps1` from the repository or `validation\collect-windows-host-evidence.ps1` from the portable package. Use `-ScanPath` to include a fixed/removable/folder CLI scan and `-ReportPath` to choose the local JSON destination. The collector is read-only, non-elevating, offline, and leaves manual accessibility/signing gates explicitly unresolved.

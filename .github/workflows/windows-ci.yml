@@ -66,6 +66,16 @@ jobs:
         shell: pwsh
         run: .\scripts\test-package-checksums.ps1
 
+      - name: Validate offline host evidence collector
+        shell: powershell
+        run: |
+          $fixture = Join-Path $env:RUNNER_TEMP 'pathspace-host-evidence-fixture'
+          New-Item -ItemType Directory -Path $fixture | Out-Null
+          Set-Content -LiteralPath (Join-Path $fixture 'sample.txt') -Value 'fixture' -NoNewline
+          .\artifacts\PathSpace-win-x64\validation\collect-windows-host-evidence.ps1 -ProductRoot .\artifacts\PathSpace-win-x64 -ScanPath $fixture -ReportPath .\artifacts\test-results\PathSpace-host-evidence.json -SkipAppLaunch
+          $report = Get-Content .\artifacts\test-results\PathSpace-host-evidence.json -Raw | ConvertFrom-Json
+          if ($report.kind -ne 'host.validation' -or -not $report.scan.complete -or $report.scan.fileCount -ne 1 -or $report.collectorNetworkAccess) { throw 'Host evidence report validation failed.' }
+
       - name: Smoke-test packaged worker
         shell: pwsh
         run: .\scripts\verify-portable-action.ps1
