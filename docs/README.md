@@ -10,6 +10,8 @@ This directory contains the product, engineering, operational, and validation do
 - [Documentation maintenance policy](technical/documentation-policy.md) — mandatory documentation and Linear updates for every change.
 - [Accessibility checklist](testing/accessibility-checklist.md) — automated evidence and remaining interactive checks.
 - [Windows compatibility record](testing/windows-compatibility.md) — tested hosts, drives, package behavior, and outstanding compatibility gates.
+- [PathSpace 0.1.0-private release notes](releases/0.1.0-private.md) — downloads, highlights, verification, known gates, and safety.
+- [Website and downloads](technical/website-and-downloads.md) — GitHub Pages deployment, validation, and release-asset policy.
 - [Installer and runtime strategy](technical/installer-and-runtime.md) — MSI choice, embedded runtime, install/upgrade/uninstall behavior, and portable fallback.
 - [Product design specification](superpowers/specs/2026-08-20-pathspace-design.md) — original approved scope and design decisions.
 - [Implementation plan](superpowers/plans/2026-08-20-pathspace-implementation.md) — milestone-by-milestone engineering plan.

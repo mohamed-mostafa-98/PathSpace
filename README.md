@@ -42,6 +42,9 @@ Basic workflow:
 
 ## Documentation
 
+- [Product website](https://mohamed-mostafa-98.github.io/PathSpace/)
+- [Download version 0.1.0-private](https://github.com/mohamed-mostafa-98/PathSpace/releases/tag/v0.1.0-private)
+- [Version 0.1.0-private release notes](docs/releases/0.1.0-private.md)
 - [Documentation hub](docs/README.md)
 - [Technical documentation](docs/technical/README.md)
 - [Architecture](docs/technical/architecture.md)
@@ -73,6 +76,7 @@ Basic workflow:
 | `legacy-toolkit` | Reviewed standalone diagnostics and guided migration tools |
 | `scripts` | Build and package verification scripts |
 | `installer` | WiX MSI definition and stable product/upgrade identity |
+| `site` | Dependency-free GitHub Pages product and documentation website |
 
 ## Build and test
 

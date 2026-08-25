@@ -10,6 +10,7 @@ PathSpace is a Windows storage-analysis and guided-cleanup product built around 
 - [Authenticode signing and release integrity](signing-and-release-integrity.md)
 - [Installer and runtime strategy](installer-and-runtime.md)
 - [Build, test, and release](build-test-release.md)
+- [Website and downloads](website-and-downloads.md)
 - [Documentation maintenance policy](documentation-policy.md)
 
 ## Technology stack

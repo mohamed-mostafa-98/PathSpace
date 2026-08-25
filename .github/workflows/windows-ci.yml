@@ -58,6 +58,10 @@ jobs:
         shell: pwsh
         run: .\scripts\test-markdown-links.ps1
 
+      - name: Validate static website
+        shell: powershell
+        run: .\scripts\test-site.ps1
+
       - name: Build portable package
         shell: powershell
         run: .\scripts\build-portable.ps1

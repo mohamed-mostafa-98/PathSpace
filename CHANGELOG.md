@@ -31,6 +31,8 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - CI now performs an isolated disposable full-release signing check covering portable and installer payload signatures, signed worker execution, checksums, MSI structure, and signatures extracted from the rebuilt MSI.
 - Windows 11 manual accessibility sign-off is recorded from the project owner for Narrator announcements, 200% scaling, high-contrast presentation, and color contrast review.
 - A packaged read-only scan of a Windows-reported FAT32 removable drive completed over 187 files and 5,035,850,556 logical bytes with zero scan warnings; the detailed offline report remains local.
+- Dependency-free GitHub Pages product website with versioned portable/MSI downloads, getting-started guidance, documentation links, release notes, roadmap, accessibility basics, and offline validation.
+- Version 0.1.0-private release notes and website/download publishing guide.
 - Packaged UI Automation now verifies screen-reader-facing control names, roles, polite live regions, recommendation naming, and protected-diagnostics help text.
 - Repository-wide documentation Definition of Done in `AGENTS.md`, `CONTRIBUTING.md`, and the documentation policy.
 - Linear milestones M8 Engineering Completeness and M9 Public Release Readiness.

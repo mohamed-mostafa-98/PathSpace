@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PathSpace is an offline Windows storage analyzer with evidence-based recovery guidance and explicitly confirmed cleanup actions.">
+  <meta name="theme-color" content="#08131d">
+  <title>PathSpace — Understand your storage</title>
+  <link rel="icon" href="assets/pathspace-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="PathSpace home">
+      <img src="assets/pathspace-icon.png" alt="" width="36" height="36">
+      <span>PathSpace</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#downloads">Download</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#docs">Documentation</a>
+      <a href="#release-notes">Release notes</a>
+      <a href="#roadmap">Roadmap</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">Private preview · Windows 10/11 x64</p>
+        <h1>See where your disk space went.</h1>
+        <p class="lede">PathSpace analyzes local drives and folders, explains the evidence, and keeps every cleanup action behind a precise preview and explicit confirmation.</p>
+        <div class="actions">
+          <a class="button primary" href="#downloads">Download v0.1.0-private</a>
+          <a class="button secondary" href="https://github.com/mohamed-mostafa-98/PathSpace">View source</a>
+        </div>
+        <ul class="trust-list" aria-label="Product guarantees">
+          <li>Fully offline</li>
+          <li>No telemetry</li>
+          <li>Read-only by default</li>
+          <li>Open source</li>
+        </ul>
+      </div>
+      <div class="space-card" aria-label="PathSpace workflow summary">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <img src="assets/pathspace-icon.png" alt="PathSpace application icon" width="128" height="128">
+        <p>Analyze → Understand → Preview → Confirm</p>
+      </div>
+    </section>
+
+    <section class="section" id="downloads">
+      <div class="section-heading">
+        <p class="eyebrow">Downloads</p>
+        <h2>Choose how you want to run PathSpace</h2>
+        <p>Both packages are version 0.1.0-private for Windows x64. Checksums are published with the release.</p>
+      </div>
+      <div class="download-grid">
+        <article class="download-card featured">
+          <span class="pill">Recommended</span>
+          <h3>Windows installer</h3>
+          <p>Offline MSI with the .NET 8 Desktop Runtime included, Start-menu registration, and standard Windows uninstall support.</p>
+          <a class="button primary" href="https://github.com/mohamed-mostafa-98/PathSpace/releases/download/v0.1.0-private/PathSpace-0.1.0-win-x64.msi">Download installer</a>
+        </article>
+        <article class="download-card">
+          <span class="pill neutral">Portable</span>
+          <h3>Portable package</h3>
+          <p>Extract and run without installation. Requires the Microsoft .NET 8 Desktop Runtime already installed.</p>
+          <a class="button secondary" href="https://github.com/mohamed-mostafa-98/PathSpace/releases/download/v0.1.0-private/PathSpace-0.1.0-private-portable-win-x64.zip">Download portable ZIP</a>
+        </article>
+      </div>
+      <aside class="warning" aria-label="Preview signing warning">
+        <strong>Unsigned private preview.</strong> Publisher signing and final Windows 10 validation are still in progress, so Windows may display an Unknown Publisher or SmartScreen warning. Verify the <a href="https://github.com/mohamed-mostafa-98/PathSpace/releases/download/v0.1.0-private/SHA256SUMS-release.txt">release checksums</a> before running either package.
+      </aside>
+    </section>
+
+    <section class="section tinted" id="how-it-works">
+      <div class="section-heading">
+        <p class="eyebrow">How it works</p>
+        <h2>Evidence first. Action second.</h2>
+      </div>
+      <ol class="steps">
+        <li><span>1</span><div><h3>Select</h3><p>Choose a fixed drive, removable drive, or individual local folder.</p></div></li>
+        <li><span>2</span><div><h3>Analyze</h3><p>Review categorized usage, large files, warnings, and protected-storage diagnostics.</p></div></li>
+        <li><span>3</span><div><h3>Decide</h3><p>Compare evidence-based recovery recommendations and their risk labels.</p></div></li>
+        <li><span>4</span><div><h3>Confirm</h3><p>Preview exact targets before any allow-listed cleanup action can run.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="section" id="docs">
+      <div class="section-heading">
+        <p class="eyebrow">Documentation</p>
+        <h2>Use it safely and understand every boundary</h2>
+      </div>
+      <div class="card-grid">
+        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/use-cases/README.md"><h3>User guide</h3><p>Common analysis and recovery workflows.</p></a>
+        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/technical/cli-reference.md"><h3>CLI reference</h3><p>JSONL commands, options, progress, and cancellation.</p></a>
+        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/technical/security-and-safety.md"><h3>Safety model</h3><p>Elevation, confirmation, allow lists, and rollback boundaries.</p></a>
+        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/technical/architecture.md"><h3>Architecture</h3><p>WPF client, PowerShell engine, contracts, and isolated worker.</p></a>
+        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/technical/installer-and-runtime.md"><h3>Installation</h3><p>Portable requirements, MSI behavior, upgrade, and uninstall.</p></a>
+        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/README.md"><h3>All documentation</h3><p>Testing records, technical guides, roadmap, and contribution policy.</p></a>
+      </div>
+    </section>
+
+    <section class="section split" id="release-notes">
+      <div>
+        <p class="eyebrow">Release notes</p>
+        <h2>0.1.0-private</h2>
+        <p class="release-date">Private preview · August 2026</p>
+      </div>
+      <div>
+        <ul class="release-list">
+          <li>Responsive WPF analysis experience with progress and cancellation.</li>
+          <li>Fixed, removable, and folder scanning with JSON/CSV export.</li>
+          <li>Docker, WSL, Notion, Claude, pagefile, hibernation, and volume guidance.</li>
+          <li>Explicit preview, confirmation, audit logging, and recovery verification.</li>
+          <li>Portable ZIP and self-contained MSI package options.</li>
+        </ul>
+        <a class="text-link" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/releases/0.1.0-private.md">Read the complete release notes →</a>
+      </div>
+    </section>
+
+    <section class="section tinted" id="roadmap">
+      <div class="section-heading">
+        <p class="eyebrow">Future work</p>
+        <h2>What remains before a public release</h2>
+      </div>
+      <div class="roadmap-grid">
+        <article><span>01</span><h3>Windows 10 sign-off</h3><p>Complete the external Windows 10 compatibility matrix.</p></article>
+        <article><span>02</span><h3>Publisher signing</h3><p>Configure a production Authenticode certificate and trusted timestamp service.</p></article>
+        <article><span>03</span><h3>Signed lifecycle</h3><p>Verify signed install, major upgrade, and uninstall on clean Windows 10 and 11 hosts.</p></article>
+      </div>
+      <a class="text-link" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/project-roadmap.md">View the tracked roadmap →</a>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>PathSpace</strong><p>Offline storage clarity for Windows.</p></div>
+    <div class="footer-links">
+      <a href="https://github.com/mohamed-mostafa-98/PathSpace">GitHub</a>
+      <a href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/LICENSE">MIT License</a>
+      <a href="https://github.com/mohamed-mostafa-98/PathSpace/issues">Issues</a>
+    </div>
+    <p>© <span id="year">2026</span> PathSpace Contributors</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
