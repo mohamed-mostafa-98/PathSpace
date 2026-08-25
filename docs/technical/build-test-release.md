@@ -101,6 +101,8 @@ The installer-enabled pipeline completed successfully on 2026-08-25 for commit `
 
 Normal Windows CI also runs `scripts\test-disposable-signed-release.ps1` against isolated copies of the portable and self-contained installer payloads. Windows PowerShell performs Authenticode operations and the script launches the signed worker smoke check under PowerShell 7 for .NET 8 assembly compatibility. It uses a one-day self-signed test certificate, verifies checksums, rebuilds and signs an isolated MSI, then verifies signatures from its administrative extraction. This proves pipeline mechanics only; it is not publisher or clean-host evidence.
 
+Commit `0b94491` passed [Windows CI run 17](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32861799780) and [GitHub Pages deployment](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32861799650). Its CI-built MSI and portable package were published unchanged in prerelease `v0.1.0-private`; GitHub-computed asset digests match the public `SHA256SUMS-release.txt` values.
+
 Local equivalents for the standalone CI checks are:
 
 ```powershell

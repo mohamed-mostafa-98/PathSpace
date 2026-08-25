@@ -24,7 +24,7 @@
 - Passing packaged Windows 11 UAC-decline validation with safe status, no protected action, continued GUI operation, and cancellation audit evidence
 - User-attested Windows 11 manual accessibility validation covering Narrator announcements, 200% scaling, high-contrast presentation, and color contrast review
 - Completed packaged read-only scan of a healthy FAT32 removable drive: 187 files, 5,035,850,556 logical bytes, zero scan warnings, and local offline evidence
-- Dependency-free GitHub Pages product/documentation website and versioned 0.1.0-private portable/MSI prerelease download plan with explicit unsigned-preview warnings
+- Live dependency-free [GitHub Pages product/documentation website](https://mohamed-mostafa-98.github.io/PathSpace/) and [v0.1.0-private prerelease](https://github.com/mohamed-mostafa-98/PathSpace/releases/tag/v0.1.0-private) with exact CI-built portable/MSI downloads, public matching SHA-256 checksums, and explicit unsigned-preview warnings
 - Completed read-only local-folder and E: fixed-drive package scans
 
 ## Public-release validation still required
@@ -48,4 +48,4 @@ Publisher signing scripts, strict signature/timestamp verification, post-signing
 - MOH-31 — installer implementation and unsigned Windows 11 lifecycle verified; signed Windows 10/11 clean-host lifecycle evidence remains
 - MOH-77 — GitHub Pages website and versioned private-preview downloads
 
-MOH-25, MOH-26, MOH-27, MOH-28, and MOH-32 are complete. The remaining dependency order is documented in [docs/project-roadmap.md](docs/project-roadmap.md).
+MOH-25, MOH-26, MOH-27, MOH-28, MOH-32, and MOH-77 are complete. The remaining dependency order is documented in [docs/project-roadmap.md](docs/project-roadmap.md).
