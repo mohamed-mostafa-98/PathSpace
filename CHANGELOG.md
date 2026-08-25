@@ -33,6 +33,8 @@ All notable PathSpace changes are recorded here. This project currently uses an 
 - A packaged read-only scan of a Windows-reported FAT32 removable drive completed over 187 files and 5,035,850,556 logical bytes with zero scan warnings; the detailed offline report remains local.
 - Dependency-free GitHub Pages product website with versioned portable/MSI downloads, getting-started guidance, documentation links, release notes, roadmap, accessibility basics, and offline validation.
 - Version 0.1.0-private release notes and website/download publishing guide.
+- Self-contained website documentation for installation, annotated interface walkthroughs, result interpretation, safe cleanup, CLI usage, troubleshooting, release notes, roadmap, and licensing.
+- Three real packaged-application screenshots captured from disposable sample data, with responsive SVG arrows and accessible numbered explanations for controls and workflow states.
 - Packaged UI Automation now verifies screen-reader-facing control names, roles, polite live regions, recommendation naming, and protected-diagnostics help text.
 - Repository-wide documentation Definition of Done in `AGENTS.md`, `CONTRIBUTING.md`, and the documentation policy.
 - Linear milestones M8 Engineering Completeness and M9 Public Release Readiness.

@@ -4,13 +4,16 @@ $ErrorActionPreference='Stop'
 if(-not $SitePath){$SitePath=Join-Path (Resolve-Path (Join-Path $PSScriptRoot '..')).Path 'site'}
 $root=(Resolve-Path -LiteralPath $SitePath).Path
 $index=Join-Path $root 'index.html'
-foreach($required in @($index,(Join-Path $root 'styles.css'),(Join-Path $root 'app.js'),(Join-Path $root 'assets\pathspace-icon.png'))){
+foreach($required in @($index,(Join-Path $root 'styles.css'),(Join-Path $root 'app.js'),(Join-Path $root 'assets\pathspace-icon.png'),
+    (Join-Path $root 'assets\screenshots\pathspace-start.png'),(Join-Path $root 'assets\screenshots\pathspace-results.png'),
+    (Join-Path $root 'assets\screenshots\pathspace-recommendations.png'))){
     if(-not (Test-Path -LiteralPath $required -PathType Leaf)){throw "Required site file is missing: $required"}
 }
 $html=Get-Content -LiteralPath $index -Raw
-foreach($id in @('downloads','how-it-works','docs','release-notes','roadmap')){
+foreach($id in @('downloads','how-it-works','docs','getting-started','interface','results-guide','safe-cleanup','cli','troubleshooting','release-notes','roadmap','license')){
     if($html -notmatch ('id="'+[regex]::Escape($id)+'"')){throw "Required site section is missing: $id"}
 }
+if($html -match 'github\.com/mohamed-mostafa-98/PathSpace/blob/'){throw 'Website documentation must be rendered on-page instead of redirecting to repository Markdown.'}
 $references=[regex]::Matches($html,'(?:href|src)="([^"]+)"')|ForEach-Object{$_.Groups[1].Value}
 foreach($reference in $references|Where-Object{$_ -notmatch '^(https?://|#|mailto:)'}){
     $target=Join-Path $root ($reference -replace '/','\')

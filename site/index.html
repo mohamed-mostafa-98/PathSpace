@@ -20,7 +20,7 @@
       <a href="#downloads">Download</a>
       <a href="#how-it-works">How it works</a>
       <a href="#docs">Documentation</a>
-      <a href="#release-notes">Release notes</a>
+      <a href="#interface">Screenshots</a>
       <a href="#roadmap">Roadmap</a>
     </nav>
   </header>
@@ -91,15 +91,131 @@
     <section class="section" id="docs">
       <div class="section-heading">
         <p class="eyebrow">Documentation</p>
-        <h2>Use it safely and understand every boundary</h2>
+        <h2>Everything you need, without leaving this page</h2>
+        <p>Install, analyze, understand results, use the CLI, and make safe recovery decisions from this guide.</p>
       </div>
-      <div class="card-grid">
-        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/use-cases/README.md"><h3>User guide</h3><p>Common analysis and recovery workflows.</p></a>
-        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/technical/cli-reference.md"><h3>CLI reference</h3><p>JSONL commands, options, progress, and cancellation.</p></a>
-        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/technical/security-and-safety.md"><h3>Safety model</h3><p>Elevation, confirmation, allow lists, and rollback boundaries.</p></a>
-        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/technical/architecture.md"><h3>Architecture</h3><p>WPF client, PowerShell engine, contracts, and isolated worker.</p></a>
-        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/technical/installer-and-runtime.md"><h3>Installation</h3><p>Portable requirements, MSI behavior, upgrade, and uninstall.</p></a>
-        <a class="doc-card" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/README.md"><h3>All documentation</h3><p>Testing records, technical guides, roadmap, and contribution policy.</p></a>
+      <div class="doc-nav" aria-label="Documentation sections">
+        <a href="#getting-started">Getting started</a>
+        <a href="#interface">Interface guide</a>
+        <a href="#results-guide">Results</a>
+        <a href="#safe-cleanup">Safe cleanup</a>
+        <a href="#cli">CLI</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+      </div>
+    </section>
+
+    <section class="section doc-section tinted" id="getting-started">
+      <div class="doc-title"><p class="eyebrow">Getting started</p><h2>Install and run</h2></div>
+      <div class="doc-content">
+        <div class="doc-columns">
+          <article><span class="doc-number">01</span><h3>Installer</h3><p>Download the MSI, verify its checksum, open it, and follow Windows Installer. The package includes the .NET 8 Desktop Runtime and adds PathSpace to the Start menu.</p></article>
+          <article><span class="doc-number">02</span><h3>Portable</h3><p>Download the ZIP, verify its checksum, extract the complete folder, and run <code>PathSpace.App.exe</code>. Install the .NET 8 Desktop Runtime first if Windows requests it.</p></article>
+        </div>
+        <div class="note"><strong>Private preview:</strong> these packages are not publisher-signed yet. Confirm the SHA-256 value before running and expect a possible Unknown Publisher or SmartScreen prompt.</div>
+      </div>
+    </section>
+
+    <section class="section doc-section" id="interface">
+      <div class="doc-title"><p class="eyebrow">Interface guide</p><h2>Start an analysis</h2><p>Real packaged PathSpace UI captured with disposable sample data.</p></div>
+      <div class="doc-content">
+        <figure class="walkthrough">
+          <div class="shot">
+            <img src="assets/screenshots/pathspace-start.png" alt="PathSpace before analysis, showing the target field, Browse, Analyze, Cancel, result tabs, and export controls." width="1040" height="680">
+            <svg class="shot-arrows" viewBox="0 0 1040 680" aria-hidden="true">
+              <defs><marker id="arrow-start" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z"/></marker></defs>
+              <g marker-end="url(#arrow-start)"><path d="M520 74 L500 142"/><path d="M790 74 L790 142"/><path d="M880 74 L880 142"/><path d="M975 74 L968 142"/><path d="M610 330 L330 263"/></g>
+              <g class="arrow-labels"><text x="520" y="68">1</text><text x="790" y="68">2</text><text x="880" y="68">3</text><text x="975" y="68">4</text><text x="620" y="334">5</text></g>
+            </svg>
+          </div>
+          <figcaption class="callout-grid">
+            <div><span>1</span><p><strong>Target path</strong> — type or paste a local drive or folder.</p></div>
+            <div><span>2</span><p><strong>Browse</strong> — choose a local folder with Windows Explorer.</p></div>
+            <div><span>3</span><p><strong>Analyze</strong> — begin the read-only scan.</p></div>
+            <div><span>4</span><p><strong>Cancel</strong> — stop safely and retain partial read-only results.</p></div>
+            <div><span>5</span><p><strong>Result tabs</strong> — move between summary, files, recommendations, diagnostics, and guidance.</p></div>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section doc-section tinted" id="results-guide">
+      <div class="doc-title"><p class="eyebrow">Reading results</p><h2>Understand before changing</h2></div>
+      <div class="doc-content">
+        <figure class="walkthrough">
+          <div class="shot">
+            <img src="assets/screenshots/pathspace-results.png" alt="Completed PathSpace analysis with status, summary measurements, tabs, and export buttons." width="1040" height="680">
+            <svg class="shot-arrows" viewBox="0 0 1040 680" aria-hidden="true">
+              <defs><marker id="arrow-results" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z"/></marker></defs>
+              <g marker-end="url(#arrow-results)"><path d="M500 72 L185 211"/><path d="M720 330 L175 300"/><path d="M520 520 L225 445"/><path d="M820 205 L315 254"/></g>
+              <g class="arrow-labels"><text x="500" y="66">1</text><text x="730" y="334">2</text><text x="530" y="524">3</text><text x="830" y="209">4</text></g>
+            </svg>
+          </div>
+          <figcaption class="callout-grid">
+            <div><span>1</span><p><strong>Status</strong> — confirms completion, cancellation, warnings, or safe failure.</p></div>
+            <div><span>2</span><p><strong>Summary</strong> — shows the exact target, measured bytes, and file count.</p></div>
+            <div><span>3</span><p><strong>Exports</strong> — save JSON, redacted JSON, or CSV locally.</p></div>
+            <div><span>4</span><p><strong>Categories and large files</strong> — inspect and filter evidence without changing files.</p></div>
+          </figcaption>
+        </figure>
+        <div class="result-tabs">
+          <article><h3>Summary</h3><p>High-level measurements and local export controls.</p></article>
+          <article><h3>Categories</h3><p>Aggregated folder usage with path filtering.</p></article>
+          <article><h3>Large files</h3><p>Largest measured files, sizes, and modification dates.</p></article>
+          <article><h3>Recommendations</h3><p>Evidence-based recovery choices with risk and reversibility.</p></article>
+          <article><h3>Advanced</h3><p>Optional raw warnings and protected read-only diagnostics.</p></article>
+          <article><h3>Guidance</h3><p>Safe application-specific instructions for complex storage.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section doc-section" id="safe-cleanup">
+      <div class="doc-title"><p class="eyebrow">Safe cleanup</p><h2>Preview, confirm, verify</h2></div>
+      <div class="doc-content">
+        <figure class="walkthrough">
+          <div class="shot">
+            <img src="assets/screenshots/pathspace-recommendations.png" alt="PathSpace Recommendations tab with a recovery recommendation, preview control, confirmation checkbox, and disabled execute button." width="1040" height="680">
+            <svg class="shot-arrows" viewBox="0 0 1040 680" aria-hidden="true">
+              <defs><marker id="arrow-actions" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z"/></marker></defs>
+              <g marker-end="url(#arrow-actions)"><path d="M680 340 L305 326"/><path d="M350 490 L145 470"/><path d="M560 548 L245 545"/><path d="M470 630 L155 580"/><path d="M820 180 L378 254"/></g>
+              <g class="arrow-labels"><text x="690" y="344">1</text><text x="360" y="494">2</text><text x="570" y="552">3</text><text x="480" y="634">4</text><text x="830" y="184">5</text></g>
+            </svg>
+          </div>
+          <figcaption class="callout-grid">
+            <div><span>1</span><p><strong>Recommendation</strong> — review measured upper bound, risk, reversibility, and elevation.</p></div>
+            <div><span>2</span><p><strong>Preview action</strong> — calculate exact targets without changing them.</p></div>
+            <div><span>3</span><p><strong>Explicit confirmation</strong> — acknowledge the exact preview; it is never preselected.</p></div>
+            <div><span>4</span><p><strong>Execute</strong> — stays disabled until preview and confirmation are valid.</p></div>
+            <div><span>5</span><p><strong>Advanced</strong> — protected diagnostics request elevation only when selected.</p></div>
+          </figcaption>
+        </figure>
+        <div class="safety-grid">
+          <article><h3>Automatic actions</h3><p>Only narrow allow-listed actions can execute, such as clearing a known rebuildable cache. Every action uses a short-lived manifest and verifies the result.</p></article>
+          <article><h3>Guided-only areas</h3><p>Docker volumes, WSL distributions, Notion partitions, Claude runtime data, and pagefile settings are never blindly deleted.</p></article>
+          <article><h3>Elevation</h3><p>The main app runs normally. Protected scans and actions use a separate short-lived worker and require Windows approval.</p></article>
+          <article><h3>Privacy</h3><p>Scans, exports, audit records, and reports stay on the computer. PathSpace has no telemetry, account, or network scanner.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section doc-section tinted" id="cli">
+      <div class="doc-title"><p class="eyebrow">Command line</p><h2>Reusable JSONL engine</h2></div>
+      <div class="doc-content">
+        <p>The portable package includes the same read-only engine used by the GUI. Run it from Windows PowerShell or PowerShell 7:</p>
+        <pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File .\cli\pathspace.ps1 `
+  scan --path "D:\Projects"</code></pre>
+        <p>Output is versioned JSON Lines: progress records arrive during the scan, followed by the final snapshot. Use <code>--large-file-threshold-bytes</code> to change the large-file threshold and <code>--output</code> to write JSONL locally. Press <kbd>Ctrl+C</kbd> to request safe cancellation.</p>
+        <div class="note"><strong>Local paths only:</strong> UNC and other remote paths are rejected. Reparse points are not followed, preventing traversal outside the selected target.</div>
+      </div>
+    </section>
+
+    <section class="section doc-section" id="troubleshooting">
+      <div class="doc-title"><p class="eyebrow">Troubleshooting</p><h2>Common questions</h2></div>
+      <div class="doc-content faq">
+        <details><summary>Windows says “Unknown Publisher.”</summary><p>Version 0.1.0-private is intentionally labeled unsigned. Verify the published SHA-256 checksum before running. Production signing remains a tracked release gate.</p></details>
+        <details><summary>The portable app asks for .NET.</summary><p>Install the Microsoft .NET 8 Desktop Runtime for Windows x64, or use the MSI, which embeds the required runtime.</p></details>
+        <details><summary>Some folders show warnings.</summary><p>Access-denied and disappearing-file warnings are expected during a live scan. PathSpace continues safely and reports what it could measure.</p></details>
+        <details><summary>Why is Execute disabled?</summary><p>Select an actionable recommendation, build its preview, inspect every target, then select the explicit confirmation checkbox. Guided-only recommendations never enable execution.</p></details>
+        <details><summary>Does cancellation delete anything?</summary><p>No. Cancelling analysis returns partial read-only results and keeps cleanup execution disabled.</p></details>
       </div>
     </section>
 
@@ -117,7 +233,7 @@
           <li>Explicit preview, confirmation, audit logging, and recovery verification.</li>
           <li>Portable ZIP and self-contained MSI package options.</li>
         </ul>
-        <a class="text-link" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/releases/0.1.0-private.md">Read the complete release notes →</a>
+        <p class="release-note">This preview remains unsigned. Windows 10 validation and trusted signed installer lifecycle testing are still open.</p>
       </div>
     </section>
 
@@ -131,7 +247,11 @@
         <article><span>02</span><h3>Publisher signing</h3><p>Configure a production Authenticode certificate and trusted timestamp service.</p></article>
         <article><span>03</span><h3>Signed lifecycle</h3><p>Verify signed install, major upgrade, and uninstall on clean Windows 10 and 11 hosts.</p></article>
       </div>
-      <a class="text-link" href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/docs/project-roadmap.md">View the tracked roadmap →</a>
+    </section>
+
+    <section class="section doc-section" id="license">
+      <div class="doc-title"><p class="eyebrow">Open source</p><h2>MIT License</h2></div>
+      <div class="doc-content"><p>PathSpace source code is available under the MIT License. You may use, copy, modify, merge, publish, distribute, sublicense, and sell copies while retaining the copyright and permission notice.</p><p>Third-party components retain their own licenses and notices inside the repository and packaged application.</p></div>
     </section>
   </main>
 
@@ -139,7 +259,7 @@
     <div><strong>PathSpace</strong><p>Offline storage clarity for Windows.</p></div>
     <div class="footer-links">
       <a href="https://github.com/mohamed-mostafa-98/PathSpace">GitHub</a>
-      <a href="https://github.com/mohamed-mostafa-98/PathSpace/blob/master/LICENSE">MIT License</a>
+      <a href="#license">MIT License</a>
       <a href="https://github.com/mohamed-mostafa-98/PathSpace/issues">Issues</a>
     </div>
     <p>© <span id="year">2026</span> PathSpace Contributors</p>

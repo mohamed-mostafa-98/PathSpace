@@ -1,6 +1,6 @@
 # Website and downloads
 
-The dependency-free static website lives under `site` and deploys to GitHub Pages through `.github/workflows/pages.yml`. It uses only committed HTML, CSS, JavaScript, and original PathSpace artwork; no analytics, telemetry, cookies, external fonts, or runtime services are loaded.
+The dependency-free static website lives under `site` and deploys to GitHub Pages through `.github/workflows/pages.yml`. It uses only committed HTML, CSS, JavaScript, original PathSpace artwork, and locally captured product screenshots; no analytics, telemetry, cookies, external fonts, or runtime services are loaded. User-facing documentation is rendered directly on the website instead of sending readers to repository Markdown.
 
 Run the offline validator before publishing:
 
@@ -8,7 +8,11 @@ Run the offline validator before publishing:
 .\scripts\test-site.ps1
 ```
 
-The validator checks required sections, local assets, and immutable `v0.1.0-private` release links. GitHub Actions repeats this validation in normal Windows CI and before every Pages deployment.
+The validator checks required documentation sections, screenshot assets, local references, immutable `v0.1.0-private` release links, and the absence of GitHub Markdown detours. GitHub Actions repeats this validation in normal Windows CI and before every Pages deployment.
+
+## Product screenshots
+
+Run `scripts\capture-site-screenshots.ps1` from an interactive Windows desktop after building the portable package. It creates disposable sample files under Public Documents, drives the real packaged UI through Windows UI Automation, captures initial, completed-summary, and recommendations states, then removes the fixture. The page overlays responsive SVG arrows and supplies numbered text explanations outside each image so the walkthrough remains understandable with zoom, keyboard navigation, or assistive technology.
 
 ## Release assets
 
