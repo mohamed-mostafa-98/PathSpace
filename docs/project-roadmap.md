@@ -23,7 +23,7 @@ MOH-27 validated the final observable workflows after MOH-25 and MOH-26 complete
 - **MOH-30 — in progress:** Signing, secret handling, timestamp/signature enforcement, post-signing checksums, release workflow, tamper tests, and the protected `release-signing` GitHub environment are implemented; real-certificate, CA timestamp configuration, and clean-host proof remain.
 - **MOH-31 — in progress:** The WiX per-machine MSI, embedded-runtime strategy, stable upgrade/Start-menu identity, CI structural verification, lifecycle harness, and unsigned Windows 11 install/upgrade/uninstall proof are complete; signed Windows 10/11 clean-host evidence remains.
 - **MOH-77 — completed:** The dependency-free GitHub Pages website and immutable 0.1.0-private portable/MSI prerelease downloads are live with matching checksums and explicit unsigned-preview labeling.
-- **MOH-78 — in progress:** Render complete user documentation and real annotated packaged-GUI walkthroughs directly on the website without repository-Markdown detours.
+- **MOH-78 — completed:** Complete user documentation and real annotated packaged-GUI walkthroughs are rendered directly on the live website without repository-Markdown detours; Pages and Windows CI validation pass.
 - **MOH-23:** Complete Windows 10 validation against the release candidate.
 
 Signing depends on legal/product identity plus CI. Installer validation follows identity and signing. External release validation follows the packaged E2E and installer work.

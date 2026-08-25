@@ -37,7 +37,7 @@ These outstanding checks are tracked in Linear and in `docs/testing` rather than
 
 ## CI status
 
-The repository is connected to [mohamed-mostafa-98/PathSpace](https://github.com/mohamed-mostafa-98/PathSpace). [Windows CI run 8](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32842599878) passed every test, validation, portable/MSI build, ICE/extraction, checksum, worker-smoke, and artifact-upload step for commit `42d1fcc`; test evidence, the portable package, and the self-contained MSI were retained successfully.
+The repository is connected to [mohamed-mostafa-98/PathSpace](https://github.com/mohamed-mostafa-98/PathSpace). [Windows CI run 32864965142](https://github.com/mohamed-mostafa-98/PathSpace/actions/runs/32864965142) passed every test, static-site validation, portable/MSI build, extraction, checksum, worker-smoke, disposable signing, and artifact-upload step for commit `303db46`.
 
 ## Signing status
 
@@ -50,4 +50,4 @@ Publisher signing scripts, strict signature/timestamp verification, post-signing
 - MOH-77 — GitHub Pages website and versioned private-preview downloads
 - MOH-78 — embedded website documentation and annotated GUI walkthroughs
 
-MOH-25, MOH-26, MOH-27, MOH-28, MOH-32, and MOH-77 are complete. The remaining dependency order is documented in [docs/project-roadmap.md](docs/project-roadmap.md).
+MOH-25, MOH-26, MOH-27, MOH-28, MOH-32, MOH-77, and MOH-78 are complete. The remaining dependency order is documented in [docs/project-roadmap.md](docs/project-roadmap.md).
